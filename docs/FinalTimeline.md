@@ -40,7 +40,7 @@ Nov 3 - Nov 14
 
 **End of November **
 
-**Goals: **Enhanced and Full User Experience
+**Goals:** Enhanced and Full User Experience
 
 Visual Enhancement and Finalized User Stories
 
