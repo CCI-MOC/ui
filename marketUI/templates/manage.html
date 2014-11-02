@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include "header.html" %}
+    
+    <title>{% block title %}Marketplace{% endblock %}</title>
+  </head>
+
+  <body> 
+
+    <h1>
+    Welcome to the {{ manage }} 
+    </h1>
+
+    <div id="footer">
+    {% block footer %}
+        {% include "footer.html" %}
+    {% endblock %}
+    </div>
+  </body>
+</html>

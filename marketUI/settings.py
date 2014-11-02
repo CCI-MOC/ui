@@ -23,6 +23,9 @@ SECRET_KEY = 'ok3ltp7a2!qc!43z)%eu8p_+7w88tc8r2dyu!@y^2tiv(+h)7m'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
+TEMPLATE_DIRS = ( 
+	os.getcwd()+"/marketUI/templates",
+)
 
 ALLOWED_HOSTS = []
 
