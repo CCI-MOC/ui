@@ -1,10 +1,20 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from marketUI.views import *
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'marketUI.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
+    
+    url(r'^login/create_user', create_user),
+    url(r'^login/', login),
+    url(r'^projects/', projects),
+
+    url(r'^project_space/market', market),
+    url(r'^project_space/manage/settings', settings),
+    url(r'^project_space/manage', manage),
+
+    # EXAMPLE REGEX
+    # url(r'^races/(?P<session_id>\d+)$', 'races', name='races'),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', login)
 )

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include "header.html" %}
+    
+    <title>{% block title %}Marketplace{% endblock %}</title>
+  </head>
+
+  <body class="container"> 
+
+    <h1>
+    Welcome to the {{ OCXlogin }} 
+    </h1>
+
+    <input type="text" class="form-control text-center medium" placeholder="Username">
+    <input type="text" class="form-control text-center medium" placeholder="Password">
+    
+    <div class="btn-group pagination-center">
+      <button type="button" class="btn btn-default">Login</button>
+      <button type="button" class="btn btn-default">Register</button>
+      <button type="button" class="btn btn-default">Forgot Password</button>
+    </div>
+
+    <div id="footer">
+    {% block footer %}
+        {% include "footer.html" %}
+    {% endblock %}
+    </div>
+  </body>
+</html>
