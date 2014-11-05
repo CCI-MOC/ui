@@ -1,21 +1,22 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    {% include "header.html" %}
-    
-    <title>{% block title %}Marketplace{% endblock %}</title>
-  </head>
+{% extends "base.html" %}
 
-  <body> 
+{% block title %}Project Management{% endblock %}
 
-    <h1>
-    Welcome to the {{ manage }} 
-    </h1>
+{% block content %}
 
-    <div id="footer">
-    {% block footer %}
-        {% include "footer.html" %}
-    {% endblock %}
-    </div>
-  </body>
-</html>
+  <h1 >
+  Project1 management
+  </h1>
+
+  <table class="table table-hover">
+    {% for VM in project_VMs %}
+      <tr class="col-lg-12">
+        <td  class="col-lg-1">{{ VM.name }}</td>
+        {% for key,value in VM.fields.items %}
+          <td  class="col-lg-1 col-lg-offset-1">{{ value }}</td>
+        {% endfor %}    
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}
