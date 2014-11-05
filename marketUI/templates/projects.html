@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    {% include "header.html" %}
-    
-    <title>{% block title %}Marketplace{% endblock %}</title>
-  </head>
+{% extends "base.html" %}
 
-  <body> 
+{% block content %}
+  <h1 >
+  Welcome to the Projects Page. </br>
+  Enter or create a project.
+  </h1>
 
-    <h1>
-    Welcome to the {{ Projects }} 
-    </h1>
+  <table class="table table-hover">
+    {% for project in user_projects %}
+      <tr class="col-lg-12">
+        <td  class="col-lg-2" style="font-size:large"><a href="../project_space/manage">{{ project.name }}</a></td>
+        <td class="col-lg-6">{{ project.desc }}</td>
+      </tr>
+    {% endfor %}
+  </table>
 
-    <div id="footer">
-    {% block footer %}
-        {% include "footer.html" %}
-    {% endblock %}
-    </div>
-  </body>
-</html>
+{% include "create_project.html" %}
+
+{% endblock %}
+
+
+
+
