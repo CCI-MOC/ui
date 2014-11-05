@@ -2,15 +2,64 @@
 <html>
   <head>
     {% include "header.html" %}
-    
+
     <title>{% block title %}Marketplace{% endblock %}</title>
+    <style>
+    {% block css %}
+        {% include "style.css" %}
+    {% endblock %}
+    </style>
+
   </head>
 
-  <body> 
+  <body>
+
+
 
     <h1>
-    Welcome to the {{ market }} 
+    Welcome to the Marketplace
     </h1>
+
+<nav class="navbar navbar-default nb" role="navigation">
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse nc">
+    <ul class="nav nb-nav">
+      <li class="active"><a href="#">Services</a></li>
+      <li><a href="#">Appliances</a></li>
+      <li class="dropdown dd">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Storage</a></li>
+          <li><a href="#">Compute</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+
+    <table class="table table-hover">
+      {% for items in market %}
+      {% if items.tag == "service"%}
+        <tr class="col-lg-12 service">
+      {% elif items.tag == "appliance"%}
+        <tr class="col-lg-12 appliance">
+      {% elif items.tag == "compute"%}
+        <tr class="col-lg-12 compute">
+      {% elif items.tag == "storage"%}
+        <tr class="col-lg-12 storage">
+      {% endif %}
+          <td class="col-lg-6">{{items.name}}</td>
+          <td class="col-lg-6">{{items.desc}}</td>
+          <td class="col-lg-6"><img src="{{items.icon}}"</td>
+        </tr>
+        {% endfor %}
+
+
+
+
+    </table>
+
 
     <div id="footer">
     {% block footer %}
