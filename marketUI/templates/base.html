@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include "header.html" %}
+
+    <title>{% block title %}Home{% endblock %}</title>
+
+<!--     {% block css %}
+    {% endblock %} -->
+
+  </head>
+
+  <body class="container"> 
+
+<!--     {% block navbar %} 
+    {% endblock %} -->
+
+    {% block content %}
+    {% endblock %}
+
+
+
+    <div id="footer">
+    {% block footer %}
+        {% include "footer.html" %}
+    {% endblock %}
+    </div>
+
+<!--     {% block js %}
+    {% endblock %} -->
+
+  </body>
+</html>
