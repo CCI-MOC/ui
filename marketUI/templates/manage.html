@@ -4,11 +4,25 @@
 
 {% block content %}
 
-  <h1 >
-  Project1 management
-  </h1>
+<div>
+  <h1>Project1 management</h1>
+  <div style="font-size:large">
+    <span class="label label-success">Storage:</span> EMC, HP <br>
+    <span class="label label-primary">Compute:</span> BU, HU 
+  </div>
+</div>
 
   <table class="table table-hover">
+    <!-- HARDCODED ROW OF FIELDS -->
+    <tr class="col-lg-12" style="font-size:large">
+      <td  class="col-lg-1">Name</td>
+      <td  class="col-lg-1">Status</td>
+      <td  class="col-lg-1">Storage</td>
+      <td  class="col-lg-1">Image</td>
+      <td  class="col-lg-1">Compute</td>
+      <hr>
+    </tr>
+
     {% for VM in project_VMs %}
       <tr class="col-lg-12">
         <td  class="col-lg-1">{{ VM.name }}</td>
