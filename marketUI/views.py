@@ -9,7 +9,10 @@ def create_user(request):
 	return render(request, 'create_user.html', {'register': 'create new user page.'})
 
 def projects(request):
-	return render(request, 'projects.html', {'Projects': 'projects page.'})
+	projects = [{'name':'Project1', 'desc':'This is my first project.'}, 
+	{'name': 'Project2', 'desc':'I should have a better name.' }]
+
+	return render(request, 'projects.html', {'user_projects': projects})
 
 def market(request):
 	return render(request, 'market.html', {'market': 'marketplace page.'})
@@ -19,6 +22,4 @@ def manage(request):
 
 def settings(request):
 	return render(request, 'settings.html', {'settings': 'project settings page.'})
-
-
 
