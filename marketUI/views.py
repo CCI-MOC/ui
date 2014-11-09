@@ -37,3 +37,12 @@ def manage(request):
 
 def settings(request):
 	return render(request, 'settings.html', {'settings': 'project settings page.'})
+
+def modal(request):
+
+	options = [
+		{'compute': 'small'},
+		{'storage': 'BU'},
+		{'network': 'private'}]
+
+	return render(request, 'modal.html', {'options': options})

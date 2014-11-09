@@ -13,9 +13,28 @@ $( document ).ready(function() {
     })
 
     $('.cart').click(function() {
-        console.log($(this).siblings('td'))
         jQuery.noConflict()
         $('#myModal').modal('show')
-
     })
+
+    function showModal(id) {
+        $.get('modal', function (data) {
+            console.log(data)
+        });
+    }
+
+    $(function(){
+
+    $(".dropdown-menu").on('click', 'li a', function(){
+        var menu = $(this).closest('ul').attr('class').split(' ')[1]
+      $('.dd'+menu).text($(this).text())
+      $('.dd'+menu).val($(this).text())
+   });
+
+   $('.project-add').click(function() {
+       //do stuff
+       window.location.href = "/project_space/manage";
+   })
+
+});
 });
