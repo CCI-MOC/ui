@@ -80,14 +80,45 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                <h4 class="modal-title" id="myModalLabel">Title of Service</h4>
                             </div>
-                            <div class="modal-body">
-                                ...
+                            <div class="modal-body text-center">
+                                <input placeholder="name"></input>
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle ddoption-compute" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                        Compute
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu option-compute" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Small</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Medium</a></a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Large</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle ddoption-storage" type="button" id="dropdownMenu2" data-toggle="dropdown">
+                                        Storage
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu option-storage" role="menu" aria-labelledby="dropdownMenu2">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">BU-small</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">EMC-large</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle ddoption-network" type="button" id="dropdownMenu3" data-toggle="dropdown">
+                                        Network
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu option-network" role="menu" aria-labelledby="dropdownMenu3">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Public</a></li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="project-add btn btn-primary">ADD</button>
                             </div>
                         </div>
                     </div>
