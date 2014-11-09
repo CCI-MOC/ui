@@ -14,7 +14,7 @@ $( document ).ready(function() {
 
     $('.cart').click(function() {
         console.log($(this).siblings('td'))
-        jQuery.noConflict();
+        jQuery.noConflict()
         $('#myModal').modal('show')
 
     })
