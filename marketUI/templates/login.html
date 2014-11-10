@@ -4,15 +4,18 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+  <div style="padding-left:300px; padding-right:300px;">
   <h1> Welcome to the {{ OCXlogin }} </h1>
 
+  
   <input type="text" class="form-control text-center medium" placeholder="Username">
   <input type="text" class="form-control text-center medium" placeholder="Password">
-  
-  <div class="btn-group pagination-center">
-    <a href="../projects" type="button" class="btn btn-default">Login</a>
-    <button type="button" class="btn btn-default">Register</button>
-    <button type="button" class="btn btn-default">Forgot Password</button>
+
+  <div class="btn-group">
+    <a href="../projects" type="button" class="btn btn-primary">Login</a>
+    <button type="button" class="btn btn-primary">Register</button>
+    <button type="button" class="btn btn-primary">Forgot Password</button>
+  </div>
   </div>
 {% endblock %}
 
