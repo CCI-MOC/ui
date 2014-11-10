@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 
 def login(request):
-	return render(request, 'login.html', {'OCXlogin': 'OCX login.'})
+	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
 
 def create_user(request):
 	return render(request, 'create_user.html', {'register': 'create new user page.'})
@@ -30,8 +30,8 @@ def market(request):
 
 def manage(request):
 	VMs = [
-		{'name': 'VM1', 'fields': {'compute':'BU-large', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
-		{'name': 'VM2', 'fields': {'compute':'HU-small', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
+		{'name': 'VM1', 'desc': 'My small VM', 'fields': {'compute':'BU-small', 'network': 'pubNet1', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
+		{'name': 'VM2', 'desc': 'My larger VM', 'fields': {'compute':'HU-large', 'network': 'privNet1', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
 
 	return render(request, 'manage.html', {'project_VMs': VMs})
 

@@ -4,31 +4,54 @@
 
 {% block content %}
 
-<div>
-  <h1>Project1 management</h1>
-  <div style="font-size:large">
-    <span class="label label-success">Storage:</span> EMC, HP <br>
-    <span class="label label-primary">Compute:</span> BU, HU 
-  </div>
-</div>
+  <div>
+    <h1>Project1 management
+    <a href="/project_space/manage/settings" style="float:right; font-size:large" class="btn btn-primary" >
+      Project Settings
+      <span class="glyphicon glyphicon-cog"></span>
+    </a>
+    </h1>
 
-  <table class="table table-hover">
+    <div style="font-size:large">
+      <span class="label label-success">Storage:</span> EMC, HP <br>
+      <span class="label label-info">Compute:</span> BU, HU <br>
+      <span class="label label-warning">Network:</span> pubNet1 (public), privNet1 (private) 
+    </div>
+    <form class="navbar-form navbar-right" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="">
+      </div>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    
+  </div>
+
+<hr>
+  <table class="table table-hover table-striped">
     <!-- HARDCODED ROW OF FIELDS -->
-    <tr class="col-lg-12" style="font-size:large">
-      <td  class="col-lg-1">Name</td>
-      <td  class="col-lg-1">Status</td>
-      <td  class="col-lg-1">Storage</td>
-      <td  class="col-lg-1">Image</td>
-      <td  class="col-lg-1">Compute</td>
-      <hr>
-    </tr>
+    <thead>
+      <tr class="col-lg-12" style="font-size:medium; font-weight:bold">
+        <td  class="col-lg-1">Name</td>
+        <td  class="col-lg-1">Description</td>
+        <td  class="col-lg-1">Status</td>
+        <td  class="col-lg-1">Storage</td>
+        <td  class="col-lg-1">Image</td>
+        <td  class="col-lg-1">Compute</td>
+        <td  class="col-lg-1">Network</td>
+        
+      </tr>
+    </thead>
 
     {% for VM in project_VMs %}
       <tr class="col-lg-12">
-        <td  class="col-lg-1">{{ VM.name }}</td>
+        <td  class="col-lg-1">
+        <span class="btn btn-primary">
+        {{ VM.name }}</span>
+        </td>
+        <td  class="col-lg-1">{{ VM.desc }}</td>
         {% for key,value in VM.fields.items %}
-          <td  class="col-lg-1 col-lg-offset-1">{{ value }}</td>
-        {% endfor %}    
+          <td  class="col-lg-1">{{ value }}</td>
+        {% endfor %}
       </tr>
     {% endfor %}
   </table>
