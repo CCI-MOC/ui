@@ -1,3 +1,0 @@
-""" Calls to OpenStack SDK """
-
-
