@@ -2,8 +2,12 @@ from novaclient.client import Client
 def list(): 
 
 	nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
-
-	print(nova.servers.list())
+	vms = []
+	server_list = nova.servers.list()
+	for server in server_list:
+		vm = {'name': server.name,'image':server.image[u'id']}
+		vms.append(vm)
+	return vms
 def create(): 
 	nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
 
@@ -32,4 +36,6 @@ def delete():
 	    print("deleting server..........")
 	    nova.servers.delete(s)
 	    print("server %s deleted" % name)	
+
+
 list()

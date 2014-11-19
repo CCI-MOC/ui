@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+import ui_api as api
 
 def login(request):
 	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
@@ -36,13 +36,13 @@ def market(request):
 
 
 def manage(request):
-
 	# VMs should receive data from a call to nova.servers.list( w/ details of each instance )
 	# 'nova' is based off a specific project / client
 	# e.g. nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
 	# depending on the object of each instance, template code (manage.html) has to change
+	VMs = api.list()
 
-	VMs = [
+	hard_code =  [
 		{'name': 'VM1', 'desc': 'My small VM', 'fields': {'compute':'BU-small', 'network': 'pubNet1', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
 		{'name': 'VM2', 'desc': 'My larger VM', 'fields': {'compute':'HU-large', 'network': 'privNet1', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
 
