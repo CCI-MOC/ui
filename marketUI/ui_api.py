@@ -1,16 +1,18 @@
-from novaclient.client import Client
+import settings
+
 def list(): 
 
-	nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
+	nova = settings.Nova
 	vms = []
 	server_list = nova.servers.list()
 	for server in server_list:
 		vm = {'name': server.name,'image':server.image[u'id']}
 		vms.append(vm)
 	return vms
-def create(): 
-	nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
 
+def create(): 
+	#nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
+	nova = settings.Nova
 	name = raw_input('name: ')
 	fl   = raw_input('flavor: ')  
 	fl = nova.flavors.find(name='m1.'+fl)
@@ -20,8 +22,8 @@ def create():
 import time
 
 def delete(): 
-	nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
-
+	#nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
+	nova = settings.Nova
 	servers_list = nova.servers.list()
 	server_exists = False
         name = raw_input('name: ')
@@ -36,6 +38,5 @@ def delete():
 	    print("deleting server..........")
 	    nova.servers.delete(s)
 	    print("server %s deleted" % name)	
-
 
 list()

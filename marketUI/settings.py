@@ -84,3 +84,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+import auth
+# OpenStack Service objects
+# created in auth.py
+Nova = auth.nova
+Keystone = auth.keystone
+Glance = auth.glance
+
+
