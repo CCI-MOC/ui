@@ -34,11 +34,8 @@
         <td  class="col-lg-1">Name</td>
         <td  class="col-lg-1">Description</td>
         <td  class="col-lg-1">Status</td>
-        <td  class="col-lg-1">Storage</td>
         <td  class="col-lg-1">Image</td>
-        <td  class="col-lg-1">Compute</td>
         <td  class="col-lg-1">Network</td>
-        
       </tr>
     </thead>
 
@@ -48,12 +45,11 @@
         <span class="btn btn-primary">
         {{ VM.name }}</span>
         </td>
+        <td  class="col-lg-1">{{ VM.desc }}</td>
+        <td  class="col-lg-1">{{ VM.status }}</td>
         <td  class="col-lg-1">{{ VM.image }}</td>
-        {% for key,value in VM.fields.items %}
-          <td  class="col-lg-1">{{ value }}</td>
-        {% endfor %}
+        <td  class="col-lg-1">{{ VM.network }}</td>
       </tr>
     {% endfor %}
   </table>
-
 {% endblock %}
