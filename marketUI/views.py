@@ -10,15 +10,11 @@ def create_user(request):
 
 def projects(request):
 
-	# similar to manage, projects will have to pull data of current projects on the deployment
-	# projects = keystone.<projects>.list()
-	# projects.html will have to change to reflect data from received projects
-	# when a project is selected from this list, relevant info will be passed to the 
-	# project management page, for access to nova
+	projects = api.listTenants()	
 
-	projects = [
-		{'name':'Project1', 'desc':'This is my first project.'},
-		{'name':'Project2', 'desc':'I should have a better name.'} ]
+	#projects = [
+	#	{'name':'Project1', 'desc':'This is my first project.'},
+	#	{'name':'Project2', 'desc':'I should have a better name.'} ]
 
 	return render(request, 'projects.html', {'user_projects': projects})
 
@@ -36,15 +32,11 @@ def market(request):
 
 
 def manage(request):
-	# VMs should receive data from a call to nova.servers.list( w/ details of each instance )
-	# 'nova' is based off a specific project / client
-	# e.g. nova = Client('2', 'nova', 'admin', 'service', 'http://10.0.2.15:5000/v2.0')
-	# depending on the object of each instance, template code (manage.html) has to change
-	VMs = api.list()
+	VMs = api.listVMs()
 
-	hard_code =  [
-		{'name': 'VM1', 'desc': 'My small VM', 'fields': {'compute':'BU-small', 'network': 'pubNet1', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
-		{'name': 'VM2', 'desc': 'My larger VM', 'fields': {'compute':'HU-large', 'network': 'privNet1', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
+#	hard_code =  [
+#		{'name': 'VM1', 'desc': 'My small VM', 'fields': {'compute':'BU-small', 'network': 'pubNet1', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
+#		{'name': 'VM2', 'desc': 'My larger VM', 'fields': {'compute':'HU-large', 'network': 'privNet1', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
 
 	return render(request, 'manage.html', {'project_VMs': VMs})
 
