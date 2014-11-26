@@ -86,11 +86,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-import auth
-# OpenStack Service objects
-# created in auth.py
-Nova = auth.nova
-Keystone = auth.keystone
-Glance = auth.glance
-
 
