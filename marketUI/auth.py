@@ -5,7 +5,6 @@ import keystoneclient.v2_0.client as ksclient
 
 # admin keystone auth
 keystone = ksclient.Client(token='admin', endpoint='http://10.0.2.15:35357/v2.0/')
-print keystone.tenants.list()
 
 #glance_endpoint = keystone.service_catalog.url_for(service_type='image')
 #glance = glclient.Client(glance_endpoint, token=keystone.auth_token)

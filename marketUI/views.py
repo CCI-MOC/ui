@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
+import time
+from forms import NameForm
 
 def login(request):
 	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
@@ -32,19 +34,31 @@ def market(request):
 
 
 def manage(request):
-	VMs = api.listVMs()
+	if request.method == 'POST':
+		form = NameForm(request.POST)
+		if form.is_valid():
+			VMname = form.cleaned_data['newVM']
+			return HttpResponseRedirect('/project_space/manage/create/'+VMname)
+	else:
+		VMs = api.listVMs()
+		return render(request, 'manage.html', {'project_VMs': VMs})
 
-#	hard_code =  [
-#		{'name': 'VM1', 'desc': 'My small VM', 'fields': {'compute':'BU-small', 'network': 'pubNet1', 'storage': 'EMC-small', 'image': 'CentOS', 'status': 'off'}},
-#		{'name': 'VM2', 'desc': 'My larger VM', 'fields': {'compute':'HU-large', 'network': 'privNet1', 'storage': 'HP-medium', 'image': 'Ubuntu', 'status': 'off'}} ]
+def deleteVM(request, VMname):
+	api.delete(VMname)
+	time.sleep(5)
+	#VMs = api.listVMs()	
+	#return render(request, 'manage.html', {'project_VMs': VMs})
+	return HttpResponseRedirect('/project_space/manage')
 
-	return render(request, 'manage.html', {'project_VMs': VMs})
+def createDefaultVM(request, VMname):
+	api.createDefault(VMname)
+	time.sleep(10)
+	return HttpResponseRedirect('/project_space/manage')
 
 def settings(request):
 	return render(request, 'settings.html', {'settings': 'project settings page.'})
 
 def modal(request):
-
 	options = [
 		{'compute': 'small'},
 		{'storage': 'BU'},

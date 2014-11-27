@@ -2,6 +2,12 @@
 
 {% block title %}Project Management{% endblock %}
 
+{% block css %}
+<style>
+    {% include "manage.css" %}
+</style>
+{% endblock %}
+
 {% block content %}
 
   <div>
@@ -16,6 +22,7 @@
       <span class="label label-success">Storage:</span> EMC, HP <br>
       <span class="label label-info">Compute:</span> BU, HU <br>
       <span class="label label-warning">Network:</span> pubNet1 (public), privNet1 (private) 
+      
     </div>
     <form class="navbar-form navbar-right" role="search">
       <div class="form-group">
@@ -30,26 +37,60 @@
   <table class="table table-hover table-striped">
     <!-- HARDCODED ROW OF FIELDS -->
     <thead>
-      <tr class="col-lg-12" style="font-size:medium; font-weight:bold">
-        <td  class="col-lg-1">Name</td>
-        <td  class="col-lg-1">Description</td>
-        <td  class="col-lg-1">Status</td>
-        <td  class="col-lg-1">Image</td>
-        <td  class="col-lg-1">Network</td>
+      <tr style="font-size:medium; font-weight:bold">
+        <th class="col-lg-2">Name</td>
+        <th class="col-lg-3">Description</td>
+        <th class="col-lg-2">Status</td>
+        <th class="col-lg-3">Image</td>
+        <th class="col-lg-2">Network</td>
       </tr>
     </thead>
 
     {% for VM in project_VMs %}
-      <tr class="col-lg-12">
-        <td  class="col-lg-1">
+      <tr>
+        <td>
         <span class="btn btn-primary">
         {{ VM.name }}</span>
         </td>
-        <td  class="col-lg-1">{{ VM.desc }}</td>
-        <td  class="col-lg-1">{{ VM.status }}</td>
-        <td  class="col-lg-1">{{ VM.image }}</td>
-        <td  class="col-lg-1">{{ VM.network }}</td>
+        <td>{{ VM.desc }}</td>
+        <td>{{ VM.status }}</td>
+        <td>{{ VM.image }}</td>
+        <td>{{ VM.network }}</td>
+	<td><form action='/project_space/manage/delete/{{ VM.name }}' method='get'>
+	  <button class="delVM btn btn-danger btn-lg">
+	  <span class="delVM add-icon glyphicon glyphicon-trash text-center"></span></button>
+       </form></td>
       </tr>
     {% endfor %}
   </table>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<span class="glyphicon glyphicon-plus"></span> 
+Create VM
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create New VM</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/project_space/manage/' method='post'>
+          {% csrf_token %}
+          {{ form }}
+          <input type="text" placeholder="Name" name="newVM">
+          <button class="btn btn-primary">Deploy</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
