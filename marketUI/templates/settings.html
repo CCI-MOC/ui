@@ -1,21 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    {% include "header.html" %}
-    
-    <title>{% block title %}Marketplace{% endblock %}</title>
-  </head>
+{% extends "base.html" %}
 
-  <body> 
+{% block content %}
+<div style="padding-left:100px; padding-right:100px;">
+  <h1><span style="font-weight:bold">{{ tenant }}</span> Users</h1>
 
-    <h1>
-    Welcome to the {{ settings }} 
-    </h1>
+  <table class="table table-hover">
+    <thead>
+      <tr style="font-size:medium; font-weight:bold">
+        <th class="col-md-2">Name</td>
+        <th class="col-md-4">Roles</td>
+        <th class="col-md-3">Enabled</td>
+        <th class="col-md-3">Email</td>
+      </tr>
+    </thead>
 
-    <div id="footer">
-    {% block footer %}
-        {% include "footer.html" %}
-    {% endblock %}
-    </div>
-  </body>
-</html>
+    {% for user in users %}
+      <tr>
+        <td style="font-size:medium">{{ user.name }}</td>
+        <td>
+	{% for role in user.roles %}
+		{{ role }}; 
+	{% endfor %}
+	</td>
+        <td>{{ user.enabled }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+</div>
+{% endblock %}
