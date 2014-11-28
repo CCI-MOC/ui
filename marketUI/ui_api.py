@@ -1,15 +1,16 @@
 from auth import nova, keystone
 
 def listVMs():
+# taking only private networks; hardcoded
 	vms = []
 	server_list = nova.servers.list()
 	for server in server_list:
 		vm = {
 		'name':server.name,
-		'desc':server.id,
+		'id':server.id,
  		'status':server.status,
  		'image':server.image[u'id'],
- 		'network':server.networks[u'private'][0]
+ 		'network':server.networks[u'private']
 		}
 		vms.append(vm)
 	return vms
@@ -26,6 +27,28 @@ def listTenants():
                 projects.append(project)
         return projects
 
+def listUsers(tenant):
+        users = []
+        user_list = tenant.list_users()
+        for member in user_list:
+                roleNames = []
+                user = {
+                'name':member.name,
+		'id':member.id,
+                'enabled':member.enabled,
+                'email':member.email,
+		'roles':roleNames
+                }
+		roles = member.list_roles(tenant=tenant.id)
+		for role in roles:
+			roleNames.append(role.name)
+                users.append(user)
+        return users
+
+def getTenant():
+# hardcoded to return first tenant
+	tenants = keystone.tenants.list()
+	return tenants[0]
 
 def create(): 
 	name = raw_input('name: ')

@@ -11,7 +11,7 @@
 {% block content %}
 
   <div>
-    <h1>Project1 management
+    <h1><span style="font-weight:bold">{{ tenant }}</span> Management
     <a href="/project_space/manage/settings" style="float:right; font-size:large" class="btn btn-primary" >
       Project Settings
       <span class="glyphicon glyphicon-cog"></span>
@@ -38,11 +38,10 @@
     <!-- HARDCODED ROW OF FIELDS -->
     <thead>
       <tr style="font-size:medium; font-weight:bold">
-        <th class="col-lg-2">Name</td>
-        <th class="col-lg-3">Description</td>
-        <th class="col-lg-2">Status</td>
+        <th class="col-lg-3">Name</td>
+        <th class="col-lg-3">Status</td>
+        <th class="col-lg-3">Network</td>
         <th class="col-lg-3">Image</td>
-        <th class="col-lg-2">Network</td>
       </tr>
     </thead>
 
@@ -52,10 +51,13 @@
         <span class="btn btn-primary">
         {{ VM.name }}</span>
         </td>
-        <td>{{ VM.desc }}</td>
         <td>{{ VM.status }}</td>
+        <td>private:
+	{% for network in VM.network %}
+		{{ network }}; 
+	{% endfor %}
+	</td>
         <td>{{ VM.image }}</td>
-        <td>{{ VM.network }}</td>
 	<td><form action='/project_space/manage/delete/{{ VM.name }}' method='get'>
 	  <button class="delVM btn btn-danger btn-lg">
 	  <span class="delVM add-icon glyphicon glyphicon-trash text-center"></span></button>
@@ -64,33 +66,6 @@
     {% endfor %}
   </table>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-<span class="glyphicon glyphicon-plus"></span> 
-Create VM
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
-        <h4 class="modal-title" id="myModalLabel">Create New VM</h4>
-      </div>
-      <div class="modal-body">
-        <form action='/project_space/manage/' method='post'>
-          {% csrf_token %}
-          {{ form }}
-          <input type="text" placeholder="Name" name="newVM">
-          <button class="btn btn-primary">Deploy</button>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% include "createModal.html" %}
 
 {% endblock %}

@@ -41,7 +41,8 @@ def manage(request):
 			return HttpResponseRedirect('/project_space/manage/create/'+VMname)
 	else:
 		VMs = api.listVMs()
-		return render(request, 'manage.html', {'project_VMs': VMs})
+		tenant = api.getTenant()
+		return render(request, 'manage.html', {'project_VMs': VMs, 'tenant': tenant.name})
 
 def deleteVM(request, VMname):
 	api.delete(VMname)
@@ -56,7 +57,9 @@ def createDefaultVM(request, VMname):
 	return HttpResponseRedirect('/project_space/manage')
 
 def settings(request):
-	return render(request, 'settings.html', {'settings': 'project settings page.'})
+	tenant = api.getTenant()	
+	users = api.listUsers(tenant)
+	return render(request, 'settings.html', {'tenant': tenant.name, 'users': users})
 
 def modal(request):
 	options = [

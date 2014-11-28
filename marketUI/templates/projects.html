@@ -2,10 +2,6 @@
 
 {% block content %}
 <div style="padding-left:100px; padding-right:100px;">
-  <h1 >
-  Welcome to the Projects Page. </br>
-  Enter or create a project.
-  </h1>
 
   <table class="table table-hover">
     <thead>
@@ -25,7 +21,7 @@
     {% endfor %}
   </table>
 
-{# include "create_project.html" #}
+{% include "create_project.html" %}
 
 </div>
 {% endblock %}

@@ -1,0 +1,29 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<span class="glyphicon glyphicon-plus"></span>
+Create VM
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create New VM</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/project_space/manage/' method='post'>
+          {% csrf_token %}
+          {{ form }}
+          <input type="text" placeholder="Name" name="newVM">
+          <button class="btn btn-primary">Deploy</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
