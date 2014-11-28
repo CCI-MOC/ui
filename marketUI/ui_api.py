@@ -15,7 +15,6 @@ def listVMs():
 		vms.append(vm)
 	return vms
 
-
 def listTenants():
 	projects = []
         tenant_list = keystone.tenants.list()
@@ -27,7 +26,6 @@ def listTenants():
 		}
                 projects.append(project)
         return projects
-
 
 def listUsers(tenant):
         users = []
@@ -46,16 +44,6 @@ def listUsers(tenant):
 			roleNames.append(role.name)
                 users.append(user)
         return users
-
-
-def listRoles(users, user_list, tenantID):
-	
-	for user in users:
-		roles = user.list_roles(tenant=tenantID)
-		roleNames = []
-		for role in roles:
-			roleNames.append(role.name)
-	return users
 
 def getTenant():
 # hardcoded to return first tenant
