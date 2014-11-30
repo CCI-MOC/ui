@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^project_space/market', market),
     url(r'^project_space/manage/settings', settings),
     url(r'^project_space/manage/delete/(?P<VMname>.+)', deleteVM),
+    url(r'^project_space/manage/create/(?P<VMname>.+);(?P<imageName>.+);(?P<flavorName>.+)', createVM),
     url(r'^project_space/manage/create/(?P<VMname>.+)', createDefaultVM),
     url(r'^project_space/manage', manage),
 

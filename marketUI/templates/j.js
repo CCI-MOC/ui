@@ -31,6 +31,7 @@ $( document ).ready(function() {
       $('.dd'+menu).val($(this).text())
    });
 
+
    $('.project-add').click(function() {
        //do stuff
        window.location.href = "/project_space/manage";
