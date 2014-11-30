@@ -1,4 +1,4 @@
-from auth import nova, keystone
+from auth import nova, keystone, glance
 
 def listVMs():
 # taking only private networks; hardcoded
@@ -9,7 +9,8 @@ def listVMs():
 		'name':server.name,
 		'id':server.id,
  		'status':server.status,
- 		'image':server.image[u'id'],
+ 		'image':nova.images.get(server.image[u'id']).name,
+		'flavor':nova.flavors.get(server.flavor[u'id']).name,
  		'network':server.networks[u'private']
 		}
 		vms.append(vm)
@@ -45,23 +46,39 @@ def listUsers(tenant):
                 users.append(user)
         return users
 
+def listImages():
+	images = []
+        image_list = list(glance.images.list())
+        for imageObj in image_list:
+                image = {
+		'name':imageObj.name,
+		'id':imageObj.id
+		}
+                images.append(image)
+        return images
+
+def listFlavors():
+	flavors = []
+	flavor_list = nova.flavors.list()
+	for flavor in flavor_list:
+		flavors.append(flavor.name)
+	return flavors
+
 def getTenant():
 # hardcoded to return first tenant
 	tenants = keystone.tenants.list()
 	return tenants[0]
 
-def create(): 
-	name = raw_input('name: ')
-	fl   = raw_input('flavor: ')  
-	fl = nova.flavors.find(name='m1.'+fl)
-	print(nova.servers.create(name, 'ed451e82-887b-42e1-b631-d28f46a5eed2',flavor=fl,meta=None,files=None))
+def createVM(VMname, imageName, flavorName):
+        image = nova.images.find(name=imageName)
+	fl = nova.flavors.find(name=flavorName)
+        nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
 
 def createDefault(VMname):
-	fl = nova.flavors.find(name='m1.tiny')
+	fl = nova.flavors.find(name='m1.nano')
 	image = nova.images.find(name='cirros-0.3.2-x86_64-uec-ramdisk')
 	nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
 	
-
 def delete(VMname): 
 	servers_list = nova.servers.list()
 	server_exists = False

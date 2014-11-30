@@ -11,13 +11,7 @@ def create_user(request):
 	return render(request, 'create_user.html', {'register': 'create new user page.'})
 
 def projects(request):
-
 	projects = api.listTenants()	
-
-	#projects = [
-	#	{'name':'Project1', 'desc':'This is my first project.'},
-	#	{'name':'Project2', 'desc':'I should have a better name.'} ]
-
 	return render(request, 'projects.html', {'user_projects': projects})
 
 def market(request):
@@ -38,22 +32,30 @@ def manage(request):
 		form = NameForm(request.POST)
 		if form.is_valid():
 			VMname = form.cleaned_data['newVM']
-			return HttpResponseRedirect('/project_space/manage/create/'+VMname)
+			image = form.cleaned_data['imageName']
+			flavor = form.cleaned_data['flavorName']
+			return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)
 	else:
 		VMs = api.listVMs()
+		images = api.listImages()
+		flavors = api.listFlavors()
 		tenant = api.getTenant()
-		return render(request, 'manage.html', {'project_VMs': VMs, 'tenant': tenant.name})
+		return render(request, 'manage.html', 
+		{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':tenant.name})
 
 def deleteVM(request, VMname):
 	api.delete(VMname)
-	time.sleep(5)
-	#VMs = api.listVMs()	
-	#return render(request, 'manage.html', {'project_VMs': VMs})
+	time.sleep(8)
 	return HttpResponseRedirect('/project_space/manage')
+
+def createVM(request, VMname, imageName, flavorName):
+        api.createVM(VMname, imageName, flavorName)
+        time.sleep(15)
+        return HttpResponseRedirect('/project_space/manage')
 
 def createDefaultVM(request, VMname):
 	api.createDefault(VMname)
-	time.sleep(10)
+	time.sleep(15)
 	return HttpResponseRedirect('/project_space/manage')
 
 def settings(request):
@@ -66,5 +68,4 @@ def modal(request):
 		{'compute': 'small'},
 		{'storage': 'BU'},
 		{'network': 'private'}]
-
 	return render(request, 'modal.html', {'options': options})
