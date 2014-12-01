@@ -29,8 +29,25 @@ $( document ).ready(function() {
         var menu = $(this).closest('ul').attr('class').split(' ')[1]
       $('.dd'+menu).text($(this).text())
       $('.dd'+menu).val($(this).text())
+      $('.create-'+menu).text($(this).text())
+      $('.create-'+menu).val($(this).text())
    });
 
+    $(".edit-dropdown").on('click', 'li a', function(){
+        var menu = $(this).closest('ul').attr('class').split(' ')[2]
+      $('.edit-'+menu).text($(this).text())
+      $('.edit-'+menu).val($(this).text())
+   });
+
+    $(".editVM").on('click', function(){
+      $('.editVM-name').text($(this).text())
+      $('.editVM-name').val($(this).text())
+      $('.editVM-id').val($(this).val())
+   });
+
+    $(".chosenFlavor").on('click', function(){
+      $('.editFlavor-id').val($(this).data('id'))
+   });
 
    $('.project-add').click(function() {
        //do stuff

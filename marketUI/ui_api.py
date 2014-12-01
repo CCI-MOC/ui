@@ -1,4 +1,5 @@
 from auth import nova, keystone, glance
+import time
 
 def listVMs():
 # taking only private networks; hardcoded
@@ -60,8 +61,12 @@ def listImages():
 def listFlavors():
 	flavors = []
 	flavor_list = nova.flavors.list()
-	for flavor in flavor_list:
-		flavors.append(flavor.name)
+	for flavorObj in flavor_list:
+		flavor = {
+		'name': flavorObj.name,
+		'id': flavorObj.id
+		}
+		flavors.append(flavor)
 	return flavors
 
 def getTenant():
@@ -93,5 +98,23 @@ def delete(VMname):
 	    print("deleting server..........")
 	    nova.servers.delete(s)
 	    print("server %s deleted" % VMname)	
+
+def editVM(VM, flavor):
+	nova.servers.resize(VM, flavor)
+	time.sleep(60)
+	nova.servers.confirm_resize(VM)
+
+def startVM(VM):
+	nova.servers.start(VM)
+
+def pauseVM(VM):
+	nova.servers.pause(VM)
+
+def unpauseVM(VM):
+	nova.servers.unpause(VM)		
+		
+def stopVM(VM):
+	nova.servers.stop(VM)
+		
 
 

@@ -1,11 +1,11 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createModal">
 <span class="glyphicon glyphicon-plus"></span>
 Create VM
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content text-center">
       <div class="modal-header">
@@ -18,7 +18,7 @@ Create VM
           {{ form }}
           <input type="text" placeholder="Name" name="newVM" class="text-center">
 	<div class="dropdown">
-          <input name="imageName" width="300px" class="btn btn-default dropdown-toggle ddoption-image" type="text" id="dropdownMenu1" data-toggle="dropdown" placeholder="Select Image"></input>
+          <input name="imageName" width="300px" class="btn btn-default dropdown-toggle create-option-image" type="text" id="dropdownMenu1" data-toggle="dropdown" placeholder="Select Image"></input>
           <ul class="dropdown-menu option-image" role="menu" aria-labelledby="dropdownMenu1">
 	  {% for image in images  %}
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ image.name }}</a></li>
@@ -26,10 +26,10 @@ Create VM
       	  </ul>
         </div>
         <div class="dropdown">
-          <input name="flavorName" class="btn btn-default dropdown-toggle ddoption-flavor" type="text" id="dropdownMenu1" data-toggle="dropdown" placeholder="Select Flavor"></input>
+          <input name="flavorName" class="btn btn-default dropdown-toggle create-option-flavor" type="text" id="dropdownMenu1" data-toggle="dropdown" placeholder="Select Flavor"></input>
           <ul class="dropdown-menu option-flavor" role="menu" aria-labelledby="dropdownMenu1">
           {% for flavor in flavors  %}
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ flavor }}</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ flavor.name }}</a></li>
           {% endfor %}
           </ul>
         </div>
