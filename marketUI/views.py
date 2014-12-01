@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-from forms import NameForm
+from forms import NameForm, EditForm, ControlForm
 
 def login(request):
 	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
@@ -45,7 +45,7 @@ def manage(request):
 
 def deleteVM(request, VMname):
 	api.delete(VMname)
-	time.sleep(8)
+	time.sleep(10)
 	return HttpResponseRedirect('/project_space/manage')
 
 def createVM(request, VMname, imageName, flavorName):
@@ -56,6 +56,31 @@ def createVM(request, VMname, imageName, flavorName):
 def createDefaultVM(request, VMname):
 	api.createDefault(VMname)
 	time.sleep(15)
+	return HttpResponseRedirect('/project_space/manage')
+
+def edit(request):
+        if request.method == 'POST':
+                form = EditForm(request.POST)
+                if form.is_valid():
+                        VM_id = form.cleaned_data['VM_id']
+                        flavor_id = form.cleaned_data['flavor_id']	
+			api.editVM(VM_id, flavor_id)
+			return HttpResponseRedirect('/project_space/manage')
+        else:
+		return HttpResponseRedirect('/project_space/manage')
+
+def editControlVM(request):
+        if request.method == 'POST':
+                form = ControlForm(request.POST)
+                if form.is_valid():
+			VM_id = form.cleaned_data['VM_id']
+			print form.cleaned_data['action']
+			if(form.cleaned_data['action'] == 'start'):
+			  api.startVM(VM_id)
+			elif(form.cleaned_data['action'] == 'pause'):
+			  api.pauseVM(VM_id)
+			elif(form.cleaned_data['action'] == 'stop'):
+			  api.stopVM(VM_id)
 	return HttpResponseRedirect('/project_space/manage')
 
 def settings(request):

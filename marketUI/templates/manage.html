@@ -43,8 +43,8 @@
     {% for VM in project_VMs %}
       <tr>
         <td>
-        <span class="btn btn-primary">
-        {{ VM.name }}</span>
+        <button class="btn btn-primary editVM" data-toggle="modal" data-target="#editModal" value="{{ VM.id }}">
+        {{ VM.name }}</button>
         </td>
         <td>{{ VM.status }}</td>
         <td>private:
@@ -63,5 +63,6 @@
   </table>
 
 {% include "createModal.html" %}
+{% include "editModal.html" %}
 
 {% endblock %}
