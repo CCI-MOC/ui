@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     
     url(r'^login/create_user', create_user),
     url(r'^login/', login),
+    url(r'^projects/enterProject', enterProject),
     url(r'^projects/', projects),
     url(r'^project_space/market', market),
     url(r'^project_space/manage/settings', settings),

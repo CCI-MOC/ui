@@ -7,6 +7,12 @@
 
     {% block css %}
     {% endblock %}
+  
+  <script>
+    {% block js %}
+    {% include "j.js" %}
+    {% endblock %}
+  </script>
 
   </head>
 
@@ -25,9 +31,6 @@
         {% include "footer.html" %}
     {% endblock %}
     </div>
-
-<!--     {% block js %}
-    {% endblock %} -->
 
   </body>
 </html>
