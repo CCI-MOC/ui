@@ -49,6 +49,19 @@ $( document ).ready(function() {
       $('.editFlavor-id').val($(this).data('id'))
    });
 
+    $(".chosenTenant").on('click', function(){
+      $('.enterTenantName').val($(this).text())
+      $('.enterTenantID').val($(this).val())
+   });
+
+// Poll the project management page every 1s
+/*  var interval = setTimeout(pollProjManage, 1000)
+  function pollProjManage() {
+    window.location.location("/project_space/manage");
+    interval = setTimeout(pollProjManage, 1000);
+  }
+*/
+
    $('.project-add').click(function() {
        //do stuff
        window.location.href = "/project_space/manage";

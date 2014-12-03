@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-from forms import NameForm, EditForm, ControlForm
+from forms import NameForm, EditForm, ControlForm, LoginForm, TenantLoginForm
 
 def login(request):
 	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
@@ -11,8 +11,36 @@ def create_user(request):
 	return render(request, 'create_user.html', {'register': 'create new user page.'})
 
 def projects(request):
-	projects = api.listTenants()	
-	return render(request, 'projects.html', {'user_projects': projects})
+        if request.method == 'POST':
+                form = LoginForm(request.POST)
+                if form.is_valid():
+                        username = form.cleaned_data['username']
+                        password = form.cleaned_data['password']	
+			projects = api.listTenants()	
+			return render(request, 'projects.html', 
+			{'user_projects': projects, 'username':username, 'password':password})
+        else:
+		projects = api.listTenants()	
+		return render(request, 'projects.html', {'user_projects': projects})
+
+def enterProject(request):
+        if request.method == 'POST':
+                form = TenantLoginForm(request.POST)
+                if form.is_valid():
+                        username = form.cleaned_data['username']
+                        password = form.cleaned_data['password']	
+                        tenantName = form.cleaned_data['tenantName']
+			tenantID = form.cleaned_data['tenantID']
+			if api.validUser(username, tenantID):
+				api.joinTenant(username, password, tenantName)
+				VMs = api.listVMs()
+				images = api.listImages()
+				flavors = api.listFlavors()
+				tenant = api.getTenant()
+				return render(request, 'manage.html', 
+				{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':tenant.name})
+	print('Invalid User')
+	return HttpResponseRedirect('/projects/')
 
 def market(request):
 
@@ -27,6 +55,8 @@ def market(request):
 	return render(request, 'market.html', {'market': resources})
 
 
+###Project Management Page###
+
 def manage(request):
 	if request.method == 'POST':
 		form = NameForm(request.POST)
@@ -34,28 +64,24 @@ def manage(request):
 			VMname = form.cleaned_data['newVM']
 			image = form.cleaned_data['imageName']
 			flavor = form.cleaned_data['flavorName']
-			return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)
-	else:
-		VMs = api.listVMs()
-		images = api.listImages()
-		flavors = api.listFlavors()
-		tenant = api.getTenant()
-		return render(request, 'manage.html', 
-		{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':tenant.name})
+			return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)	
+	VMs = api.listVMs()
+	images = api.listImages()
+	flavors = api.listFlavors()
+	tenant = api.getTenant()
+	return render(request, 'manage.html', 
+	{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':tenant.name})
 
 def deleteVM(request, VMname):
 	api.delete(VMname)
-	time.sleep(10)
 	return HttpResponseRedirect('/project_space/manage')
 
 def createVM(request, VMname, imageName, flavorName):
         api.createVM(VMname, imageName, flavorName)
-        time.sleep(15)
         return HttpResponseRedirect('/project_space/manage')
 
 def createDefaultVM(request, VMname):
 	api.createDefault(VMname)
-	time.sleep(15)
 	return HttpResponseRedirect('/project_space/manage')
 
 def edit(request):
@@ -74,7 +100,6 @@ def editControlVM(request):
                 form = ControlForm(request.POST)
                 if form.is_valid():
 			VM_id = form.cleaned_data['VM_id']
-			print form.cleaned_data['action']
 			if(form.cleaned_data['action'] == 'start'):
 			  api.startVM(VM_id)
 			elif(form.cleaned_data['action'] == 'pause'):
@@ -82,6 +107,9 @@ def editControlVM(request):
 			elif(form.cleaned_data['action'] == 'stop'):
 			  api.stopVM(VM_id)
 	return HttpResponseRedirect('/project_space/manage')
+
+###End Project Management###
+
 
 def settings(request):
 	tenant = api.getTenant()	
