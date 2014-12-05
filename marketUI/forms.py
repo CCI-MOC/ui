@@ -5,8 +5,6 @@ class LoginForm(forms.Form):
     password = forms.CharField()
 
 class TenantLoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField()
     tenantName = forms.CharField()
     tenantID = forms.CharField()
 

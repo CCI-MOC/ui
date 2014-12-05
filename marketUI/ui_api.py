@@ -1,7 +1,18 @@
-from auth import keystone, nova, glance
-import time
+from auth import keystone, nova, glance, loginUser, loginTenant
 from os import environ as env
-import subprocess
+import views
+import time
+
+
+# Uses admin authenticated keystone, nova, and glance by default
+def login(username, password):
+	global keystone
+	keystone = loginUser(username, password)
+
+def joinTenant(username, password, tenantName):
+        global keystone, nova, glance
+        keystone, nova, glance = loginTenant(username, password, tenantName)
+
 
 #### VMs ####
 
@@ -51,6 +62,7 @@ def createVM(VMname, imageName, flavorName):
         nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
 
 def createDefault(VMname):
+	"""Previously used for testing"""
 	fl = nova.flavors.find(name='m1.nano')
 	image = nova.images.find(name='cirros-0.3.2-x86_64-uec-ramdisk')
 	nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
@@ -70,6 +82,7 @@ def delete(VMname):
 	    nova.servers.delete(s)
 	    print("server %s deleted" % VMname)	
 
+# VM Control Functions; VM = VM.id
 def editVM(VM, flavor):
 	nova.servers.resize(VM, flavor)
 	#nova.servers.confirm_resize(VM)
@@ -80,6 +93,7 @@ def startVM(VM):
 def pauseVM(VM):
 	nova.servers.pause(VM)
 
+# needs to be incorporated
 def unpauseVM(VM):
 	nova.servers.unpause(VM)		
 		
@@ -89,16 +103,12 @@ def stopVM(VM):
 
 ### Tenant / User ###
 
-def getTenant():
+def getTenant(tenantName):
 	tenants = keystone.tenants.list()
 	for tenant in tenants:
-		if tenant.name == env['OS_TENANT_NAME']:
+		if tenant.name == tenantName:
 			return tenant
 	return 'Unable to find Current Tenant'
-
-def getUser(username):
-	user_list = keystone
-	return keystone.users.get(user.id)
 
 def listTenants():
         projects = []
@@ -130,26 +140,4 @@ def listUsers(tenant):
                 users.append(user)
         return users
 
-def validUser(username, tenantID):
-	tenant = keystone.tenants.get(tenantID)
-	user_list = tenant.list_users()
-	for user in user_list:
-		if username == user.name:
-			return True
-	return False
-
-def shell_source(script):
-    """Sometime you want to emulate the action of "source" in bash,
-    settings some environment variables. Here is a way to do it."""
-    import subprocess, os
-    pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
-    output = pipe.communicate()[0]
-    environ = dict((line.split("=", 1) for line in output.splitlines()))
-    env.update(environ)
-
-def joinTenant(username, password, tenantName):
-#	shell_source('openrc '+username+' '+password+' '+tenantName)
-	env['OS_USERNAME'] = username
-	env['OS_PASSWORD'] = password
-	env['OS_TENANT_NAME'] = tenantName
 
