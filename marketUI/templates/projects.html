@@ -13,8 +13,6 @@
    
     <form action="/projects/enterProject" method="post">
       {% csrf_token %}
-      <input type="hidden" name="username" value="{{ username }}">
-      <input type="hidden" name="password" value="{{ password }}">
       <input class="enterTenantName" type="hidden" name="tenantName" value="None">
       <input class="enterTenantID" type="hidden" name="tenantID" value="None">
     {% for project in user_projects %}

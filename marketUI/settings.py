@@ -8,6 +8,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+# session username and password - used for keystone authentication
+USERNAME = 'admin'
+PASSWORD = 'admin'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -26,6 +30,13 @@ TEMPLATE_DEBUG = True
 TEMPLATE_DIRS = ( 
 	os.getcwd()+"/marketUI/templates",
 )
+
+# for request variables in templates
+from django.conf import global_settings
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    "django.core.context_processors.request",
+)
+
 
 ALLOWED_HOSTS = []
 
@@ -50,6 +61,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_FILE_PATH = "/home/logan/devstack/UI/session"
 
 ROOT_URLCONF = 'marketUI.urls'
 
