@@ -8,15 +8,19 @@ class TenantLoginForm(forms.Form):
     tenantName = forms.CharField()
     tenantID = forms.CharField()
 
-class NameForm(forms.Form):
+class TenantCreateForm(forms.Form):
+    tenantName = forms.CharField()
+    tenantDesc = forms.CharField(required=False)
+
+class VMCreateForm(forms.Form):
     newVM = forms.CharField()
     imageName = forms.CharField()
     flavorName = forms.CharField()
 
-class EditForm(forms.Form):
+class VMEditForm(forms.Form):
     VM_id = forms.CharField()
     flavor_id = forms.CharField()
 
-class ControlForm(forms.Form):
+class VMControlForm(forms.Form):
     VM_id = forms.CharField()
     action = forms.CharField()

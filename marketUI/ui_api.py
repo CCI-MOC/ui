@@ -27,7 +27,8 @@ def listVMs():
  		'status':server.status,
  		'image':nova.images.get(server.image[u'id']).name,
 		'flavor':nova.flavors.get(server.flavor[u'id']).name,
- 		'network':'-'
+ 		'network':'-',
+		'vnc':server.get_vnc_console('novnc')[u'console'][u'url']
 		}
 		if server.status != 'BUILD':
 			vm['network'] = server.networks[u'private']
@@ -101,7 +102,7 @@ def stopVM(VM):
 	nova.servers.stop(VM)
 		
 
-### Tenant / User ###
+### Tenant ###
 
 def getTenant(tenantName):
 	tenants = keystone.tenants.list()
@@ -121,6 +122,31 @@ def listTenants():
                 }
                 projects.append(project)
         return projects
+
+def createTenant(name, description):
+	keystone.tenants.create(
+		tenant_name = name,
+		description = description,
+		enabled = True)
+
+def deleteTenant(tenantName):
+	tenants = keystone.tenants.list()
+	tenant = [x for x in tenants if x.name==tenantName][0]
+	keystone.tenants.delete(tenant)	
+
+
+### User ###
+
+def addUser(userName, roleName, tenantName):
+	"""Adds a user to a tenant with specified role"""
+	users = keystone.users.list()
+	user = [x for x in users if x.name==userName][0]
+	roles = keystone.roles.list()
+	role = [x for x in roles if x.name==roleName][0]
+	tenants = keystone.tenants.list()
+	tenant = [x for x in tenants if x.name==tenantName][0]
+	keystone.roles.add_user_role(user, role, tenant)
+	
 
 def listUsers(tenant):
         users = []

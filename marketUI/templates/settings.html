@@ -2,7 +2,9 @@
 
 {% block content %}
 <div style="padding-left:100px; padding-right:100px;">
-  <h1><span style="font-weight:bold">{{ tenant }}</span> Users</h1>
+  <h1><span style="font-weight:bold">{{ tenant }}</span> Users
+    <button data-target="#deleteProj-Modal" data-toggle="modal" style="float:right; font-size:large" class="btn btn-danger">Delete Project</button>
+  </h1>
 
   <table class="table table-hover">
     <thead>
@@ -27,6 +29,6 @@
       </tr>
     {% endfor %}
   </table>
-
 </div>
+{% include "deleteProjModal.html" %}
 {% endblock %}
