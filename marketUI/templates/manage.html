@@ -43,7 +43,7 @@
     {% for VM in project_VMs %}
       <tr>
         <td>
-        <button class="btn btn-primary editVM" data-toggle="modal" data-target="#editModal" value="{{ VM.id }}">
+        <button class="btn btn-md btn-primary editVM" data-toggle="modal" data-target="#editVM-Modal" value="{{ VM.id }}">
         {{ VM.name }}</button>
         </td>
         <td>{{ VM.status }}</td>
@@ -54,15 +54,17 @@
 	</td>
         <td>{{ VM.image }}</td>
         <td>{{ VM.flavor }}</td>
+	<td><a class="novnc btn btn-md btn-success" href="{{VM.vnc}}" target="_blank">VNC</a></td>
 	<td><form action='/project_space/manage/delete/{{ VM.name }}' method='get'>
-	  <button class="delVM btn btn-danger btn-lg">
+	  <button class="delVM btn btn-danger btn-md">
 	  <span class="delVM add-icon glyphicon glyphicon-trash text-center"></span></button>
        </form></td>
       </tr>
     {% endfor %}
   </table>
 
-{% include "createModal.html" %}
-{% include "editModal.html" %}
+{% include "createVMModal.html" %}
+{% include "editVMModal.html" %}
+<script>{% include "manage.js" %}</script>
 
 {% endblock %}

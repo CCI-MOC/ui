@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-from forms import NameForm, EditForm, ControlForm, LoginForm, TenantLoginForm
+from forms import VMCreateForm, VMEditForm, VMControlForm, LoginForm, TenantLoginForm, TenantCreateForm
 
 
 def login(request):
@@ -12,8 +12,11 @@ def login(request):
 def create_user(request):
 	return render(request, 'create_user.html', {'register': 'create new user page.'})
 
+
+### Projects Page ###
+
 def projects(request):
-	"""List projects available to the user; attempt to login with credentials"""
+	"""List keystone projects available to the user; attempt to login with credentials"""
         if request.method == 'POST':
                 form = LoginForm(request.POST)
                 if form.is_valid():
@@ -31,7 +34,7 @@ def projects(request):
 		return render(request, 'projects.html', {'user_projects': projects})
 
 def enterProject(request):
-	"""On selection of tenant from Projects page; attempt to enter tenant"""
+	"""Called when a tenant is chosen on Projects page; attempt to enter tenant via keystone"""
         if request.method == 'POST':
                 form = TenantLoginForm(request.POST)
                 if form.is_valid():
@@ -39,17 +42,40 @@ def enterProject(request):
 			request.session['tenant'] = tenantName
 			tenantID = form.cleaned_data['tenantID']
 			
-			# errors out on failure
+			# send session user/pw and selected tenant to keystone
 			api.joinTenant(request.session['username'], request.session['password'], tenantName)
+			return HttpResponseRedirect('/project_space/manage')
 			
-			# gather nova/glance info for project management page
-			VMs = api.listVMs()
-			images = api.listImages()
-			flavors = api.listFlavors()
-			return render(request, 'manage.html', 
-			{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':tenantName})
 	print('Invalid User')
 	return HttpResponseRedirect('/projects/')
+
+def createProject(request):
+	"""Create new project from Projects page"""
+	if request.method == 'POST':
+		form = TenantCreateForm(request.POST)
+		if form.is_valid():
+			projectName = form.cleaned_data['tenantName']
+			projectDesc = form.cleaned_data['tenantDesc']
+			
+			# work around for user to have project creation privileges
+			# for some reason, unable to create a project unless
+			# keystone client is passed a tenant_name arguement; can't create solely as user
+			api.joinTenant('admin', 'admin', 'demo')
+			# create project with current keystone session
+			api.createTenant(projectName, projectDesc)
+			# add user to new project with admin role
+			api.addUser(request.session['username'], 'admin', projectName)		
+
+	print ('Unable to create new Project')
+	return HttpResponseRedirect('/projects')
+
+def deleteProject(request, projectName):
+	"""Delete current project; called from project settings page"""
+	api.deleteTenant(projectName)
+	return HttpResponseRedirect('/projects')
+	
+
+### Marketplace Page ###
 
 def market(request):
 
@@ -67,7 +93,7 @@ def market(request):
 def manage(request):
 	"""Project Management page; edit VMs, project settings"""
 	if request.method == 'POST':
-		form = NameForm(request.POST)
+		form = VMCreateForm(request.POST)
 		if form.is_valid():
 			VMname = form.cleaned_data['newVM']
 			image = form.cleaned_data['imageName']
@@ -98,7 +124,7 @@ def createDefaultVM(request, VMname):
 def edit(request):
 	"""EditVM modal (pop up); retrieves VM/flavor IDs"""
         if request.method == 'POST':
-                form = EditForm(request.POST)
+                form = VMEditForm(request.POST)
                 if form.is_valid():
                         VM_id = form.cleaned_data['VM_id']
                         flavor_id = form.cleaned_data['flavor_id']	
@@ -110,7 +136,7 @@ def edit(request):
 def editControlVM(request):
 	"""EditVM modal footer; submission of VM controlling actions"""
         if request.method == 'POST':
-                form = ControlForm(request.POST)
+                form = VMControlForm(request.POST)
                 if form.is_valid():
 			VM_id = form.cleaned_data['VM_id']
 			if(form.cleaned_data['action'] == 'start'):

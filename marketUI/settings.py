@@ -8,10 +8,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# session username and password - used for keystone authentication
-USERNAME = 'admin'
-PASSWORD = 'admin'
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -63,7 +59,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
-SESSION_FILE_PATH = "/home/logan/devstack/UI/session"
+SESSION_FILE_PATH = os.getcwd() +"/session"
 
 ROOT_URLCONF = 'marketUI.urls'
 
