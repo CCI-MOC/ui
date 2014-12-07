@@ -37,22 +37,22 @@ def loginTenant(username, password, tenantName):
 
 ##### OUTDATED SECTION - USEFUL FOR TESTING
 # admin keystone auth
-keystone = ksclient.Client(token='admin', endpoint='http://10.0.2.15:35357/v2.0')
+#keystone = ksclient.Client(token='admin', endpoint='http://10.0.2.15:35357/v2.0')
 
-keystoneImages = ksclient.Client(auth_url=env['OS_AUTH_URL'],
-username=env['OS_USERNAME'],
-password=env['OS_PASSWORD'],
-tenant_name=env['OS_TENANT_NAME'],
-region_name=env['OS_REGION_NAME'])
+#keystoneImages = ksclient.Client(auth_url=env['OS_AUTH_URL'],
+#username=env['OS_USERNAME'],
+#password=env['OS_PASSWORD'],
+#tenant_name=env['OS_TENANT_NAME'],
+#region_name=env['OS_REGION_NAME'])
 
-glance_endpoint = keystoneImages.service_catalog.url_for(service_type='image')
-glance = glclient.Client(glance_endpoint, token=keystoneImages.auth_token)
+#glance_endpoint = keystoneImages.service_catalog.url_for(service_type='image')
+#glance = glclient.Client(glance_endpoint, token=keystoneImages.auth_token)
 
-nova = nvclient.Client(auth_url=env['OS_AUTH_URL'],
-username=env['OS_USERNAME'],
-api_key=env['OS_PASSWORD'],
-project_id=env['OS_TENANT_NAME'],
-region_name=env['OS_REGION_NAME'])
+#nova = nvclient.Client(auth_url=env['OS_AUTH_URL'],
+#username=env['OS_USERNAME'],
+#api_key=env['OS_PASSWORD'],
+#project_id=env['OS_TENANT_NAME'],
+#region_name=env['OS_REGION_NAME'])
 #####
 
 
