@@ -18,7 +18,9 @@
 
     {% for user in users %}
       <tr>
-        <td style="font-size:medium">{{ user.name }}</td>
+        <td style="font-size:medium">
+	  <button class="btn btn-primary chosenUser" data-toggle="modal" data-target="#editUser-Modal" value="{{ user.id }}">{{ user.name }}</button>
+	</td>
         <td>
 	{% for role in user.roles %}
 		{{ role }}; 
@@ -29,6 +31,8 @@
       </tr>
     {% endfor %}
   </table>
+{% include "addUserModal.html" %}
 </div>
+{% include "editUserModal.html" %}
 {% include "deleteProjModal.html" %}
 {% endblock %}

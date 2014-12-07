@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% block header %}
     {% include "header.html" %}
-
+    {% endblock %}
     <title>{% block title %}Home{% endblock %}</title>
 
     {% block css %}
@@ -16,8 +17,9 @@
 
   </head>
 
-  <body class="container"> 
-
+{% block body %}
+  <body class="container">
+{% endblock %}
 <!--     {% block navbar %} 
     {% endblock %} -->
 

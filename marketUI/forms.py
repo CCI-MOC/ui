@@ -4,6 +4,24 @@ class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
 
+class UserRegisterForm(forms.Form):
+    userName = forms.CharField()
+    userPwd = forms.CharField()
+    userPwd2 = forms.CharField()
+    userEmail = forms.CharField(required=False)
+
+class UserAddForm(forms.Form):
+    userName = forms.CharField()
+    roleName = forms.CharField()
+
+class UserRemoveForm(forms.Form):
+    userName = forms.CharField()
+
+class RoleEditForm(forms.Form):
+    userName = forms.CharField()
+    editAction = forms.CharField()
+    roleName = forms.CharField()
+
 class TenantLoginForm(forms.Form):
     tenantName = forms.CharField()
     tenantID = forms.CharField()
