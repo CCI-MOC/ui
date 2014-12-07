@@ -2,21 +2,55 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-from forms import VMCreateForm, VMEditForm, VMControlForm, LoginForm, TenantLoginForm, TenantCreateForm
+from forms import VMCreateForm, VMEditForm, VMControlForm, RoleEditForm, UserAddForm, UserRegisterForm, LoginForm, TenantLoginForm, TenantCreateForm
 
+
+### Login Page ###
 
 def login(request):
-	"""Enter credentials to be processed by the projects page"""
+	"""
+	Login Page;
+	Enter credentials to be processed by the projects page
+	"""
 	return render(request, 'login.html', {'OCXlogin': 'OCXi'})
 
-def create_user(request):
-	return render(request, 'create_user.html', {'register': 'create new user page.'})
+def logout(request):
+	"""
+	Logout of session; 
+	remove session variables and return to login page
+	"""
+	for state, sessionInfo in request.session.items():
+		sessionInfo = None
+	return HttpResponseRedirect('/login/')
+
+def register(request):
+	"""
+	Register new user with keystone; called from login page
+	Needs error checking
+	"""
+	if request.method == "POST":
+		form = UserRegisterForm(request.POST)
+		if form.is_valid():
+			request.session['username'] = form.cleaned_data['userName']
+           	     	request.session['password'] = form.cleaned_data['userPwd']
+               		email = form.cleaned_data['userEmail']
+			# Work around - login as admin keystone client for user creation
+			# then logged into new user from projects page arrival
+			api.joinTenant('admin', 'admin', 'demo')
+			# register user with keystone
+			api.registerUser(request.session['username'], request.session['password'], email)	
+			# login as new user
+			#api.login(request.session['username'], request.session['password'])
+	return HttpResponseRedirect('/projects/')
 
 
 ### Projects Page ###
 
 def projects(request):
-	"""List keystone projects available to the user; attempt to login with credentials"""
+	"""
+	List keystone projects available to the user; 
+	attempt to login with credentials
+	"""
         if request.method == 'POST':
                 form = LoginForm(request.POST)
                 if form.is_valid():
@@ -34,7 +68,10 @@ def projects(request):
 		return render(request, 'projects.html', {'user_projects': projects})
 
 def enterProject(request):
-	"""Called when a tenant is chosen on Projects page; attempt to enter tenant via keystone"""
+	"""
+	Called when a tenant is chosen on Projects page; 
+	attempt to enter tenant via keystone
+	"""
         if request.method == 'POST':
                 form = TenantLoginForm(request.POST)
                 if form.is_valid():
@@ -45,12 +82,13 @@ def enterProject(request):
 			# send session user/pw and selected tenant to keystone
 			api.joinTenant(request.session['username'], request.session['password'], tenantName)
 			return HttpResponseRedirect('/project_space/manage')
-			
 	print('Invalid User')
 	return HttpResponseRedirect('/projects/')
 
 def createProject(request):
-	"""Create new project from Projects page"""
+	"""
+	Create new project from Projects page
+	"""
 	if request.method == 'POST':
 		form = TenantCreateForm(request.POST)
 		if form.is_valid():
@@ -69,16 +107,13 @@ def createProject(request):
 	print ('Unable to create new Project')
 	return HttpResponseRedirect('/projects')
 
-def deleteProject(request, projectName):
-	"""Delete current project; called from project settings page"""
-	api.deleteTenant(projectName)
-	return HttpResponseRedirect('/projects')
-	
 
 ### Marketplace Page ###
 
 def market(request):
-
+	"""
+	Marketplace page; hardcoded values
+	"""
 	resources = [
 		{'name': 'Hadoop','desc':'Hadoop as a Service', 'tag': 'service', 'icon': 'http://cdn.blog-sap.com/innovation/files/2012/09/hadoop-elephant.jpg'},
 		{'name': 'Wireshark','desc':'Wireshark Appliance', 'tag': 'appliance', 'icon': 'http://halozatbiztonsag.hu/sites/default/files/WireShark_2.png'},
@@ -91,7 +126,9 @@ def market(request):
 ###Project Management Page###
 
 def manage(request):
-	"""Project Management page; edit VMs, project settings"""
+	"""
+	Project Management page; edit VMs, project settings
+	"""
 	if request.method == 'POST':
 		form = VMCreateForm(request.POST)
 		if form.is_valid():
@@ -109,10 +146,16 @@ def manage(request):
 	{'project_VMs':VMs, 'images':images, 'flavors':flavors, 'tenant':request.session['tenant']})
 
 def deleteVM(request, VMname):
+	"""
+	Delete selected VM; called from editVM modal
+	"""
 	api.delete(VMname)
 	return HttpResponseRedirect('/project_space/manage')
 
 def createVM(request, VMname, imageName, flavorName):
+	"""
+	Create VM with specified fields; from createVM modal
+	"""
         api.createVM(VMname, imageName, flavorName)
         return HttpResponseRedirect('/project_space/manage')
 
@@ -122,7 +165,9 @@ def createDefaultVM(request, VMname):
 	return HttpResponseRedirect('/project_space/manage')
 
 def edit(request):
-	"""EditVM modal (pop up); retrieves VM/flavor IDs"""
+	"""
+	EditVM modal (pop up); retrieves VM/flavor IDs
+	"""
         if request.method == 'POST':
                 form = VMEditForm(request.POST)
                 if form.is_valid():
@@ -134,7 +179,9 @@ def edit(request):
 		return HttpResponseRedirect('/project_space/manage')
 
 def editControlVM(request):
-	"""EditVM modal footer; submission of VM controlling actions"""
+	"""
+	EditVM modal footer; submission of VM controlling actions
+	"""
         if request.method == 'POST':
                 form = VMControlForm(request.POST)
                 if form.is_valid():
@@ -147,15 +194,67 @@ def editControlVM(request):
 			  api.stopVM(VM_id)
 	return HttpResponseRedirect('/project_space/manage')
 
-###End Project Management###
 
+### Project Settings ###
 
 def settings(request):
-	"""Project Settings; ADMIN ONLY; add/edit/delete current tenant's users"""
+	"""
+	Project Settings; ADMIN ONLY; 
+	add/edit/delete current tenant's users
+	"""
+	# work around lack of keystone session; recreate keystone client on page arrival
+	api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'])
 	tenant = api.getTenant(request.session['tenant'])
 	users = api.listUsers(tenant)
 	return render(request, 'settings.html', {'tenant': tenant.name, 'users': users})
 
+def deleteProject(request, projectName):
+        """
+	Delete current project
+	"""
+        api.deleteTenant(projectName)
+        return HttpResponseRedirect('/projects')
+
+def addUser(request, projectName):
+	"""
+	Add user to current project
+	"""
+	if request.method == "POST":
+		form = UserAddForm(request.POST)
+		if form.is_valid():
+			# recreate keystone client; keystone session work around
+			api.joinTenant(request.session['username'], request.session['password'], projectName)
+			api.addUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
+        return HttpResponseRedirect('/project_space/manage/settings')
+
+def editRole(request):
+	"""
+	Add role to selected user for current project
+	"""
+	if request.method == "POST":
+		form = RoleEditForm(request.POST)
+		if form.is_valid():
+			# recreate keystone client; keystone session work around
+			api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'])
+			if form.cleaned_data['editAction'] == 'add':
+				api.addRole(form.cleaned_data['userName'], form.cleaned_data['roleName'], request.session['tenant'])
+			elif form.cleaned_data['editAction'] == 'remove':
+				api.removeUserRole(form.cleaned_data['userName'], form.cleaned_data['roleName'], request.session['tenant'])
+        return HttpResponseRedirect('/project_space/manage/settings')
+
+def removeUser(request):
+	"""
+	Remove user from current project
+	"""
+	if request.method == "POST":
+		form = UserRemoveForm(request.POST)
+		if form.is_valid():
+			# recreate keystone client; keystone session work around
+			api.joinTenant(request.session['username'], request.session['password'], projectName)
+			api.removeUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
+        return HttpResponseRedirect('/project_space/manage/settings')
+
+# Misc.
 def modal(request):
 	options = [
 		{'compute': 'small'},

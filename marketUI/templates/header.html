@@ -17,12 +17,19 @@
         <li><a href="/project_space/manage">Management</a></li>
         <li><a href="/project_space/billing">Billing</a></li>
       </ul>
-      <a href="/login">User: {{ request.session.username }}</a>
+    <div class="dropdown navbar-right">
+      <button class="btn glyphicon glyphicon-user" style="font-size:1.5em" id="userProfile" data-toggle="dropdown" aria-expanded="true">
+      {{ request.session.username }}
+      </button>
+      <ul class="dropdown-menu navbar-right" role="menu" aria-labelledby="userProfile">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Logout</a></li>
+      </ul>
+    </div>
       <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
 
     </div><!-- /.navbar-collapse -->
