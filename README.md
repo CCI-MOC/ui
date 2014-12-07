@@ -4,6 +4,7 @@ An alternative OpenStack Dashboard to Horizon for the MOC.
 
 ###Setup and Usage
 ---
+
 ####1. Setup Devstack (OpenStack deployment)
 * git clone https://github.com/openstack-dev/devstack.git
 * cd devstack
@@ -11,6 +12,7 @@ An alternative OpenStack Dashboard to Horizon for the MOC.
 * ./rejoin-stack.sh - to rejoin environment (after start up, if terminal closed)
 * ctrl-a 0 - select shell window
 * For VM to desktop copy/pasting, screen resizing, install virtualbox guest-utils (http://askubuntu.com/questions/22743/how-do-i-install-guest-additions-in-a-virtualbox-vm)
+
 ###### Recommended Environment
 * Linux VM with atleast 4GB RAM and 10GB Storage
 
