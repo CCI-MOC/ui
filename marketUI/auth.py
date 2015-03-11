@@ -4,27 +4,27 @@ import glanceclient.v2.client as glclient
 import keystoneclient.v2_0.client as ksclient
 
 
-def loginUser(username, password):
+def loginUser(username, password, auth_url):
         """
 	Create keystone client for user; called on login
 	"""
         keystone = ksclient.Client(
-	        auth_url = 'http://10.0.2.15:5000/v2.0',
+	        auth_url = "http://%s:5000/v2.0" % auth_url,
 		username = username,
-       		password = password)
+      		password = password)
 	return keystone
 
-def loginTenant(username, password, tenantName):
+def loginTenant(username, password, tenantName, auth_url):
         """
 	Create keystone, nova, and glance clients for tenant; on tenant selection
 	"""
         keystone = ksclient.Client(
-	        auth_url = 'http://10.0.2.15:5000/v2.0',
+	        auth_url = 'http://%s:5000/v2.0' % auth_url,
 		username = username,
                 password = password,
                 tenant_name = tenantName)
 	nova = nvclient.Client(
-	        auth_url = 'http://10.0.2.15:5000/v2.0',
+	        auth_url = 'http://%s:5000/v2.0' % auth_url,
 		username = username,
                 api_key = password,
 		project_id = tenantName)

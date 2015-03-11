@@ -56,14 +56,15 @@ def projects(request):
                 if form.is_valid():
 			request.session['username'] = form.cleaned_data['username']
                         request.session['password'] = form.cleaned_data['password']
+                        request.session['auth_url'] = form.cleaned_data['auth_url']
 			
 			# pass session's user info to keystone for authentication
-			api.login(request.session['username'], request.session['password'])
+			api.login(request.session['username'], request.session['password'], request.session['auth_url'])
 			projects = api.listTenants()
 			return render(request, 'projects.html', {'user_projects': projects})
         else:
 		# temporary fix to ensure user's keystone session is used
-		api.login(request.session['username'], request.session['password'])
+		api.login(request.session['username'], request.session['password'], request.session['auth_url'])
 		projects = api.listTenants()	
 		return render(request, 'projects.html', {'user_projects': projects})
 
@@ -80,7 +81,7 @@ def enterProject(request):
 			tenantID = form.cleaned_data['tenantID']
 			
 			# send session user/pw and selected tenant to keystone
-			api.joinTenant(request.session['username'], request.session['password'], tenantName)
+			api.joinTenant(request.session['username'], request.session['password'], tenantName, request.session['auth_url'])
 			return HttpResponseRedirect('/project_space/manage')
 	print('Invalid User')
 	return HttpResponseRedirect('/projects/')
@@ -138,7 +139,7 @@ def manage(request):
 			return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)	
 
 	# temporary fix to ensure user stays connected to current project
-	api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'])
+	api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
 	VMs = api.listVMs()
 	images = api.listImages()
 	flavors = api.listFlavors()
@@ -203,7 +204,7 @@ def settings(request):
 	add/edit/delete current tenant's users
 	"""
 	# work around lack of keystone session; recreate keystone client on page arrival
-	api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'])
+	api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
 	tenant = api.getTenant(request.session['tenant'])
 	users = api.listUsers(tenant)
 	return render(request, 'settings.html', {'tenant': tenant.name, 'users': users})
@@ -223,7 +224,7 @@ def addUser(request, projectName):
 		form = UserAddForm(request.POST)
 		if form.is_valid():
 			# recreate keystone client; keystone session work around
-			api.joinTenant(request.session['username'], request.session['password'], projectName)
+			api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])
 			api.addUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
         return HttpResponseRedirect('/project_space/manage/settings')
 
@@ -235,7 +236,7 @@ def editRole(request):
 		form = RoleEditForm(request.POST)
 		if form.is_valid():
 			# recreate keystone client; keystone session work around
-			api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'])
+			api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
 			if form.cleaned_data['editAction'] == 'add':
 				api.addRole(form.cleaned_data['userName'], form.cleaned_data['roleName'], request.session['tenant'])
 			elif form.cleaned_data['editAction'] == 'remove':
@@ -250,7 +251,7 @@ def removeUser(request):
 		form = UserRemoveForm(request.POST)
 		if form.is_valid():
 			# recreate keystone client; keystone session work around
-			api.joinTenant(request.session['username'], request.session['password'], projectName)
+			api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])
 			api.removeUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
         return HttpResponseRedirect('/project_space/manage/settings')
 

@@ -3,21 +3,20 @@ from os import environ as env
 import views
 import time
 
-
-def login(username, password):
+def login(username, password, auth_url):
 	"""
 	Create keystone client for user
 	"""
 	global keystone
-	keystone = loginUser(username, password)
+	keystone = loginUser(username, password, auth_url)
 
-def joinTenant(username, password, tenantName):
+def joinTenant(username, password, tenantName, auth_url):
 	"""
 	Create keystone client for specified tenant;
 	User's credentials already authenticated on login
 	"""
         global keystone, nova, glance
-        keystone, nova, glance = loginTenant(username, password, tenantName)
+        keystone, nova, glance = loginTenant(username, password, tenantName, auth_url)
 
 
 #### VMs ####
@@ -39,8 +38,11 @@ def listVMs():
 		'vnc':'-'
 		}
 		if server.status != 'BUILD':
-			vm['vnc'] = server.get_vnc_console('novnc')[u'console'][u'url']
-			vm['network'] = server.networks[u'private']
+		    vm['vnc'] = server.get_vnc_console('novnc')[u'console'][u'url']
+		    if u'private' in server.networks:
+		        vm['network'] = server.networks[u'private']
+		    else:
+		        vm['network'] = 'no network'
 		vms.append(vm)
 	return vms
 
