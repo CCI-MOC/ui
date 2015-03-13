@@ -7,9 +7,9 @@ class LoginForm(forms.Form):
 
 class UserRegisterForm(forms.Form):
     userName = forms.CharField()
-    userPwd = forms.CharField()
-    userPwd2 = forms.CharField()
-    userEmail = forms.CharField(required=False)
+    password = forms.CharField()
+    confirm_password = forms.CharField()
+    Email = forms.CharField(required=False)
 
 class UserAddForm(forms.Form):
     userName = forms.CharField()

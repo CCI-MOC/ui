@@ -15,6 +15,7 @@ def joinTenant(username, password, tenantName, auth_url):
 	Create keystone client for specified tenant;
 	User's credentials already authenticated on login
 	"""
+
         global keystone, nova, glance
         keystone, nova, glance = loginTenant(username, password, tenantName, auth_url)
 

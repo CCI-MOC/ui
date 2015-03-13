@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+ 
+{% block header %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+  <body background="https://s3.amazonaws.com/moc-picture/pattern-bxer.png" class="container">
+{% endblock %}
+
+{% block content %}
+
+  <!-- login form -->
+  {% with login_data as form_data and login_form as form %}
+      {% include "form.html" %}
+  {% endwith %}
+  
+  <!-- modal pop-ups for buttons -->
+  {% with reg_modal as modal_data and reg_form as form %}
+      {% include "post_modal.html" %}
+  {% endwith %}
+
+{% endblock %}
+

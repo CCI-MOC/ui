@@ -23,13 +23,15 @@
     <input name="auth_url" type="text" class="form-control text-center medium" placeholder="Auth_url">
   <div class="btn-group">
     <button class="btn btn-primary">Login</button>
-  </form>
-    <button data-toggle="modal" data-target="#createUser-Modal" type="button" class="btn btn-primary">Register</button>
+    <button data-toggle="modal" data-target="#createUser" type="button" class="btn btn-primary">Register</button>
     <button type="button" class="btn btn-primary">Forgot Password</button>
+  </form>
   </div>
   </div>
 
-{% include "createUserModal.html"%}
+  {% with reg_modal as modal_data %}
+      {% include "post_modal.html" %}
+  {% endwith %}
 
 {% endblock %}
 
