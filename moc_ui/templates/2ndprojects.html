@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding-left:100px; padding-right:100px;">
+
+  {% for cluster in cluster_list %}
+    {% for project_name in project_endpoints %}
+    <table class="table table-hover">
+      <thead>
+        <tr style="font-size:medium; font-weight:bold">
+          <th class="col-md-3">Name</td>
+          <th class="col-md-9">Description</td>
+        </tr>
+      </thead>
+     
+      <form action="/projects/enterProject" method="post">
+        {% csrf_token %}
+        <input class="enterTenantName" type="hidden" name="tenantName" value="None">
+        <input class="enterTenantID" type="hidden" name="tenantID" value="None">
+      {% for project in user_projects %}
+        <tr>
+          <td style="font-size:large"><button value="{{ project.id }}" class="btn btn-primary chosenTenant">{{ project.name }}</button></td>
+          <td>{{ project.desc }}</td>
+        </tr>
+      {% endfor %}
+      </form>
+    </table>
+    {% endfor %}
+
+{% include "createProjModal.html" %}
+
+{% with cluster_modal as modal_data %}
+  {% include "post_modal.html" %}
+{% endwith %}
+
+</div>
+{% endblock %}
+
+
+
+

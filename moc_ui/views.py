@@ -12,8 +12,8 @@ def login(request):
     Login Page;
     Enter credentials to be processed by the projects page
     """
-    login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/project/', 'class': 'btn-primary'},
-                    {'name': 'register', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}]
+    login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/project/', 'class': 'btn-primary btn-large'},
+                    {'name': 'register', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success btn-large'}]
 
     login_data = {'name': 'Mass Open Cloud Login =)', 'action': '/projects/', 'method': 'post', 'button_list': login_buttons}
 

@@ -10,7 +10,7 @@
             {% if button.type != 'modal' %}
             <button type='{{ button.type }}' class="{{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
             {% else %}
-              <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="{{ button.class }}">{{ button.name }}</button>
+              <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn {{ button.class }}">{{ button.name }}</button>
             {% endif %}
           {% endfor %}
       </form>

@@ -1,0 +1,62 @@
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+}
+
+body {
+    background-size:   contain contain;                      
+    background-repeat: no-repeat;
+    background-position: center center;            /* optionally, center the image */
+}
+
+@media (min-width: 500px) {
+  .nc {
+    height: auto;
+    border-top: 0;
+    box-shadow: none;
+    max-height: none;
+    padding-left:0;
+    padding-right:0;
+  }
+  .nc {
+    display: block !important;
+    width: auto !important;
+    padding-bottom: 0;
+    overflow: visible !important;
+  }
+  .nc.in {
+    overflow-x: visible;
+  }
+
+.nb
+{
+    width:200px;
+	margin-right: 0;
+	margin-left: 0;
+    position: fixed;
+    z-index: 900;
+}
+
+.nb-nav,
+.nb-nav > li,
+.nb-left,
+.nb-right,
+.nb-header
+{float:none !important;}
+
+.nb-right .dd-menu {left:0;right:auto;}
+.nb-collapse .nb-nav.nb-right:last-child {
+    margin-right: 0;
+}
+}
+
+table {
+        border-collapse: collapse;
+    }
+
+table, th, td {
+        border: 1px solid black;
+    }

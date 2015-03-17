@@ -2,11 +2,15 @@
 <html>
   <head>
     {% block header %}
-    {% include "header.html" %}
+      {% include "header.html" %}
     {% endblock %}
+
     <title>{% block title %}Home{% endblock %}</title>
 
     {% block css %}
+      <style>
+        {% include "moc_ui.css" %}
+      </style>
     {% endblock %}
   
   <script>
@@ -18,8 +22,9 @@
   </head>
 
 {% block body %}
-  <body class="container">
+  <body background="/static/coloring_flowers.jpg" class= "container">
 {% endblock %}
+
 <!--     {% block navbar %} 
     {% endblock %} -->
 
