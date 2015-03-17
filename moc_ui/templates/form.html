@@ -1,24 +1,21 @@
-<div class="col-md-4">
-    <h3>{{ form_data.name }}</h3>
+<h3>{{ form_data.name }}</h3>
 
-    <form action="{{ form_data.action }}" method="{{ form_data.method }}">
-        <div class="row">
-            {% csrf_token %}
-            <table >
-            {{  form.as_table }}
-            </table>
-        </div>
+<form action="{{ form_data.action }}" method="{{ form_data.method }}">
+    <div class="row">
+        {% csrf_token %}
+        <table >
+        {{  form.as_table }}
+        </table>
+    </div>
 
-        <div class="row form-btns">
-            {% for button in form_data.button_list %}
-              {% if button.type != 'modal' %}
-                <button type='{{ button.type }}' class="btn btn-large {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
-              {% else %}
-                <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn btn-large {{ button.class }}">
-                {{ button.name }}</button>
-              {% endif %}
-            {% endfor %}
-        </div>
-    </form>
-</div>
-<!-- old class "btn-group" --> 
+    <div class="row form-btns">
+        {% for button in form_data.button_list %}
+          {% if button.type != 'modal' %}
+            <button type='{{ button.type }}' class="btn btn-large {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
+          {% else %}
+            <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn btn-large {{ button.class }}">
+            {{ button.name }}</button>
+          {% endif %}
+        {% endfor %}
+    </div>
+</form>

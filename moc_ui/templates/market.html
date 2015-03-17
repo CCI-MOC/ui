@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<html>
-<head>
-    {% include "header.html" %}
+{% extends "base.html" %}
 
-    <title>{% block title %}Marketplace{% endblock %}</title>
-    <script>
+    {% block title %}Marketplace{% endblock %}
+
     {% block js %}
-    {% include "j.js" %}
-    {% endblock %}</script>
-
-</head>
-
-<body>
+        {% include "externalJS.html" %}
+        {% include "j.js" %}
+    {% endblock %}
 
 
-
-    <h1>
-        Welcome to the Marketplace
-    </h1>
+    <h1>Welcome to the Marketplace</h1>
 
     <nav class="navbar navbar-default nb" role="navigation">
         <!-- Collect the nav links, forms, and other content for toggling -->

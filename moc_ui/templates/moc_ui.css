@@ -6,7 +6,7 @@ body {
     background-position: center center;            /* optionally, center the image */
 
     /* text defaults */
-    color: linen;
+    color: #428BCA; /* light blue */
 
 
     /* margins for elements */

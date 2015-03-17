@@ -39,10 +39,9 @@ def login(request):
             password = form.cleaned_data['password']
             user = models.User.objects.filter(name=username)
 
-            if user:
-                if user.verify_password(password=password):
-                    request.session['username'] = username
-                    return HttpResponseRedirect('/project/')
+            if user.verify_password(password=password):
+                request.session['username'] = username
+                return HttpResponseRedirect('/project/')
         
     return HttpResponseRedirect('/')
 
