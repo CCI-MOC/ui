@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="{{modal_data.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="{{modal_data.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" background="black">
   <div class="modal-dialog">
     <div class="modal-content text-center">
       <div class="modal-header">
@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="myModalLabel">{{modal_data.title}}</h4>
       </div>
 
-      <form action="{{modal_data.form_action}}" method='post'>
+      <form action="{{modal_data.action}}" method='{{modal_data.method}}'>
         {% csrf_token %}
           <div class="modal-body">
               <table align="center">
@@ -15,7 +15,7 @@
               </table>
           </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Create</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
       </form>

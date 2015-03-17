@@ -26,9 +26,21 @@ input, select, textarea{
     color: #000000;
 }
 
+
+.floating-block {
+    border: 2px solid #000000; /* #a1a1a1; */
+    padding: 10px 40px; 
+    background: #dddddd;
+    width: 300px;
+    border-radius: 25px;
+}
+
+.form-btns {
+    padding-top: 10px;
+    padding-left: 72px;
+}
+
 /* form css class 
-.form {
-    
 }*/
 
 @media (min-width: 500px) {

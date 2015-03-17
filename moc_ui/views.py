@@ -2,28 +2,49 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-import forms
+import forms 
+import models 
 
 
 ### Login Page ###
 
-def login(request):
+def front_page(request):
     """
-    Login Page;
-    Enter credentials to be processed by the projects page
+    Front page;
+    Enter credentials to be processed by the login view 
     """
-    login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/project/', 'class': 'btn-primary btn-large'},
-                    {'name': 'register', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success btn-large'}]
+    login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'},
+                    {'name': 'sign-up', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}]
 
-    login_data = {'name': 'Mass Open Cloud Login =)', 'action': '/projects/', 'method': 'post', 'button_list': login_buttons}
+    login_data = {'name': 'MOC Login =)', 'action': '/login', 'method': 'post', 'button_list': login_buttons}
 
-    reg_modal = {'id': 'createUser', 'form_action': '/login/register', 'title': 'Register User'}
+    reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
 
     login_form = forms.LoginForm()
     reg_form = forms.UserRegisterForm()
 
-    return render(request, 'newlogin.html', {'OCXlogin': 'OCXi', 'login_data': login_data, 
+    return render(request, 'front_page.html', {'OCXlogin': 'OCXi', 'login_data': login_data, 
         'login_form': login_form, 'reg_modal': reg_modal, 'reg_form': reg_form})
+
+def login(request):
+    """
+    Login view;
+    Checks post credentials, redirects to projects or back to front page with error
+    """
+    if request.method == 'POST':
+        form = forms.LoginForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = models.User.objects.filter(name=username)
+
+            if user:
+                if user.verify_password(password=password):
+                    request.session['username'] = username
+                    return HttpResponseRedirect('/project/')
+        
+    return HttpResponseRedirect('/')
 
 def logout(request):
     """
@@ -32,7 +53,7 @@ def logout(request):
     """
     for state, sessionInfo in request.session.items():
         sessionInfo = None
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect('/')
 
 def register(request):
     """
@@ -42,17 +63,18 @@ def register(request):
     if request.method == "POST":
         form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
-            request.session['username'] = form.cleaned_data['userName']
-            request.session['password'] = form.cleaned_data['userPwd']
-            email = form.cleaned_data['userEmail']
-            # Work around - login as admin keystone client for user creation
-            # then logged into new user from projects page arrival
-            api.joinTenant('admin', 'admin', 'demo')
-            # register user with keystone
-            api.registerUser(request.session['username'], request.session['password'], email)   
-            # login as new user
-            #api.login(request.session['username'], request.session['password'])
-    return HttpResponseRedirect('/projects/')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user_exist = models.User.objects.filter(name=username)
+
+            if 'pk' not in user_exist:
+                newuser = models.User(name=username)
+                newuser.set_password(password=password)
+                newuser.save
+                request.session['username'] = username
+                return HttpResponseRedirect('/projects/')
+
+    return HttpResponseRedirect('/')
 
 
 ### Projects Page ###
@@ -62,22 +84,11 @@ def projects(request):
     List keystone projects available to the user; 
     attempt to login with credentials
     """
-    if request.method == 'POST':
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            request.session['username'] = form.cleaned_data['username']
-            request.session['password'] = form.cleaned_data['password']
-            request.session['auth_url'] = form.cleaned_data['auth_url']
         
-            # pass session's user info to keystone for authentication
-            api.login(request.session['username'], request.session['password'], request.session['auth_url'])
-            projects = api.listTenants()
-            return render(request, 'projects.html', {'user_projects': projects})
-        else:
-        # temporary fix to ensure user's keystone session is used
-            api.login(request.session['username'], request.session['password'], request.session['auth_url'])
-            projects = api.listTenants()    
-            return render(request, 'projects.html', {'user_projects': projects})
+       # pass session's user info to keystone for authentication
+       #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
+       #     projects = api.listTenants()
+    return render(request, 'projects.html', {'user_projects': projects})
 
 def enterProject(request):
     """

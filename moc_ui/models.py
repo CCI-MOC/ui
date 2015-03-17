@@ -8,7 +8,7 @@ DEFAULT_FIELD_LEN = 255
 
 class User(models.Model):
      """A user of the marketplace UI"""
-     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+     name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
      password_hash = models.CharField(max_length=PASSHASH_LEN)
     
      def verify_password(self, password):
