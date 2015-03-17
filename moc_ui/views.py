@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import ui_api as api
 import time
-from forms import VMCreateForm, VMEditForm, VMControlForm, RoleEditForm, UserAddForm, UserRegisterForm, LoginForm, TenantLoginForm, TenantCreateForm
+import forms
 
 
 ### Login Page ###
@@ -19,8 +19,8 @@ def login(request):
 
     reg_modal = {'id': 'createUser', 'form_action': '/login/register', 'title': 'Register User'}
 
-    login_form = LoginForm()
-    reg_form = UserRegisterForm()
+    login_form = forms.LoginForm()
+    reg_form = forms.UserRegisterForm()
 
     return render(request, 'newlogin.html', {'OCXlogin': 'OCXi', 'login_data': login_data, 
         'login_form': login_form, 'reg_modal': reg_modal, 'reg_form': reg_form})
@@ -40,7 +40,7 @@ def register(request):
     Needs error checking
     """
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+        form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
             request.session['username'] = form.cleaned_data['userName']
             request.session['password'] = form.cleaned_data['userPwd']
@@ -63,7 +63,7 @@ def projects(request):
     attempt to login with credentials
     """
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = forms.LoginForm(request.POST)
         if form.is_valid():
             request.session['username'] = form.cleaned_data['username']
             request.session['password'] = form.cleaned_data['password']
@@ -85,7 +85,7 @@ def enterProject(request):
     attempt to enter tenant via keystone
     """
     if request.method == 'POST':
-        form = TenantLoginForm(request.POST)
+        form = forms.TenantLoginForm(request.POST)
         if form.is_valid():
             tenantName = form.cleaned_data['tenantName']
             request.session['tenant'] = tenantName
@@ -102,7 +102,7 @@ def createProject(request):
     Create new project from Projects page
     """
     if request.method == 'POST':
-        form = TenantCreateForm(request.POST)
+        form = forms.TenantCreateForm(request.POST)
         if form.is_valid():
             projectName = form.cleaned_data['tenantName']
             projectDesc = form.cleaned_data['tenantDesc']
@@ -142,7 +142,7 @@ def manage(request):
     Project Management page; edit VMs, project settings
     """
     if request.method == 'POST':
-        form = VMCreateForm(request.POST)
+        form = forms.VMCreateForm(request.POST)
         if form.is_valid():
             VMname = form.cleaned_data['newVM']
             image = form.cleaned_data['imageName']
@@ -182,7 +182,7 @@ def edit(request):
     EditVM modal (pop up); retrieves VM/flavor IDs
     """
     if request.method == 'POST':
-        form = VMEditForm(request.POST)
+        form = forms.VMEditForm(request.POST)
         if form.is_valid():
             VM_id = form.cleaned_data['VM_id']
             flavor_id = form.cleaned_data['flavor_id']  
@@ -196,7 +196,7 @@ def editControlVM(request):
     EditVM modal footer; submission of VM controlling actions
     """
     if request.method == 'POST':
-        form = VMControlForm(request.POST)
+        form = forms.VMControlForm(request.POST)
         if form.is_valid():
             VM_id = form.cleaned_data['VM_id']
             if(form.cleaned_data['action'] == 'start'):
@@ -233,7 +233,7 @@ def addUser(request, projectName):
     Add user to current project
     """
     if request.method == "POST":
-        form = UserAddForm(request.POST)
+        form = forms.UserAddForm(request.POST)
         if form.is_valid():
             # recreate keystone client; keystone session work around
             api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])
@@ -245,7 +245,7 @@ def editRole(request):
     Add role to selected user for current project
     """
     if request.method == "POST":
-        form = RoleEditForm(request.POST)
+        form = forms.RoleEditForm(request.POST)
         if form.is_valid():
             # recreate keystone client; keystone session work around
             api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
@@ -260,7 +260,7 @@ def removeUser(request):
     Remove user from current project
     """
     if request.method == "POST":
-        form = UserRemoveForm(request.POST)
+        form = forms.UserRemoveForm(request.POST)
         if form.is_valid():
             # recreate keystone client; keystone session work around
             api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])

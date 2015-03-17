@@ -1,22 +1,24 @@
-<h1 style="font-size:48px;font-weight:bold;padding-left:240px;padding-top:50px;">{{ form_data.name }}</h1>
-  <div style="padding-left:300px;padding-right:300px;padding-top:50px;">
-      <form action="{{ form_data.action }}" method="{{ form_data.method }}">
-        {% csrf_token %}
-        <table align="center">
-          {{  form.as_table }}
-        </table>
-        <div class="btn-group">
-          {% for button in form_data.button_list %}
-            {% if button.type != 'modal' %}
-            <button type='{{ button.type }}' class="{{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
-            {% else %}
-              <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn {{ button.class }}">{{ button.name }}</button>
-            {% endif %}
-          {% endfor %}
-      </form>
-  </div>
-  </div>
-    <!-- <button data-toggle="modal" data-target="#createUser" type="button" class="btn btn-primary">Register</button>
-        {% if extra_button in form_data %}
+<div class="col-xs-6 col-md-8">
+  <h3>{{ form_data.name }}</h3>
+  
+  <form action="{{ form_data.action }}" method="{{ form_data.method }}">
+    <div class="row">
+      {% csrf_token %}
+      <table >
+        {{  form.as_table }}
+      </table>
+    </div>
+
+    <div class = "row">
+      {% for button in form_data.button_list %}
+        {% if button.type != 'modal' %}
+          <button type='{{ button.type }}' class="btn {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
+        {% else %}
+          <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn {{ button.class }}">
+          {{ button.name }}</button>
         {% endif %}
-   <button type="button" class="btn btn-primary">Forgot Password</button> -->
+      {% endfor %}
+    </div>
+  </form>
+</div>
+<!-- old class "btn-group" --> 

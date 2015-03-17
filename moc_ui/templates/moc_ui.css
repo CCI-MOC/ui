@@ -1,16 +1,35 @@
+body {
+    /* background options */
+    background-image: url("/static/blue_clouds.jpg");
+    background-size:   contain contain;                      
+    background-repeat: no-repeat;
+    background-position: center center;            /* optionally, center the image */
+
+    /* text defaults */
+    color: linen;
+
+
+    /* margins for elements */
+    margin: 10px;
+}
+
 table {
     border-collapse: collapse;
 }
 
-th, td {
-    border: 1px solid black;
+table, th, td {
+    border: 1px;
+    border-color: transparent;
 }
 
-body {
-    background-size:   contain contain;                      
-    background-repeat: no-repeat;
-    background-position: center center;            /* optionally, center the image */
+input, select, textarea{
+    color: #000000;
 }
+
+/* form css class 
+.form {
+    
+}*/
 
 @media (min-width: 500px) {
   .nc {
@@ -52,11 +71,3 @@ body {
     margin-right: 0;
 }
 }
-
-table {
-        border-collapse: collapse;
-    }
-
-table, th, td {
-        border: 1px solid black;
-    }
