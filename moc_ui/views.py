@@ -37,11 +37,11 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = models.User.objects.filter(name=username)
+            user = models.User.objects.get(name=username)
 
             if user.verify_password(password=password):
                 request.session['username'] = username
-                return HttpResponseRedirect('/project/')
+                return HttpResponseRedirect('/projects')
         
     return HttpResponseRedirect('/')
 
