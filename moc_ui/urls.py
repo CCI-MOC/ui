@@ -27,5 +27,7 @@ urlpatterns = patterns('',
     url(r'^project_space/manage', manage),
     # default
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', front_page)
+    url(r'^$', front_page),
+
+    url(r'^clusters', clusters),
 )

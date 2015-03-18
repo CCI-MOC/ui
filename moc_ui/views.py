@@ -78,6 +78,24 @@ def register(request):
 
 ### Projects Page ###
 
+def clusters(request):
+    """
+    List clusters available to the user.
+
+    Also show, for each cluster, all projects available to the user.
+    """
+    user = models.User.objects.get(name=request.session['username'])
+    result = {}
+    result['user_clusters'] = [
+        {
+            'cluster_title': account.cluster.title,
+            'projects': [project.name
+                         for project in account.tenant_set.get_queryset()]
+        } for account in user.clusteraccount_set.get_queryset()
+    ]
+    print result
+    return render(request, 'clusters.html', result)
+
 def projects(request):
     """
     List keystone projects available to the user; 

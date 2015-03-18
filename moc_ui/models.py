@@ -75,6 +75,16 @@ class ClusterAccount(models.Model):
             else:
                 client = keystoneclient.Client(auth_ref=json.loads(self.token))
             client.authenticate()
+            return client
          except AuthorizationFailure:
             self.token = None
             raise
+
+
+class Tenant(models.Model):
+     """An openstack tenant that a user has access to."""
+     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+     cluster_account = models.ForeignKey(ClusterAccount)
+
+     def __unicode__(self):
+         return self.name
