@@ -6,7 +6,8 @@ body {
     background-position: center center;            /* optionally, center the image */
 
     /* text defaults */
-    color: #428BCA; /* light blue */
+    /* color: #428BCA; /* light blue */
+    color: #000000; /* black */
 
 
     /* margins for elements */
@@ -26,14 +27,16 @@ input, select, textarea{
     color: #000000;
 }
 
-
 .floating-block {
-    border: 2px solid #000000; /* #a1a1a1; */
+    border: 1px solid #000000; /* #a1a1a1; */
     padding: 10px 40px; 
     background: #dddddd;
     width: 300px;
     border-radius: 25px;
 }
+
+.row {
+float: none; margin: 0 auto;
 
 .form-btns {
     padding-top: 10px;

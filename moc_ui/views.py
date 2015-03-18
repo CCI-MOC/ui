@@ -37,11 +37,14 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = models.User.objects.get(name=username)
-
-            if user.verify_password(password=password):
-                request.session['username'] = username
-                return HttpResponseRedirect('/projects')
+            
+            try:
+                user = models.User.objects.get(name=username)
+                if user.verify_password(password=password):
+                    request.session['username'] = username
+                    return HttpResponseRedirect('/projects')
+            except:
+                pass
         
     return HttpResponseRedirect('/')
 
@@ -69,12 +72,30 @@ def register(request):
             if 'pk' not in user_exist:
                 newuser = models.User(name=username)
                 newuser.set_password(password=password)
-                newuser.save
+                newuser.save()
                 request.session['username'] = username
                 return HttpResponseRedirect('/projects/')
 
     return HttpResponseRedirect('/')
 
+def clusters(request):
+    """
+    List keystone projects available to the user; 
+    attempt to login with credentials
+    """
+    test_cluster_list = [{name: 'pokemans cluster', projects: [{'name': 'bulbasour', 'url': '/projects/'},
+	   						       {'name': 'chardmonger', 'url': '/projects/'},] }
+	   						       {'name': 'squirtle squirt', 'url': '/projects/'},] }
+			{name: 'TMNT cluster', projects: [{'name': 'leodizzle'},{}] }
+  						       {'name': 'chardmonger', 'url': '/projects/'},] }
+						       {'name': 'squirtle squirt', 'url': '/projects/'},] }
+
+		    ] 
+        
+       # pass session's user info to keystone for authentication
+       #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
+       #     projects = api.listTenants()
+    return render(request, 'projects.html', {'user_projects': projects})
 
 ### Projects Page ###
 
@@ -83,6 +104,8 @@ def projects(request):
     List keystone projects available to the user; 
     attempt to login with credentials
     """
+    test_cluster_list = {}
+    test_project_list = {}
         
        # pass session's user info to keystone for authentication
        #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
