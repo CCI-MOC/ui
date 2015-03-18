@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+    {% load staticfiles %}
 
     {% block title %}Marketplace{% endblock %}
 
     {% block js %}
         {% include "externalJS.html" %}
-        {% include "j.js" %}
+        <script src="{% static "moc_ui/j.js" %}" ></script>
     {% endblock %}
 
 
