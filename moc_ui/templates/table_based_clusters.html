@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding-left:100px; padding-right:100px;">
+
+    {% for table in table_list %}
+    <div class="floating-block">
+    <table class="table table-hover">
+        <thead>
+          <tr style="font-size:medium; font-weight:bold">
+            <th >Name</td>
+            <th >Enter Project</td>
+          </tr>
+        </thead>
+   
+        <form action="/projects/" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="tenantName" value="None">
+            <input type="hidden" name="tenantID" value="None">
+                {% for element in table.elements %}
+                <tr>
+                    <td>{{ element.name }}</td>
+                    <td class="button-right">
+                        <button value="{{ element.name }}" type="submit" class="btn btn-success">Enter</button>
+                    </td>
+                </tr>
+                {% endfor %}
+        </form>
+    </table>
+    </div>
+    {% endfor %}
+
+{% include "createProjModal.html" %}
+
+</div>
+{% endblock %}
+
+
+
+

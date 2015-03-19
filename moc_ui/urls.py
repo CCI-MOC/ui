@@ -7,6 +7,8 @@ urlpatterns = patterns('',
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),
+    # cluster
+    url(r'^clusters', clusters),
     # projects
     url(r'^projects/enterProject', enterProject),
     url(r'^projects/create', createProject),

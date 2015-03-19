@@ -9,6 +9,12 @@ class UserRegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
+class CreateClusterForm(forms.Form):
+    auth_url = forms.CharField()
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
 class UserAddForm(forms.Form):
     userName = forms.CharField()
     roleName = forms.CharField()

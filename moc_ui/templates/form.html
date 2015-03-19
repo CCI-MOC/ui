@@ -1,21 +1,24 @@
-<h3>{{ form_data.name }}</h3>
+<h3 class="text-center">{{ form_data.name }}</h3>
 
-<form action="{{ form_data.action }}" method="{{ form_data.method }}">
+<form class="form-inline" action="{{ form_data.action }}" method="{{ form_data.method }}">
     <div class="row">
         {% csrf_token %}
-        <table >
-        {{  form.as_table }}
-        </table>
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+        </div>
+        {% endfor %}
     </div>
 
-    <div class="row form-btns">
-        {% for button in form_data.button_list %}
-          {% if button.type != 'modal' %}
-            <button type='{{ button.type }}' class="btn btn-large {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
-          {% else %}
-            <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn btn-large {{ button.class }}">
-            {{ button.name }}</button>
-          {% endif %}
-        {% endfor %}
+    <div class="row">
+    {% for button in form_data.button_list %}
+      {% if button.type != 'modal' %}
+        <button type='{{ button.type }}' class="btn btn-large {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
+      {% else %}
+        <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn btn-large {{ button.class }}">
+        {{ button.name }}</button>
+      {% endif %}
+    {% endfor %}
     </div>
 </form>

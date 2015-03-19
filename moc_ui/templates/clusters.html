@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Clusters{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-2 floating-block">
+        <h2 class="text-center">Clusters</h3>
+    </div>
+</div>
+
+<div class="col-md-6 center-align">
+
+    {% for table in table_list %}
+    <div class="floating-block">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th >Name</td>
+                <th >Enter Project</td>
+              </tr>
+            </thead>
+       
+            <form action="/projects/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="tenantName" value="None">
+                <input type="hidden" name="tenantID" value="None">
+                    {% for element in table.elements %}
+                    <tr>
+                        <td>{{ element.name }}</td>
+                        <td>
+                            <button value="{{ element.name }}" type="submit" class="btn btn-success right-align">Enter</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </form>
+
+        </table>
+    </div>
+    {% endfor %}
+
+</div>
+  {% with create_cluster_data as modal_data and create_cluster_form as form %}
+      {% include "modal.html" %}
+  {% endwith %}
+{% endblock %}
+
+
+
+

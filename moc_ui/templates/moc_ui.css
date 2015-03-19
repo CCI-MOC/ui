@@ -4,10 +4,11 @@ body {
     background-size:   contain contain;                      
     background-repeat: no-repeat;
     background-position: center center;            /* optionally, center the image */
+    background-attachment: fixed;
 
     /* text defaults */
     /* color: #428BCA; /* light blue */
-    color: #000000; /* black */
+    color: #555; /* gray */
 
 
     /* margins for elements */
@@ -23,24 +24,47 @@ table, th, td {
     border-color: transparent;
 }
 
+th {
+    font-size: medium; 
+    font-weight: bold;
+
+}
+
+
 input, select, textarea{
     color: #000000;
 }
 
 .floating-block {
     border: 1px solid #000000; /* #a1a1a1; */
-    padding: 10px 40px; 
-    background: #dddddd;
-    width: 300px;
     border-radius: 25px;
+
+    margin-left: auto; margin-right: auto;
+
+    padding-top: 25px;
+    padding-right: 50px;
+    padding-bottom: 25px;
+    padding-left: 50px;
+
+    background: #eeeeee;
+
+    opacity: .8;
+    width: 500px;
 }
 
-.row {
-float: none; margin: 0 auto;
+.floating-block.hover {
+    opacity: 1;
+}
+
 
 .form-btns {
     padding-top: 10px;
     padding-left: 72px;
+}
+
+.align-center{
+    margin-left: auto; margin-right: auto;
+
 }
 
 /* form css class 

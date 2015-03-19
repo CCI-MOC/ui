@@ -16,14 +16,14 @@ def front_page(request):
     login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'},
                     {'name': 'sign-up', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}]
 
-    login_data = {'name': 'MOC Login =)', 'action': '/login', 'method': 'post', 'button_list': login_buttons}
+    login_data = {'name': 'MassOpenCloud Login =)', 'action': '/login', 'method': 'post', 'button_list': login_buttons}
 
     reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
 
     login_form = forms.LoginForm()
     reg_form = forms.UserRegisterForm()
 
-    return render(request, 'front_page.html', {'OCXlogin': 'OCXi', 'login_data': login_data, 
+    return render(request, 'front_page.html', {'login_data': login_data, 
         'login_form': login_form, 'reg_modal': reg_modal, 'reg_form': reg_form})
 
 def login(request):
@@ -83,19 +83,32 @@ def clusters(request):
     List keystone projects available to the user; 
     attempt to login with credentials
     """
-    test_cluster_list = [{name: 'pokemans cluster', projects: [{'name': 'bulbasour', 'url': '/projects/'},
-	   						       {'name': 'chardmonger', 'url': '/projects/'},] }
-	   						       {'name': 'squirtle squirt', 'url': '/projects/'},] }
-			{name: 'TMNT cluster', projects: [{'name': 'leodizzle'},{}] }
-  						       {'name': 'chardmonger', 'url': '/projects/'},] }
-						       {'name': 'squirtle squirt', 'url': '/projects/'},] }
+    test_cluster_list = [{'name': 'pokemans cluster', 'elements': [{'name': 'bulbasour', 'url': '/projects/'},
+                                                               {'name': 'chardmonger', 'url': '/projects/'}, 
+                                                               {'name': 'squirtle squirt', 'url': '/projects/'},]},
+                         {'name': 'TMNT cluster', 'elements': [{'name': 'leodizzle', 'url': '/projects/'}, 
+                                                           {'name': 'donna', 'url': '/projects/'}, 
+                                                           {'name': 'raphael', 'url': '/projects/'},]},
+                         {'name': 'TMNT cluster', 'elements': [{'name': 'leodizzle', 'url': '/projects/'}, 
+                                                           {'name': 'donna', 'url': '/projects/'}, 
+                                                           {'name': 'raphael', 'url': '/projects/'},]},
+                         {'name': 'TMNT cluster', 'elements': [{'name': 'leodizzle', 'url': '/projects/'}, 
+                                                           {'name': 'donna', 'url': '/projects/'}, 
+                                                           {'name': 'raphael', 'url': '/projects/'},]},
+                         {'name': 'TMNT cluster', 'elements': [{'name': 'leodizzle', 'url': '/projects/'}, 
+                                                           {'name': 'donna', 'url': '/projects/'}, 
+                                                           {'name': 'raphael', 'url': '/projects/'},]}]
 
-		    ] 
-        
-       # pass session's user info to keystone for authentication
-       #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
-       #     projects = api.listTenants()
-    return render(request, 'projects.html', {'user_projects': projects})
+    create_cluster_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
+    create_cluster_form  = forms.CreateClusterForm()
+
+    cluster_buttons = []
+    
+    # pass session's user info to keystone for authentication
+    #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
+    #     projects = api.listTenants()
+    return render(request, 'clusters.html', {'cluster_list': test_cluster_list, 'create_cluster_modal': create_cluster_modal, 
+                                             'create_cluster_modal': create_cluster_modal, 'button_list': cluster_buttons})
 
 ### Projects Page ###
 
