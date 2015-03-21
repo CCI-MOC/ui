@@ -8,19 +8,53 @@
 
 <div class="container-fluid">
     <div class="col-md-6 col-centered">
-        <div class="floating-block-thin">
-            <h1 class="text-center">Your Clouds</h1>
+        <div class="floating-block">
+            <div class="panel panel-default">
+                <h1 class="text-center">Your Clouds</h1>
+            </div>
         </div>
     </div>
 
     <div class="col-md-6 col-centered">
+
         {% for cloud in cloud_list %}
         <div class="floating-block vert-padded">
-            <div class="list-group">
-                <h4>{{ cloud.name }}</h4>
-                {% for project in cloud.projects %}
-                <a class="list-group-item" href="/projects/{{ cloud.name }}/{{ project.name }}">{{ project.name }}</a>
-                {% endfor %}
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <h2>{{cloud.name}}</h2>
+                    {% for project in cloud.projects %}
+                    <div class="panel-heading">
+                        <a class="list-group-item" data-toggle="collapse" data-parent="#accordian" href="#{{project.name}}"
+                        >{{project.name}}</a>
+                    </div>
+                    <div id="{{project.name}}" class="panel-collapse collapse">
+                        <table class="table table-hover">
+                            <tbody>
+                                {% for vm in project.vm_list %}
+                                <tr>
+                                    <td>{{vm.name}}</td>
+                                    <td> {{vm.state}}</td>
+                                    <td> {{vm.img}} </td>
+                                    <td> 
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
+                                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-info" aria-label="Left Align">
+                                                VNC 
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
+                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         {% endfor %}

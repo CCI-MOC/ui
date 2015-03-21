@@ -2,23 +2,20 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect 
 #import ui_api as api 
 import time 
+# Forms to use in pages
 import forms 
+# Dictionaries to pass to template context
+import dicts
+# Models to access our db's tables
 import models 
 
 ### Splash Page ### 
 def front_page(request): 
     """ Front page; Enter credentials to be processed by the login view """ 
-    login_buttons = [{'name': 'submit', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'}, 
-                     {'name': 'sign-up', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}] 
-
-    login_data = {'name': 'MassOpenCloud Login =)', 'action': '/login', 'method': 'post', 'button_list': login_buttons} 
     
-    reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'} 
-    
-    login_form = forms.LoginForm() 
-    reg_form = forms.UserRegisterForm() 
-    
-    return render(request, 'front_page.html', {'login_data': login_data, 'login_form': login_form, 'reg_modal': reg_modal, 'reg_form': reg_form}) 
+    return render(request, 'front_page.html', 
+                 {'login_data': dicts.login_data, 'login_form': forms.LoginForm(), 
+                  'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegisterForm()}) 
 
 ### Login View ### 
 def login(request): 
@@ -65,7 +62,7 @@ def register(request):
 
 def clouds(request): 
     """ List keystone projects available in user's clouds""" 
-    test_cloud_list = [{'name': 'League of Legends cloud', 'projects': [{'name': 'Ahri',}, 
+    test_cloud_list = [{'name': 'League of Legends Cloud', 'projects': [{'name': 'Ahri',}, 
                                                                             {'name': 'Lucian', }, {'name': 'YasuWoh',}]},
                          {'name': 'pokemans cloud', 'projects': [{'name': 'bulbasour'},
                                                                    {'name': 'chardmonger'}, 
@@ -75,15 +72,14 @@ def clouds(request):
                                                                           {'name': 'epona',}, 
                                                                           {'name': 'zelda',},]}]
 
+    league_cloud = {}
+    cloud_buttons = {} 
     create_cloud_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
     create_cloud_form  = forms.CreateClusterForm()
 
     cloud_buttons = []
     
-    # pass session's user info to keystone for authentication
-    #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
-    #     projects = api.listTenants()
-    return render(request, 'clouds.html', {'cloud_list': test_cloud_list, 'create_cloud_modal': create_cloud_modal, 
+    return render(request, 'clouds.html', {'cloud_list': dicts.test_cloud_list, 'create_cloud_modal': create_cloud_modal, 
                                              'create_cloud_modal': create_cloud_modal, 'button_list': cloud_buttons})
 
 ### Projects Page ###

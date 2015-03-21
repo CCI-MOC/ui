@@ -10,6 +10,8 @@ body {
     /* text defaults */
     /* color: #428BCA; /* light blue */
     color: #444; /* gray */
+    text-align: middle;
+    vertical-align: center;
 
 
     /* margins for elements */
@@ -25,6 +27,10 @@ table, th, td {
     border-color: transparent;
     vertical-align: center;
     text-align: center;
+}
+
+td {
+    vertical-align: center;
 }
 
 th {
@@ -45,10 +51,32 @@ input, select, textarea{
 
 }
 
+.panel {
+    text-align: center;
+    vertical-align: center;
+}
+
 /* custom classes */
 .floating-block {
-    border: 1px solid #000000; /* #a1a1a1; */
-    border-radius: 75px;
+    /*border: 1px solid #000000;
+    border-radius: 75px;*/
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 25px 50px;
+
+
+    vertical-align: center;
+
+    /*background: #eeeeee;*/
+
+    opacity: .8;
+}
+
+.floating-block-thin {
+    border: 1px solid #000000; 
+    border-radius: 75px; 
 
     margin-left: auto;
     margin-right: auto;
@@ -56,26 +84,6 @@ input, select, textarea{
     padding-top: 25px;
     padding-right: 50px;
     padding-bottom: 25px;
-    padding-left: 50px;
-
-
-    vertical-align: center;
-
-    background: #eeeeee;
-
-    opacity: .8;
-}
-
-.floating-block-thin {
-    border: 1px solid #000000; /* #a1a1a1; */
-    border-radius: 75px;
-
-    margin-left: auto;
-    margin-right: auto;
-
-    padding-top: 25px;
-    padding-right: 50px;
-    padding-bottom: 20px;
     padding-left: 50px;
 
     background: #eeeeee;
