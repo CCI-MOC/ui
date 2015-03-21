@@ -1,38 +1,25 @@
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
-<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
-
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="/projects">OCXi</a>
+      <a class="navbar-brand" href="/clouds">OCX</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/market">Marketplace</a></li>
-        <li><a href="/manage">Management</a></li>
-        <li><a href="/billing">Billing</a></li>
+        <li><a href="/clouds">Clouds</a></li>
+        <li><a href="/market">Market</a></li>
+        <li><a href="/settings">Settings</a></li>
       </ul>
-    <div class="dropdown navbar-right">
-      <button class="btn glyphicon glyphicon-user" style="font-size:1.5em" id="userProfile" data-toggle="dropdown" aria-expanded="true">
-      {{ request.session.username }}
-      </button>
-      <ul class="dropdown-menu navbar-right" role="menu" aria-labelledby="userProfile">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Logout</a></li>
-      </ul>
-    </div>
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-
+      <div class="dropdown navbar-right">
+        <button class="btn glyphicon glyphicon-user" style="font-size:1.5em" id="userProfile" data-toggle="dropdown" aria-expanded="true">
+        {{ request.session.username }}
+        </button>
+        <ul class="dropdown-menu navbar-right" role="menu" aria-labelledby="userProfile">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Logout</a></li>
+        </ul>
+      </div>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

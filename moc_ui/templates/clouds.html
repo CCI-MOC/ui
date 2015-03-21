@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Cloud{% endblock %}
+
+{% block content %}
+<div class="row vert-padded-large"></div>
+<div class="row vert-padded-large"></div>
+
+<div class="container-fluid">
+    <div class="col-md-6 col-centered">
+        <div class="floating-block-thin">
+            <h1 class="text-center">Your Clouds</h1>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-centered">
+        {% for cloud in cloud_list %}
+        <div class="floating-block vert-padded">
+            <div class="list-group">
+                <h4>{{ cloud.name }}</h4>
+                {% for project in cloud.projects %}
+                <a class="list-group-item" href="/projects/{{ cloud.name }}/{{ project.name }}">{{ project.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-6 col-centered">
+        <div class="floating-block vert-padded">
+            <div class="btn-group centered vert-padded" role="group">
+                <button type='submit' class="btn btn-large btn-primary" action="/clouds/">Add Cloud</button>
+                <button type='button' class="btn btn-large btn-danger" action="/clouds/">Remove Cloud</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row vert-padded-large"></div>
+
+    {% with create_cloud_data as modal_data and create_cloud_form as form %}
+        {% include "modal.html" %}
+    {% endwith %}
+</div>
+{% endblock %}
+

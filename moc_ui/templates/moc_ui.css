@@ -1,3 +1,4 @@
+/* html div over-rides */
 body {
     /* background options */
     background-image: url("/static/blue_clouds.jpg");
@@ -8,7 +9,7 @@ body {
 
     /* text defaults */
     /* color: #428BCA; /* light blue */
-    color: #555; /* gray */
+    color: #444; /* gray */
 
 
     /* margins for elements */
@@ -22,50 +23,97 @@ table {
 table, th, td {
     border: 1px;
     border-color: transparent;
+    vertical-align: center;
+    text-align: center;
 }
 
 th {
-    font-size: medium; 
+    font-size: large; 
     font-weight: bold;
+    text-align: center;
 
 }
-
 
 input, select, textarea{
     color: #000000;
 }
 
+/* bootstrap 3 over-rides */
+.list-group {
+    text-align: center;
+    vertical-align: center;
+
+}
+
+/* custom classes */
 .floating-block {
     border: 1px solid #000000; /* #a1a1a1; */
-    border-radius: 25px;
+    border-radius: 75px;
 
-    margin-left: auto; margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 
     padding-top: 25px;
     padding-right: 50px;
     padding-bottom: 25px;
     padding-left: 50px;
 
+
+    vertical-align: center;
+
     background: #eeeeee;
 
     opacity: .8;
-    width: 500px;
+}
+
+.floating-block-thin {
+    border: 1px solid #000000; /* #a1a1a1; */
+    border-radius: 75px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-top: 25px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+
+    background: #eeeeee;
+
+    opacity: .8;
+
 }
 
 .floating-block.hover {
     opacity: 1;
 }
 
+.vert-padded { 
+    margin-top:10px; 
+    margin-bottom:10px;
+}
+
+.vert-padded-large { 
+    margin-top:25px; 
+    margin-bottom:25px;
+}
+
+.centered{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .form-btns {
     padding-top: 10px;
     padding-left: 72px;
 }
 
-.align-center{
-    margin-left: auto; margin-right: auto;
-
-}
+.col-centered{
+     float: none;
+     margin: 0 auto;
+ }
 
 /* form css class 
 }*/
