@@ -62,25 +62,11 @@ def register(request):
 
 def clouds(request): 
     """ List keystone projects available in user's clouds""" 
-    test_cloud_list = [{'name': 'League of Legends Cloud', 'projects': [{'name': 'Ahri',}, 
-                                                                            {'name': 'Lucian', }, {'name': 'YasuWoh',}]},
-                         {'name': 'pokemans cloud', 'projects': [{'name': 'bulbasour'},
-                                                                   {'name': 'chardmonger'}, 
-                                                                   {'name': "picka - ha'choo"}, 
-                                                                   {'name': 'squirtle squirt'}]},
-                         {'name': 'Legend of Zelda cloud', 'projects': [{'name': 'link', },
-                                                                          {'name': 'epona',}, 
-                                                                          {'name': 'zelda',},]}]
 
-    league_cloud = {}
-    cloud_buttons = {} 
-    create_cloud_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
     create_cloud_form  = forms.CreateClusterForm()
 
-    cloud_buttons = []
-    
-    return render(request, 'clouds.html', {'cloud_list': dicts.test_cloud_list, 'create_cloud_modal': create_cloud_modal, 
-                                             'create_cloud_modal': create_cloud_modal, 'button_list': cloud_buttons})
+    return render(request, 'clouds.html', {'cloud_list': dicts.test_cloud_list, 'create_cloud_modal': dicts.create_cloud_modal, 
+                                             'create_cloud_form': forms.CreateClusterForm()})
 
 ### Projects Page ###
 

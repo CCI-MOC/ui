@@ -4,39 +4,62 @@
 
 {% block content %}
 <div class="row vert-padded-large"></div>
-<div class="row vert-padded-large"></div>
 
 <div class="container-fluid">
-    <div class="col-md-6 col-centered">
+    <div class="col-md-8 col-centered">
         <div class="floating-block">
             <div class="panel panel-default">
-                <h1 class="text-center">Your Clouds</h1>
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h1>{{request.session.username}}'s <small>clouds</small><h1>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Cloud 
+                        </button>
+                        <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings 
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-6 col-centered">
-
+    <div class="col-md-8 col-centered">
         {% for cloud in cloud_list %}
-        <div class="floating-block vert-padded">
+        <div class="floating-block">
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
-                    <h2>{{cloud.name}}</h2>
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <h3>{{ cloud.name }}</h3>
+                        </div>
+                    </div>
                     {% for project in cloud.projects %}
                     <div class="panel-heading">
-                        <a class="list-group-item" data-toggle="collapse" data-parent="#accordian" href="#{{project.name}}"
-                        >{{project.name}}</a>
+                        <h4><a class="list-group-item" data-toggle="collapse" data-parent="#accordian" href="#{{project.name}}"
+                        >{{project.name}}</a></h4>
                     </div>
                     <div id="{{project.name}}" class="panel-collapse collapse">
                         <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td>vm name</td>
+                                    <td>vm state</td>
+                                    <td>vm img</td>
+                                    <td>buttons</td>
+                                </tr>
+                            </thead>
                             <tbody>
                                 {% for vm in project.vm_list %}
                                 <tr>
                                     <td>{{vm.name}}</td>
-                                    <td> {{vm.state}}</td>
-                                    <td> {{vm.img}} </td>
-                                    <td> 
-                                        <div class="btn-group" role="group">
+                                    <td>{{vm.state}}</td>
+                                    <td>{{vm.img}}</td>
+                                    <td><div class="btn-group" role="group">
                                             <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
                                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                             </button>
@@ -46,30 +69,34 @@
                                             <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
                                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                             </button>
-                                        </div>
-                                    </td>
+                                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                            </button>
+                                    </div></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                     {% endfor %}
+                    <div class="panel-footer">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> VM
+                            </button>
+                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
+                            </button>
+                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Cloud 
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-    <div class="col-md-6 col-centered">
-        <div class="floating-block vert-padded">
-            <div class="btn-group centered vert-padded" role="group">
-                <button type='submit' class="btn btn-large btn-primary" action="/clouds/">Add Cloud</button>
-                <button type='button' class="btn btn-large btn-danger" action="/clouds/">Remove Cloud</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="row vert-padded-large"></div>
 
     {% with create_cloud_data as modal_data and create_cloud_form as form %}
         {% include "modal.html" %}

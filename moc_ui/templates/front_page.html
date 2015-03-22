@@ -14,10 +14,16 @@
     <div class = "row">
         <div class = "col-md-5 col-centered">
             <div class = "floating-block">
-                <h3 class="text-center">{{ login_data.name }}</h3>
-                {% with login_data as form_data and login_form as form %}
-                    {% include "form.html" %}
-                {% endwith %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">{{ login_data.name }}</div>
+                    </div>
+                    <div class="panel-body">
+                        {% with login_data as form_data and login_form as form %}
+                            {% include "form.html" %}
+                        {% endwith %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

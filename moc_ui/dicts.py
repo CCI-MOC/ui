@@ -15,10 +15,12 @@ reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title
 
 
 # CLOUDS PAGE
-test_vm_list = [{'name': 'vm1', 'state': 'on', 'img': 'ubuntu'},
-                {'name': 'vm2', 'state': 'off', 'img': 'centos7'},
-                {'name': 'vm3', 'state': 'build', 'img': 'RHEL7'},
-                {'name': 'vm4', 'state': 'error', 'img': 'Windows 8'}]
+test_vm_list = [{'name': 'hadoop master', 'state': '=)', 'img': 'centOS 7'},
+                {'name': 'hadoop slave 1', 'state': '=)', 'img': 'centOS 7'},
+                {'name': 'hadoop slave 2', 'state': '=)', 'img': 'centOS 7'},
+                {'name': 'web server', 'state': 'off', 'img': 'Ubuntu 14.10'},
+                {'name': 'database', 'state': 'build', 'img': 'RHEL 7'},
+                {'name': 'bad machine', 'state': '=(', 'img': 'Windows 8'}]
 
 test_cloud_list = [{'name': 'Harvard Production', 'projects': [{'name': 'Ahri', 'vm_list': test_vm_list}, 
                                                                {'name': 'Lucian', 'vm_list': test_vm_list}, 
@@ -32,6 +34,4 @@ test_cloud_list = [{'name': 'Harvard Production', 'projects': [{'name': 'Ahri', 
                                                        {'name': 'zelda', 'vm_list': test_vm_list},]}]
 
 
-league_cloud = {}
-cloud_buttons = {} 
 create_cloud_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}

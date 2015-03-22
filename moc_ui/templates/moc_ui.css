@@ -10,9 +10,6 @@ body {
     /* text defaults */
     /* color: #428BCA; /* light blue */
     color: #444; /* gray */
-    text-align: middle;
-    vertical-align: center;
-
 
     /* margins for elements */
     margin: 10px;
@@ -39,6 +36,11 @@ th {
     text-align: center;
 
 }
+h1, h2, h3, h4 {
+    margin:auto;
+    text-align: center;
+    vertical-align: middle;
+}
 
 input, select, textarea{
     color: #000000;
@@ -56,6 +58,12 @@ input, select, textarea{
     vertical-align: center;
 }
 
+.panel-body {
+    margin: 0 auto;
+    vertical-align: center;
+
+}
+
 /* custom classes */
 .floating-block {
     /*border: 1px solid #000000;
@@ -71,7 +79,7 @@ input, select, textarea{
 
     /*background: #eeeeee;*/
 
-    opacity: .8;
+    opacity: .7;
 }
 
 .floating-block-thin {
@@ -88,7 +96,7 @@ input, select, textarea{
 
     background: #eeeeee;
 
-    opacity: .8;
+    opacity: .7;
 
 }
 
