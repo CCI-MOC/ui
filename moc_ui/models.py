@@ -48,43 +48,49 @@ class ClusterAccount(models.Model):
      cluster = models.ForeignKey(Cluster)
      cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
      cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
-     token = models.TextField(default=None, blank=True, null=True)
 
      def __unicode__(self):
          return '%r@%r' % (self.cluster_username, self.cluster.title)
-
-
-     def get_keystoneclient(self):
-         """Get a keystone client object for the cluster account.
-
-        Returns the client object.
-
-        This may raise ``keystone.exceptions.AuthorizationFailure`` if
-        authorization fails for any reason, including stale tokens in
-        the database. At some point we'll want to have that handle within
-        this method, but for now, just try again -- the stale token will
-        have been deleted.
-         """
-         try:
-            if self.token is None:
-                client = keystoneclient.Client(username=self.cluster_username,
-                                                password=self.cluster_password,
-                                                auth_url=self.cluster.auth_url,
-                                                )
-                self.token = json.dumps(client.auth_ref)
-            else:
-                client = keystoneclient.Client(auth_ref=json.loads(self.token))
-            client.authenticate()
-            return client
-         except AuthorizationFailure:
-            self.token = None
-            raise
 
 
 class Tenant(models.Model):
      """An openstack tenant that a user has access to."""
      name = models.CharField(max_length=DEFAULT_FIELD_LEN)
      cluster_account = models.ForeignKey(ClusterAccount)
+     token = models.TextField(default=None, blank=True, null=True)
 
      def __unicode__(self):
          return self.name
+
+     def get_keystoneclient(self):
+         """Get a keystone client object for the tenant.
+
+         Returns the client object.
+
+         This may raise ``keystone.exceptions.AuthorizationFailure`` if
+         authorization fails for any reason, including stale tokens in
+         the database.
+         """
+         try:
+            if self.token is None:
+                client = keystoneclient.Client(username=self.cluster_account.cluster_username,
+                                               password=self.cluster_account.cluster_password,
+                                               auth_url=self.cluster_account.cluster.auth_url,
+                                               tenant_name=self.name,
+                                               )
+                self.token = json.dumps(client.auth_ref)
+            else:
+                client = keystoneclient.Client(auth_ref=json.loads(self.token))
+            # keystoneclient authenticates lazily, i.e. It doensn't actually
+            # authenticates until the first time it needs the token for
+            # someting. We'd like to find out about failures now (in
+            # particular, it's easier to clear a bad token here than somewhere
+            # else in the code. authenticate() forces it to auth right now:
+            client.authenticate()
+            return client
+         except AuthorizationFailure:
+             # Clear the token if auth failed:
+            self.token = None
+            raise
+
+
