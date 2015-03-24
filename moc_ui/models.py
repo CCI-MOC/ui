@@ -1,12 +1,15 @@
 from django.db import models
 from passlib.hash import sha512_crypt
 import json
+import uuid
 
 from keystoneclient.v2_0 import client as keystoneclient
 from keystoneclient.exceptions import AuthorizationFailure
+from novaclient.v2 import client as novaclient
 
 # Lengths for CharField, as it is required
 PASSHASH_LEN = len(sha512_crypt.encrypt(''))
+UUID_LEN = len(str(uuid.uuid1()))
 DEFAULT_FIELD_LEN = 255
 
 
@@ -101,14 +104,21 @@ class OSProject(models.Model):
             self.token = None
             raise
 
+    def get_novaclient(self):
+        """Get a nova client for the tenant."""
+        # TODO: We ought to be able to derive this from the keystone client,
+        # but it's proving trickier than I expected --isd
+        return novaclient.Client(self.cluster_account.cluster_username,
+                                 self.cluster_account.cluster_password,
+                                 self.name,
+                                 self.cluster_account.cluster.auth_url)
+
 
 class VM(models.Model):
     """A user's vm."""
     ui_project = models.ForeignKey(UIProject)
     os_project = models.ForeignKey(OSProject)
-
-    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    auth_endpoint = models.URLField()
+    os_uuid = models.CharField(max_length=UUID_LEN)
 
     def __unicode__(self):
         return self.name
