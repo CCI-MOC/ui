@@ -5,7 +5,15 @@ from passlib.hash import sha512_crypt
 PASSHASH_LEN = len(sha512_crypt.encrypt(''))
 DEFAULT_FIELD_LEN = 255 
 
+# service directory
+class Provider(models.Model):
+     key = models.IntegerField(primary_key=True) 
+    
+     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+     def __unicode__(self):
+         return self.name
 
+# user specifics
 class User(models.Model):
      """A user of the marketplace UI"""
      name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
@@ -19,7 +27,7 @@ class User(models.Model):
         
      def __unicode__(self):
          return self.name
-                
+
 class Project(models.Model):
      """A user's project."""
      key = models.IntegerField(primary_key=True) 
@@ -29,20 +37,20 @@ class Project(models.Model):
 
      def __unicode__(self):
          return self.name
-     
+
 class VM(models.Model):
      """A user's vm."""
      key = models.IntegerField(primary_key=True) 
      project = models.ForeignKey(Project)
+     provider = models.ForeignKey(Provider)
 
      name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-     provider = models.CharField(max_length=DEFAULT_FIELD_LEN)
      auth_endpoint = models.URLField()
 
       
      def __unicode__(self):
          return self.name
-                
+
 class Cluster(models.Model):
      """An openstack cluster."""
      title = models.CharField(max_length=DEFAULT_FIELD_LEN)

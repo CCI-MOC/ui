@@ -7,22 +7,25 @@
 
 {% block title %}Welcome!{% endblock %}
 
+{% block background %}
+<body class="blue_clouds">
+{% endblock %}
+
+
 {% block content %}
 
   <!-- login form -->
 <div class = "container-fluid">
     <div class = "row">
         <div class = "col-md-5 col-centered">
-            <div class = "floating-block">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">{{ login_data.name }}</div>
-                    </div>
-                    <div class="panel-body">
-                        {% with login_data as form_data and login_form as form %}
-                            {% include "form.html" %}
-                        {% endwith %}
-                    </div>
+            <div class="panel panel-default floating-block">
+                <div class="panel-heading">
+                    <div class="panel-title">{{ login_data.name }}</div>
+                </div>
+                <div class="panel-body">
+                    {% with login_data as form_data and login_form as form %}
+                        {% include "form.html" %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

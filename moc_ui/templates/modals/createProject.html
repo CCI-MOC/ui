@@ -1,5 +1,5 @@
 <!-- dustProject Modal -->
-<div class="modal fade" id="dustProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="createProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header">
@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <table align="center">
-                        {{ dustProject.as_table }}
+                        {{ createProject.as_table }}
                     </table>
                 </div>
                 <div class="modal-footer">

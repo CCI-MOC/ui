@@ -9,13 +9,23 @@ class userRegister(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
-class dustProject(forms.Form):
+class createProject(forms.Form):
     name = forms.CharField()
-    action = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
 
-class dustVM(forms.Form):
+class deleteProject(forms.Form):
     name = forms.CharField()
-    action = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
+
+class createVM(forms.Form):
+    providers = ['BU-PROD', 'HU-PROD', 'NE-PROD', 'UMASS-PROD', 'MIT-PROD']
+    name = forms.CharField()
+    provider= forms.ChoiceField(widget=forms.RadioSelect, choices=providers)
+    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
+
+class deleteVM(forms.Form):
+    name = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
 
 class controlVM(forms.Form):
     action = forms.CharField()

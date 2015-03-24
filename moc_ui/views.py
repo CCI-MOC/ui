@@ -37,8 +37,9 @@ def clouds(request):
 
 
     return render(request, 'clouds.html', 
-                  {'project_list': project_list, 'dustProject': forms.dustProject(), 
-                  'dustVM': forms.dustVM(), 'controlVM': forms.controlVM(),})
+                  {'project_list': project_list, 
+                  'createProject': forms.createProject(), 'deleteProject': forms.deleteProject(), 
+                  'createVM': forms.createVM(), 'deleteVM': forms.deleteVM(), 'controlVM': forms.controlVM(),})
 
 ### User Actions ### 
 def login(request): 
@@ -89,12 +90,19 @@ def dustProject(request):
     """Create or destroy project - from dust to dust"""
     if request.method == "POST": 
 
-        form = forms.dustProject(request.POST) 
+        form = forms.createProject(request.POST) 
         if form.is_valid(): 
             user = models.User.objects.get(name=request.session['username'])
             project_name = form.cleaned_data['name'] 
             action = form.cleaned_data['action']
 
+            if action is 'create':
+                project = models.Project(name=project_name, user=user) 
+                project.save()
+                return HttpResponseRedicret('/clouds')
+
+        form = forms.deleteProject(request.POST) 
+        if form.is_valid(): 
             try:
                 project = models.Project.objects.get(name=project_name, user=user) 
                 if action is 'destroy' and 'pk' in project:
@@ -102,13 +110,32 @@ def dustProject(request):
             except: 
                 pass
 
-            if action is 'create':
-                project = models.Project(name=project_name, user=user) 
-                project.save()
-
     return HttpResponseRedirect('/clouds') 
 
     
+def dustVM(request):
+    """Create or destroy vm - from dust to dust"""
+    if request.method == "POST": 
+
+        form = forms.createVM(request.POST) 
+        if form.is_valid(): 
+            user = models.User.objects.get(name=request.session['username'])
+            vm_name = form.cleaned_data['name'] 
+            action = form.cleaned_data['action']
+
+            if action is 'create':
+                vm = models.VM(name=vm_name, user=user) 
+                vm.save()
+                return HttpResponseRedicret('/clouds')
+
+        form = forms.deleteVM(request.POST) 
+        if form.is_valid(): 
+            try:
+                vm = models.VM.objects.get(name=vm_name, user=user) 
+                if action is 'destroy' and 'pk' in vm:
+                    vm.delete()
+            except: 
+                pass
 
 def dustVM(request):
     """Create or destroy vm"""

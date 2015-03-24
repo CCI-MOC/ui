@@ -1,7 +1,7 @@
 /* html div over-rides */
 body {
     /* background options */
-    background-image: url("/static/blue_clouds.jpg");
+    background-image: url("/static/low-poly-landscape.png");
     background-size:   contain contain;                      
     background-repeat: no-repeat;
     background-position: center center;            /* optionally, center the image */
@@ -12,7 +12,7 @@ body {
     color: #444; /* gray */
 
     /* margins for elements */
-    padding-top:20px;
+    padding: 25px 50px;
     margin: 10px;
 }
 
@@ -76,15 +76,11 @@ input, select, textarea{
     /*border: 1px solid #000000;
     border-radius: 75px;*/
 
-    margin-left: auto;
-    margin-right: auto;
-
-    padding: 25px 50px;
-
+    .center-block();
 
     vertical-align: center;
 
-    /*background: #eeeeee;*/
+    background: #eeeeee;
 
     opacity: .7;
 }
@@ -94,23 +90,15 @@ input, select, textarea{
     margin-bottom:15px;
 }
 
-.centered{
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.form-btns {
-    padding-top: 10px;
-    padding-left: 72px;
-}
 
 .col-centered{
      float: none;
      margin: 0 auto;
  }
 
+ .blue_clouds{
+    background-image: url("/static/blue_clouds.jpg");
+ }
 
 @media (min-width: 500px) {
   .nc {

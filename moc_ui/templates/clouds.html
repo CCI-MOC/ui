@@ -7,90 +7,98 @@
 
 <div class="container-fluid">
     <div class="col-md-8 col-centered">
-        <div class="floating-block">
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            <h1>{{request.session.username}}'s <small>cloud</small><h1>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default floating-block">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <h2 class="col-md-6 pull-left">  {{request.session.username}}'s <small>cloud</small></h2>
+                            <div class="col-md-4 btn-group pull-right" role="group">
+                                <button type='button' data-toggle="modal" data-target="#createProject" 
+                                class="btn btn-success" aria-label="Left">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> project
+                                </button>
+                                <button type='button' data-toggle="modal" data-target="#projectSettings" 
+                                class="btn btn-primary" aria-label="Left">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {% for project in project_list %}
-                    <div class="panel-body">
-                        <h4><a class="list-group-item text-left" data-toggle="collapse" data-parent="#accordian" 
-                        href="#{{project.name}}">{{project.name}}</a></h4>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align" action="#dustVM">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </div>
+                {% for project in project_list %}
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6 btn-group pull-left">
+                            <button type="button" class="btn btn-default" data-toggle="collapse" 
+                            data-parent="#accordian" data-target="#{{project.name}}">
+                                    <h4>{{project.name}}</h4>
                             </button>
-                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align" action="/clouds/">
+                        </div>
+                        <div class="col-md-4 btn-group pull-right" role="group">
+                            <button type="button" class="btn btn-success" aria-label="Left Align" action="#dustVM">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> vm
+                            </button>
+                            <button type="button" class="btn btn-primary" aria-label="Left Align" action="/clouds/">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align" action="#dustProject">
-                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                            <button type="button" class="btn btn-danger" aria-label="Left Align" action="#dustProject">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> project
                             </button>
                         </div>
                     </div>
-                    <div id="{{project.name}}" class="panel-collapse collapse">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <td>vm name</td>
-                                    <td>vm state</td>
-                                    <td>vm img</td>
-                                    <td>buttons</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for vm in project.vm_list %}
-                                <tr>
-                                    <td>{{vm.name}}</td>
-                                    <td>{{vm.state}}</td>
-                                    <td>{{vm.img}}</td>
-                                    <td><div class="btn-group" role="group">
-                                            {% if vm.state == 'off' %}
-                                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
-                                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                            </button>
-                                            {% else %}
-                                            <button type="button" class="btn btn-default btn-warning" aria-label="Left Align">
-                                                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
-                                            </button>
-                                            {% endif %}
-                                            <button type="button" class="btn btn-default btn-info" aria-label="Left Align">
-                                                <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
-                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                                            </button>
-                                    </div></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% endfor %}
-                    <div class="panel-footer">
-                        <div class="btn-group" role="group">
-                            <button type='button' data-toggle="modal" data-target="#dustProject" 
-                            class="btn btn-default btn-success" aria-label="Left">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                            <button type='button' data-toggle="modal" data-target="#dustProject" 
-                            class="btn btn-default btn-primary" aria-label="Left">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
+                </div>
+                <div id="{{project.name}}" class="panel-collapse collapse">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td>vm name</td>
+                                <td>vm state</td>
+                                <td>vm image</td>
+                                <td>vm provider</td>
+                                <td>controls</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vm in project.vm_list %}
+                            <tr>
+                                <td>{{vm.name}}</td>
+                                <td>{{vm.state}}</td>
+                                <td>{{vm.image}}</td>
+                                <td>{{vm.provider}}</td>
+                                <td><div class="btn-group" role="group">
+                                        {% if vm.state == 'off' %}
+                                        <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                        </button>
+                                        {% else %}
+                                        <button type="button" class="btn btn-default btn-warning" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                                        </button>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-default btn-info" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                        </button>
+                                </div></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+                <div class="panel-footer">
                 </div>
             </div>
         </div>
     </div>
 
-    {% include "modals/dustProject.html" %}
+    {% include "modals/createProject.html" %}
 
 </div>
 {% endblock %}
