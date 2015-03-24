@@ -19,7 +19,7 @@ def clouds(request):
     """List projects and vms in user's clouds"""
     try:
         user = models.User.objects.get(name=request.session['username'])
-        projects = models.Project.objects.filter(user=user)
+        projects = models.UIProject.objects.filter(user=user)
     except:
         return HttpResponseRedirect('/')
 
