@@ -20,6 +20,28 @@ class User(models.Model):
      def __unicode__(self):
          return self.name
                 
+class Project(models.Model):
+     """A user's project."""
+     key = models.IntegerField(primary_key=True) 
+     user = models.ForeignKey(User)
+
+     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+
+     def __unicode__(self):
+         return self.name
+     
+class VM(models.Model):
+     """A user's vm."""
+     key = models.IntegerField(primary_key=True) 
+     project = models.ForeignKey(Project)
+
+     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+     provider = models.CharField(max_length=DEFAULT_FIELD_LEN)
+     auth_endpoint = models.URLField()
+
+      
+     def __unicode__(self):
+         return self.name
                 
 class Cluster(models.Model):
      """An openstack cluster."""

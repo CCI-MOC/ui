@@ -3,16 +3,19 @@ from django.contrib import admin
 from moc_ui.views import *
 
 urlpatterns = patterns('',
+    # front page
+    url(r'^$', front_page),
     # login 
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),
-    # cloud
+    # cloud splash
     url(r'^clouds', clouds),
-    # projects
-#    url(r'^projects/enterProject', enterProject),
-#    url(r'^projects/create', createProject),
-#    url(r'^projects/', projects),
+    # projects control
+    url(r'^dustProject', dustProject),
+    # vm control 
+    url(r'^dustVM', dustVM),
+    url(r'^controlVM', controlVM),
 #    # marketplace
 #    url(r'^project_space/market', market),
 #    # project settings
@@ -29,5 +32,4 @@ urlpatterns = patterns('',
 #    url(r'^project_space/manage', manage),
     # default
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', front_page)
 )

@@ -1,47 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}Cloud{% endblock %}
+{% block title %}{{request.session.username}}'s Cloud{% endblock %}
 
 {% block content %}
-<div class="row vert-padded-large"></div>
+<div class="row vert-padded"></div>
 
 <div class="container-fluid">
     <div class="col-md-8 col-centered">
-        <div class="floating-block">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h1>{{request.session.username}}'s <small>clouds</small><h1>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Cloud 
-                        </button>
-                        <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings 
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-8 col-centered">
-        {% for cloud in cloud_list %}
         <div class="floating-block">
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h3>{{ cloud.name }}</h3>
+                            <h1>{{request.session.username}}'s <small>cloud</small><h1>
                         </div>
                     </div>
-                    {% for project in cloud.projects %}
-                    <div class="panel-heading">
-                        <h4><a class="list-group-item" data-toggle="collapse" data-parent="#accordian" href="#{{project.name}}"
-                        >{{project.name}}</a></h4>
+                    {% for project in project_list %}
+                    <div class="panel-body">
+                        <h4><a class="list-group-item text-left" data-toggle="collapse" data-parent="#accordian" 
+                        href="#{{project.name}}">{{project.name}}</a></h4>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align" action="#dustVM">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align" action="/clouds/">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align" action="#dustProject">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                            </button>
+                        </div>
                     </div>
                     <div id="{{project.name}}" class="panel-collapse collapse">
                         <table class="table table-hover">
@@ -60,11 +48,17 @@
                                     <td>{{vm.state}}</td>
                                     <td>{{vm.img}}</td>
                                     <td><div class="btn-group" role="group">
+                                            {% if vm.state == 'off' %}
                                             <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
                                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                             </button>
+                                            {% else %}
+                                            <button type="button" class="btn btn-default btn-warning" aria-label="Left Align">
+                                                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                                            </button>
+                                            {% endif %}
                                             <button type="button" class="btn btn-default btn-info" aria-label="Left Align">
-                                                VNC 
+                                                <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
                                             </button>
                                             <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
                                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -81,26 +75,23 @@
                     {% endfor %}
                     <div class="panel-footer">
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> VM
+                            <button type='button' data-toggle="modal" data-target="#dustProject" 
+                            class="btn btn-default btn-success" aria-label="Left">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
-                            </button>
-                            <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Cloud 
+                            <button type='button' data-toggle="modal" data-target="#dustProject" 
+                            class="btn btn-default btn-primary" aria-label="Left">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 
-    {% with create_cloud_data as modal_data and create_cloud_form as form %}
-        {% include "modal.html" %}
-    {% endwith %}
+    {% include "modals/dustProject.html" %}
+
 </div>
 {% endblock %}
 

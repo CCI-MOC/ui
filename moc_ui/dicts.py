@@ -22,16 +22,12 @@ test_vm_list = [{'name': 'hadoop master', 'state': '=)', 'img': 'centOS 7'},
                 {'name': 'database', 'state': 'build', 'img': 'RHEL 7'},
                 {'name': 'bad machine', 'state': '=(', 'img': 'Windows 8'}]
 
-test_cloud_list = [{'name': 'Harvard Production', 'projects': [{'name': 'Ahri', 'vm_list': test_vm_list}, 
-                                                               {'name': 'Lucian', 'vm_list': test_vm_list}, 
-                                                               {'name': 'YasuWoh', 'vm_list': test_vm_list}]},
-                   {'name': 'Harvard Development', 'projects': [{'name': 'bulbasour', 'vm_list': test_vm_list},
-                                                                {'name': 'chardmonger', 'vm_list': test_vm_list}, 
-                                                                {'name': "picka - ha'choo", 'vm_list': test_vm_list}, 
-                                                                {'name': 'squirtle squirt', 'vm_list': test_vm_list}]},
-                   {'name': 'Amazon EC2', 'projects': [{'name': 'link', 'vm_list': test_vm_list},
-                                                       {'name': 'epona', 'vm_list': test_vm_list}, 
-                                                       {'name': 'zelda', 'vm_list': test_vm_list},]}]
+test_project_list = [{'name': 'Ahri', 'vm_list': test_vm_list}, 
+                 {'name': 'Lucian', 'vm_list': test_vm_list}, 
+                 {'name': 'YasuWoh', 'vm_list': test_vm_list},
+                 {'name': 'bulbasour', 'vm_list': test_vm_list},
+                 {'name': 'chardmonger', 'vm_list': test_vm_list}, 
+                 {'name': 'link', 'vm_list': test_vm_list},
+                 {'name': 'epona', 'vm_list': test_vm_list}, 
+                 {'name': 'zelda', 'vm_list': test_vm_list}]
 
-
-create_cloud_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}

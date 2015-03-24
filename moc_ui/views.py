@@ -14,15 +14,38 @@ def front_page(request):
     """ Front page; Enter credentials to be processed by the login view """ 
     
     return render(request, 'front_page.html', 
-                 {'login_data': dicts.login_data, 'login_form': forms.LoginForm(), 
-                  'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegisterForm()}) 
+                 {'login_data': dicts.login_data, 'login_form': forms.login(), 
+                  'reg_modal': dicts.reg_modal, 'reg_form': forms.userRegister()}) 
 
-### Login View ### 
+def clouds(request): 
+    """List projects and vms in user's clouds""" 
+    try:
+        projects = models.Project.objects.filter(name = request.session['username'])
+        vms = models.VM.objects.filter(name = request.session['username'])
+    except:
+        return HttpResponseRedirect('/') 
+
+    project_list = []
+    for project in projects:
+        vm_list = []
+        for vm in vms.filter(project = project.name):
+            vm_list.append(vm.name)
+        project_list.append({'name':project.name, 'vm_list': vm_list})
+
+    for project in dicts.test_project_list:
+        project_list.append(project)
+
+
+    return render(request, 'clouds.html', 
+                  {'project_list': project_list, 'dustProject': forms.dustProject(), 
+                  'dustVM': forms.dustVM(), 'controlVM': forms.controlVM(),})
+
+### User Actions ### 
 def login(request): 
     """ Login view; Checks post credentials, redirects 
     to clouds or back to front page with error """ 
     if request.method == 'POST': 
-        form = forms.LoginForm(request.POST) 
+        form = forms.login(request.POST) 
         if form.is_valid(): 
             username = form.cleaned_data['username'] 
             password = form.cleaned_data['password'] 
@@ -32,7 +55,8 @@ def login(request):
                 if user.verify_password(password=password): 
                     request.session['username'] = username 
                     return HttpResponseRedirect('/clouds') 
-            except: pass 
+            except: 
+                pass 
     return HttpResponseRedirect('/') 
 
 def logout(request): 
@@ -46,7 +70,7 @@ def register(request):
     """ Register new user with keystone; 
     called from login page Needs error checking """ 
     if request.method == "POST": 
-        form = forms.UserRegisterForm(request.POST) 
+        form = forms.userRegister(request.POST) 
         if form.is_valid(): 
             username = form.cleaned_data['username'] 
             password = form.cleaned_data['password'] 
@@ -58,30 +82,75 @@ def register(request):
                 newuser.save() 
                 request.session['username'] = username 
                 return HttpResponseRedirect('/clouds') 
+
     return HttpResponseRedirect('/') 
 
-def clouds(request): 
-    """ List keystone projects available in user's clouds""" 
+def dustProject(request):
+    """Create or destroy project - from dust to dust"""
+    if request.method == "POST": 
 
-    create_cloud_form  = forms.CreateClusterForm()
+        form = forms.dustProject(request.POST) 
+        if form.is_valid(): 
+            user = models.User.objects.get(name=request.session['username'])
+            project_name = form.cleaned_data['name'] 
+            action = form.cleaned_data['action']
 
-    return render(request, 'clouds.html', {'cloud_list': dicts.test_cloud_list, 'create_cloud_modal': dicts.create_cloud_modal, 
-                                             'create_cloud_form': forms.CreateClusterForm()})
+            try:
+                project = models.Project.objects.get(name=project_name, user=user) 
+                if action is 'destroy' and 'pk' in project:
+                    project.delete()
+            except: 
+                pass
 
-### Projects Page ###
+            if action is 'create':
+                project = models.Project(name=project_name, user=user) 
+                project.save()
 
-def projects(request):
-    """
-    List keystone projects available to the user; 
-    attempt to login with credentials
-    """
-    test_cloud_list = {}
-    test_project_list = {}
-        
-       # pass session's user info to keystone for authentication
-       #     api.login(request.session['username'], request.session['password'], request.session['auth_url'])
-       #     projects = api.listTenants()
-    return render(request, 'projects.html', {'user_projects': projects})
+    return HttpResponseRedirect('/clouds') 
+
+    
+
+def dustVM(request):
+    """Create or destroy vm"""
+    if request.method == "POST": 
+
+        form = forms.dustForm(request.POST) 
+        if form.is_valid(): 
+            user_name = request.session['username']
+            vm_name = form.cleaned_data['name'] 
+            action = form.cleaned_data['action']
+
+            vm = models.VM.objects.get(name=vm_name, user=user_name) 
+            
+            if action is 'create' and 'pk' not in vm:
+                vm = models.Project(name=vm_name, user=user_name) 
+                vm.save()
+
+
+            if action is 'destroy' and 'pk' in vm:
+                vm.delete()
+
+    return HttpResponseRedirect('/clouds') 
+
+def controlVM(request):
+    """Control operations on vm"""
+    if request.method == "POST": 
+        form = forms.control(request.POST) 
+        if form.is_valid(): 
+            user_name = request.session['username']
+            vm_name = form.cleaned_data['name'] 
+            action = form.cleaned_data['action']
+
+            vm = models.Project.objects.get(name=vm_name, user=user_name) 
+            
+            if action is 'power_on' and 'pk' not in vm:
+                pass
+
+            if action is 'power_off' and 'pk' in vm:
+                pass
+
+    return HttpResponseRedirect('/clouds') 
+
 
 #def enterProject(request):
 #    """
@@ -89,7 +158,7 @@ def projects(request):
 #    attempt to enter tenant via keystone
 #    """
 #    if request.method == 'POST':
-#        form = forms.TenantLoginForm(request.POST)
+#        form = forms.Tenantlogin(request.POST)
 #        if form.is_valid():
 #            tenantName = form.cleaned_data['tenantName']
 #            request.session['tenant'] = tenantName
