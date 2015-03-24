@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
+    <head>
     {% block header %}
-      {% include "header.html" %}
+        {% include "header.html" %}
     {% endblock %}
 
     <title>{% block title %}Home{% endblock %}</title>
 
     {% block css %}
-      <style>
-        {% include "moc_ui.css" %}
-      </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+        <style>
+            {% include "moc_ui.css" %}
+        </style>
     {% endblock %}
-  
-  {% block js %}
-  {% endblock %}
 
-  </head>
+    </head>
 
-  {% block background %}
-  <body>
-  {% endblock %}
+    {% block background %}
+    <body>
+    {% endblock %}
 
-  {% block navbar %} 
-  {% endblock %} 
+    {% block navbar %} 
+    {% endblock %} 
 
     {% block content %}
     {% endblock %}
@@ -31,10 +30,16 @@
 
 
     <div id="footer">
-    {% block footer %}
-        {% include "footer.html" %}
-    {% endblock %}
+        {% block footer %}
+            {% include "footer.html" %}
+        {% endblock %}
     </div>
 
-  </body>
+    {% block js %}
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    {% endblock %}
+
+    </body>
 </html>

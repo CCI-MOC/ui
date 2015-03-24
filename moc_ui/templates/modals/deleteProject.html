@@ -1,17 +1,17 @@
-<!-- {{modal_data.title}} Modal -->
-<div class="modal fade" id="{{modal_data.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- dustProject Modal -->
+<div class="modal fade" id="dustProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
-                <h4 class="modal-title">{{modal_data.title}}</h4>
+                <h2 class="modal-title">Create Project</h2>
             </div>
 
-            <form action="{{modal_data.action}}" method='{{modal_data.method}}'>
+            <form action="/dustProject/" method='POST'>
                 {% csrf_token %}
                 <div class="modal-body">
                     <table align="center">
-                        {{ form.as_table }}
+                        {{ createProject.as_table }}
                     </table>
                 </div>
                 <div class="modal-footer">

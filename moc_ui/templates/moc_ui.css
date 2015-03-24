@@ -1,15 +1,18 @@
+/* html div over-rides */
 body {
     /* background options */
-    background-image: url("/static/blue_clouds.jpg");
+    background-image: url("/static/low-poly-landscape.png");
     background-size:   contain contain;                      
     background-repeat: no-repeat;
     background-position: center center;            /* optionally, center the image */
+    background-attachment: fixed;
 
     /* text defaults */
-    color: #428BCA; /* light blue */
-
+    /* color: #428BCA; /* light blue */
+    color: #444; /* gray */
 
     /* margins for elements */
+    padding: 25px 50px;
     margin: 10px;
 }
 
@@ -20,28 +23,82 @@ table {
 table, th, td {
     border: 1px;
     border-color: transparent;
+    vertical-align: center;
+    text-align: center;
+}
+
+td {
+    vertical-align: center;
+}
+
+th {
+    font-size: large; 
+    font-weight: bold;
+    text-align: center;
+
+}
+h1, h2, h3, h4 {
+    margin:auto;
+    text-align: center;
+    vertical-align: middle;
 }
 
 input, select, textarea{
     color: #000000;
 }
 
+/* bootstrap 3 over-rides */
+.list-group {
+    text-align: center;
+    vertical-align: center;
 
+}
+
+.panel {
+    text-align: center;
+    vertical-align: center;
+}
+
+.panel-body {
+    margin: 0 auto;
+    vertical-align: center;
+
+}
+
+.modal-content {
+
+    background: #eeeeee;
+
+}
+
+/* custom classes */
 .floating-block {
-    border: 2px solid #000000; /* #a1a1a1; */
-    padding: 10px 40px; 
-    background: #dddddd;
-    width: 300px;
-    border-radius: 25px;
+    /*border: 1px solid #000000;
+    border-radius: 75px;*/
+
+    .center-block();
+
+    vertical-align: center;
+
+    background: #eeeeee;
+
+    opacity: .7;
 }
 
-.form-btns {
-    padding-top: 10px;
-    padding-left: 72px;
+.vert-padded { 
+    margin-top:15px; 
+    margin-bottom:15px;
 }
 
-/* form css class 
-}*/
+
+.col-centered{
+     float: none;
+     margin: 0 auto;
+ }
+
+ .blue_clouds{
+    background-image: url("/static/blue_clouds.jpg");
+ }
 
 @media (min-width: 500px) {
   .nc {

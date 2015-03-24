@@ -1,27 +1,43 @@
 {% extends "base.html" %}
  
 {% block header %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block title %}Welcome!{% endblock %}
 
+{% block background %}
+<body class="blue_clouds">
+{% endblock %}
+
+
 {% block content %}
 
   <!-- login form -->
-  <div class = "col-md-8 floating-block">
-  {% with login_data as form_data and login_form as form %}
-      {% include "form.html" %}
-  {% endwith %}
-  </div>
+<div class = "container-fluid">
+    <div class = "row">
+        <div class = "col-md-5 col-centered">
+            <div class="panel panel-default floating-block">
+                <div class="panel-heading">
+                    <div class="panel-title">{{ login_data.name }}</div>
+                </div>
+                <div class="panel-body">
+                    {% with login_data as form_data and login_form as form %}
+                        {% include "form.html" %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
   
-  <!-- modal pop-ups for buttons -->
-  {% with reg_modal as modal_data and reg_form as form %}
-      {% include "modal.html" %}
-  {% endwith %}
+    <!-- modal pop-ups for buttons -->
+    {% with reg_modal as modal_data and reg_form as form %}
+        {% include "modal.html" %}
+    {% endwith %}
+</div>
 
 {% endblock %}
-
+<!--
+    <div class = "col-sm-4-center col-md-4-center col-lg-4-center floating-block">
+-->

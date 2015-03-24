@@ -1,43 +1,31 @@
 from django import forms
 
-class LoginForm(forms.Form):
+class login(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
-class UserRegisterForm(forms.Form):
+class userRegister(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
-class UserAddForm(forms.Form):
-    userName = forms.CharField()
-    roleName = forms.CharField()
+class createProject(forms.Form):
+    name = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
 
-class UserRemoveForm(forms.Form):
-    userName = forms.CharField()
+class deleteProject(forms.Form):
+    name = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
 
-class RoleEditForm(forms.Form):
-    userName = forms.CharField()
-    editAction = forms.CharField()
-    roleName = forms.CharField()
+class createVM(forms.Form):
+    providers = ['BU-PROD', 'HU-PROD', 'NE-PROD', 'UMASS-PROD', 'MIT-PROD']
+    name = forms.CharField()
+    provider= forms.ChoiceField(widget=forms.RadioSelect, choices=providers)
+    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
 
-class TenantLoginForm(forms.Form):
-    tenantName = forms.CharField()
-    tenantID = forms.CharField()
+class deleteVM(forms.Form):
+    name = forms.CharField()
+    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
 
-class TenantCreateForm(forms.Form):
-    tenantName = forms.CharField()
-    tenantDesc = forms.CharField(required=False)
-
-class VMCreateForm(forms.Form):
-    newVM = forms.CharField()
-    imageName = forms.CharField()
-    flavorName = forms.CharField()
-
-class VMEditForm(forms.Form):
-    VM_id = forms.CharField()
-    flavor_id = forms.CharField()
-
-class VMControlForm(forms.Form):
-    VM_id = forms.CharField()
+class controlVM(forms.Form):
     action = forms.CharField()

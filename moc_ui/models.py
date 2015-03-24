@@ -10,68 +10,76 @@ PASSHASH_LEN = len(sha512_crypt.encrypt(''))
 DEFAULT_FIELD_LEN = 255
 
 
+# user specifics
 class User(models.Model):
-     """A user of the marketplace UI"""
-     name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
-     password_hash = models.CharField(max_length=PASSHASH_LEN)
+    """A user of the marketplace UI"""
+    name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
+    password_hash = models.CharField(max_length=PASSHASH_LEN)
 
-     def verify_password(self, password):
-         return sha512_crypt.verify(password, self.password_hash)
+    def verify_password(self, password):
+        return sha512_crypt.verify(password, self.password_hash)
 
-     def set_password(self, password):
-         self.password_hash = sha512_crypt.encrypt(password)
+    def set_password(self, password):
+        self.password_hash = sha512_crypt.encrypt(password)
 
-     def __unicode__(self):
-         return self.name
+    def __unicode__(self):
+        return self.name
+
+
+class UIProject(models.Model):
+    """A user's project in the moc ui."""
+    user = models.ForeignKey(User)
+
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Cluster(models.Model):
-     """An openstack cluster."""
-     title = models.CharField(max_length=DEFAULT_FIELD_LEN)
-     auth_url = models.URLField()
+    """An openstack cluster."""
+    title = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    auth_url = models.URLField()
 
-     def __unicode__(self):
-         return self.title
+    def __unicode__(self):
+        return self.title
 
 
 class ClusterAccount(models.Model):
-     """A user account within an openstack cluster.
+    """A user account within an openstack cluster.
 
-     Each of these belongs to a marketplace UI user. We store that user's
-     openstack credentials in the database, including username/password,
-     and posibly a keystone token, if we have a valid one.
+    Each of these belongs to a marketplace UI user. We store that user's
+    openstack credentials in the database, including username/password.
+    These are used by OSProject to obtain a token when necessary.
+    """
+    user = models.ForeignKey(User)
+    cluster = models.ForeignKey(Cluster)
+    cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
 
-     Users of this class should verify that the token is still valid before
-     trying to use it, and fetch a new one if needed.
-     """
-     user = models.ForeignKey(User)
-     cluster = models.ForeignKey(Cluster)
-     cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
-     cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
-
-     def __unicode__(self):
-         return '%r@%r' % (self.cluster_username, self.cluster.title)
+    def __unicode__(self):
+        return '%r@%r' % (self.cluster_username, self.cluster.title)
 
 
-class Tenant(models.Model):
-     """An openstack tenant that a user has access to."""
-     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-     cluster_account = models.ForeignKey(ClusterAccount)
-     token = models.TextField(default=None, blank=True, null=True)
+class OSProject(models.Model):
+    """An openstack project that a user has access to."""
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    cluster_account = models.ForeignKey(ClusterAccount)
+    token = models.TextField(default=None, blank=True, null=True)
 
-     def __unicode__(self):
-         return self.name
+    def __unicode__(self):
+        return self.name
 
-     def get_keystoneclient(self):
-         """Get a keystone client object for the tenant.
+    def get_keystoneclient(self):
+        """Get a keystone client object for the tenant.
 
-         Returns the client object.
+        Returns the client object.
 
-         This may raise ``keystone.exceptions.AuthorizationFailure`` if
-         authorization fails for any reason, including stale tokens in
-         the database.
-         """
-         try:
+        This may raise ``keystone.exceptions.AuthorizationFailure`` if
+        authorization fails for any reason, including stale tokens in
+        the database.
+        """
+        try:
             if self.token is None:
                 client = keystoneclient.Client(username=self.cluster_account.cluster_username,
                                                password=self.cluster_account.cluster_password,
@@ -88,9 +96,19 @@ class Tenant(models.Model):
             # else in the code. authenticate() forces it to auth right now:
             client.authenticate()
             return client
-         except AuthorizationFailure:
-             # Clear the token if auth failed:
+        except AuthorizationFailure:
+            # Clear the token if auth failed:
             self.token = None
             raise
 
 
+class VM(models.Model):
+    """A user's vm."""
+    ui_project = models.ForeignKey(UIProject)
+    os_project = models.ForeignKey(OSProject)
+
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    auth_endpoint = models.URLField()
+
+    def __unicode__(self):
+        return self.name
