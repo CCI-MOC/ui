@@ -1,29 +1,27 @@
-from django.shortcuts import render 
-from django.http import HttpResponse, HttpResponseRedirect 
-#import ui_api as api 
-import time 
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 # Forms to use in pages
-import forms 
+import forms
 # Dictionaries to pass to template context
 import dicts
 # Models to access our db's tables
-import models 
+import models
 
-### Splash Page ### 
-def front_page(request): 
-    """ Front page; Enter credentials to be processed by the login view """ 
-    
-    return render(request, 'front_page.html', 
-                 {'login_data': dicts.login_data, 'login_form': forms.login(), 
-                  'reg_modal': dicts.reg_modal, 'reg_form': forms.userRegister()}) 
+### Splash Page ###
+def front_page(request):
+    """ Front page; Enter credentials to be processed by the login view """
 
-def clouds(request): 
-    """List projects and vms in user's clouds""" 
+    return render(request, 'front_page.html',
+                 {'login_data': dicts.login_data, 'login_form': forms.login(),
+                  'reg_modal': dicts.reg_modal, 'reg_form': forms.userRegister()})
+
+def clouds(request):
+    """List projects and vms in user's clouds"""
     try:
         user = models.User.objects.get(name=request.session['username'])
-        projects = models.Project.objects.filter(user=user)
+        projects = models.UIProject.objects.filter(user=user)
     except:
-        return HttpResponseRedirect('/') 
+        return HttpResponseRedirect('/')
 
     project_list = []
     for project in projects:
@@ -36,83 +34,87 @@ def clouds(request):
         project_list.append(project)
 
 
-    return render(request, 'clouds.html', 
-                  {'project_list': project_list, 
-                  'createProject': forms.createProject(), 'deleteProject': forms.deleteProject(), 
+    return render(request, 'clouds.html',
+                  {'project_list': project_list,
+                  'createProject': forms.createProject(), 'deleteProject': forms.deleteProject(),
                   'createVM': forms.createVM(), 'deleteVM': forms.deleteVM(), 'controlVM': forms.controlVM(),})
 
-### User Actions ### 
-def login(request): 
-    """ Login view; Checks post credentials, redirects 
-    to clouds or back to front page with error """ 
-    if request.method == 'POST': 
-        form = forms.login(request.POST) 
-        if form.is_valid(): 
-            username = form.cleaned_data['username'] 
-            password = form.cleaned_data['password'] 
-            
-            try: 
-                user = models.User.objects.get(name=username) 
-                if user.verify_password(password=password): 
-                    request.session['username'] = username 
-                    return HttpResponseRedirect('/clouds') 
-            except: 
-                pass 
-    return HttpResponseRedirect('/') 
+### User Actions ###
+def login(request):
+    """ Login view; Checks post credentials, redirects
+    to clouds or back to front page with error """
+    if request.method == 'POST':
+        form = forms.login(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-def logout(request): 
-    """ Logout of session; remove session variables and return to login page """ 
-    for state, sessionInfo in request.session.items(): 
-        sessionInfo = None 
+            try:
+                user = models.User.objects.get(name=username)
+                if user.verify_password(password=password):
+                    request.session['username'] = username
+                    return HttpResponseRedirect('/clouds')
+            except:
+                pass
+    return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/') 
+def logout(request):
+    """ Logout of session; remove session variables and return to login page """
+    for state, sessionInfo in request.session.items():
+        sessionInfo = None
 
-def register(request): 
-    """ Register new user with keystone; 
-    called from login page Needs error checking """ 
-    if request.method == "POST": 
-        form = forms.userRegister(request.POST) 
-        if form.is_valid(): 
-            username = form.cleaned_data['username'] 
-            password = form.cleaned_data['password'] 
-            user_exist = models.User.objects.filter(name=username) 
-            
-            if 'pk' not in user_exist: 
-                newuser = models.User(name=username) 
-                newuser.set_password(password=password) 
-                newuser.save() 
-                request.session['username'] = username 
-                return HttpResponseRedirect('/clouds') 
+    return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/') 
+def register(request):
+    """ Register new user with keystone;
+    called from login page Needs error checking """
+    if request.method == "POST":
+        form = forms.userRegister(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            try:
+                user = models.User.objects.get(name=username)
+            except models.User.DoesNotExist:
+                user = None
+
+            if user is None:
+                newuser = models.User(name=username)
+                newuser.set_password(password=password)
+                newuser.save()
+                request.session['username'] = username
+                return HttpResponseRedirect('/clouds')
+
+    return HttpResponseRedirect('/')
 
 def dustProject(request):
     """Create or destroy project - from dust to dust"""
-    if request.method == "POST": 
+    if request.method == "POST":
 
-        form = forms.createProject(request.POST) 
-        if form.is_valid(): 
+        form = forms.createProject(request.POST)
+        if form.is_valid():
             user = models.User.objects.get(name=request.session['username'])
-            project_name = form.cleaned_data['name'] 
+            project_name = form.cleaned_data['name']
             action = form.cleaned_data['action']
 
             if action == 'create':
-                project = models.Project(name=project_name, user=user) 
+                project = models.Project(name=project_name, user=user)
                 project.save()
                 return HttpResponseRedirect('/clouds')
 
         form = forms.deleteProject(request.POST)
         if form.is_valid():
             try:
-                project = models.Project.objects.get(name=project_name, user=user) 
+                project = models.Project.objects.get(name=project_name, user=user)
                 if action == 'destroy' and 'pk' in project:
                     project.delete()
-            except: 
+            except:
                 pass
 
-    return HttpResponseRedirect('/clouds') 
+    return HttpResponseRedirect('/clouds')
 
-    
+
 def dustVM(request):
     """Create or destroy vm - from dust to dust"""
     if request.method == "POST":
@@ -137,29 +139,30 @@ def dustVM(request):
             except:
                 pass
 
+
 def controlVM(request):
     """Control operations on vm"""
-    if request.method == "POST": 
-        form = forms.control(request.POST) 
-        if form.is_valid(): 
+    if request.method == "POST":
+        form = forms.control(request.POST)
+        if form.is_valid():
             user_name = request.session['username']
-            vm_name = form.cleaned_data['name'] 
+            vm_name = form.cleaned_data['name']
             action = form.cleaned_data['action']
 
-            vm = models.Project.objects.get(name=vm_name, user=user_name) 
-            
+            vm = models.UIProject.objects.get(name=vm_name, user=user_name)
+
             if action is 'power_on' and 'pk' not in vm:
                 pass
 
             if action is 'power_off' and 'pk' in vm:
                 pass
 
-    return HttpResponseRedirect('/clouds') 
+    return HttpResponseRedirect('/clouds')
 
 
 #def enterProject(request):
 #    """
-#    Called when a tenant is chosen on Projects page; 
+#    Called when a tenant is chosen on Projects page;
 #    attempt to enter tenant via keystone
 #    """
 #    if request.method == 'POST':
@@ -168,7 +171,7 @@ def controlVM(request):
 #            tenantName = form.cleaned_data['tenantName']
 #            request.session['tenant'] = tenantName
 #            tenantID = form.cleaned_data['tenantID']
-#            
+#
 #            # send session user/pw and selected tenant to keystone
 #            api.joinTenant(request.session['username'], request.session['password'], tenantName, request.session['auth_url'])
 #            return HttpResponseRedirect('/project_space/manage')
@@ -184,7 +187,7 @@ def controlVM(request):
 #        if form.is_valid():
 #            projectName = form.cleaned_data['tenantName']
 #            projectDesc = form.cleaned_data['tenantDesc']
-#            
+#
 #            # work around for user to have project creation privileges
 #            # for some reason, unable to create a project unless
 #            # keystone client is passed a tenant_name arguement; can't create solely as user
@@ -192,7 +195,7 @@ def controlVM(request):
 #            # create project with current keystone session
 #            api.createTenant(projectName, projectDesc)
 #            # add user to new project with admin role
-#            api.addUser(request.session['username'], 'admin', projectName)      
+#            api.addUser(request.session['username'], 'admin', projectName)
 #
 #    print ('Unable to create new Project')
 #    return HttpResponseRedirect('/projects')
@@ -225,15 +228,15 @@ def controlVM(request):
 #            VMname = form.cleaned_data['newVM']
 #            image = form.cleaned_data['imageName']
 #            flavor = form.cleaned_data['flavorName']
-#            return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)    
+#            return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)
 #
 #    # temporary fix to ensure user stays connected to current project
 #    api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
 #    VMs = api.listVMs()
 #    images = api.listImages()
 #    flavors = api.listFlavors()
-#    return render(request, 'manage.html', {'project_VMs':VMs, 
-#                  'images':images, 'flavors':flavors, 
+#    return render(request, 'manage.html', {'project_VMs':VMs,
+#                  'images':images, 'flavors':flavors,
 #                  'tenant':request.session['tenant']})
 #
 #def deleteVM(request, VMname):
@@ -263,7 +266,7 @@ def controlVM(request):
 #        form = forms.VMEditForm(request.POST)
 #        if form.is_valid():
 #            VM_id = form.cleaned_data['VM_id']
-#            flavor_id = form.cleaned_data['flavor_id']  
+#            flavor_id = form.cleaned_data['flavor_id']
 #            api.editVM(VM_id, flavor_id)
 #            return HttpResponseRedirect('/project_space/manage')
 #    else:
@@ -290,7 +293,7 @@ def controlVM(request):
 #
 #def settings(request):
 #    """
-#    Project Settings; ADMIN ONLY; 
+#    Project Settings; ADMIN ONLY;
 #    add/edit/delete current tenant's users
 #    """
 #    # work around lack of keystone session; recreate keystone client on page arrival
