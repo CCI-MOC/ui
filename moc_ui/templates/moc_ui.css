@@ -1,11 +1,16 @@
 /* html div over-rides */
 body {
     /* background options */
-    background-image: url("/static/low-poly-landscape.png");
-    background-size:   contain contain;                      
-    background-repeat: no-repeat;
-    background-position: center center;            /* optionally, center the image */
-    background-attachment: fixed;
+      background: url('/static/low-poly-landscape.png') no-repeat 50% 0% fixed;
+      background-size: 100%; 
+
+      background: url('/static/low-poly-landscape.png') no-repeat center center fixed;
+
+      -webkit-background-size: cover;  
+      -moz-background-size: cover;  
+      -o-background-size: cover;  
+      background-size: cover;  
+      -ms-
 
     /* text defaults */
     /* color: #428BCA; /* light blue */
