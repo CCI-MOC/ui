@@ -1,7 +1,7 @@
-<form class="form-inline" action="{{ form_data.action }}" method="{{ form_data.method }}">
+<form class="col-md-4 col-centered form-inline" action="{{ form_data.action }}" method="{{ form_data.method }}">
     {% csrf_token %}
     {% for field in form %}
-    <div class="form-group">
+    <div class="row form-group">
         {{ field.errors }}
         {{ field.label_tag }} {{ field }}
     </div>

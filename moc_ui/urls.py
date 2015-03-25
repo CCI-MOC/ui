@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^clouds', clouds),
     # projects control
     url(r'^dustProject', dustProject),
+    url(r'^dustCluster', dustCluster),
     # vm control 
     url(r'^dustVM', dustVM),
     url(r'^controlVM', controlVM),

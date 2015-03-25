@@ -6,7 +6,7 @@
 <div class="row vert-padded"></div>
 
 <div class="container-fluid">
-    <div class="col-md-8 col-centered">
+    <div class="col-md-10 col-centered">
         <div class="panel-group" id="accordion">
             <div class="panel panel-default floating-block">
                 <div class="panel-heading">
@@ -18,9 +18,13 @@
                                 class="btn btn-success" aria-label="Left">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> project
                                 </button>
-                                <button type='button' data-toggle="modal" data-target="#projectSettings" 
-                                class="btn btn-primary" aria-label="Left">
-                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                <button type='button' data-toggle="modal" data-target="#createCluster" 
+                                class="btn btn-primary" aria-label="Left"> 
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> cluster
+                                </button>
+                                <button type='button' data-toggle="modal" data-target="#deleteCluster" 
+                                class="btn btn-danger" aria-label="Left"> 
+                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> cluster
                                 </button>
                             </div>
                         </div>
@@ -36,13 +40,13 @@
                             </button>
                         </div>
                         <div class="col-md-4 btn-group pull-right" role="group">
-                            <button type="button" class="btn btn-success" aria-label="Left Align" action="#dustVM">
+                            <button type="button" class="btn btn-success" aria-label="Left Align" action="#createVM">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> vm
                             </button>
                             <button type="button" class="btn btn-primary" aria-label="Left Align" action="/clouds/">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-danger" aria-label="Left Align" action="#dustProject">
+                            <button type="button" class="btn btn-danger" aria-label="Left Align" action="#deleteProject">
                                 <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> project
                             </button>
                         </div>
@@ -66,26 +70,29 @@
                                 <td>{{vm.state}}</td>
                                 <td>{{vm.image}}</td>
                                 <td>{{vm.provider}}</td>
-                                <td><div class="btn-group" role="group">
+                                <td>
+                                    <form action="/controlVM/" method="POST"><div class="btn-group" role="group">
+                                        {% csrf_token %}
                                         {% if vm.state == 'off' %}
-                                        <button type="button" class="btn btn-default btn-success" aria-label="Left Align">
+                                        <button name="action" value="start" type="submit" class="btn btn-success" aria-label="Left Align">
                                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                         </button>
                                         {% else %}
-                                        <button type="button" class="btn btn-default btn-warning" aria-label="Left Align">
+                                        <button name="action" value="stop" type="submit" class="btn btn-warning" aria-label="Left Align">
                                             <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
                                         </button>
                                         {% endif %}
-                                        <button type="button" class="btn btn-default btn-info" aria-label="Left Align">
+                                        <button name="action" value="VNC" type="submit" class="btn btn-info" aria-label="Left Align">
                                             <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
                                         </button>
-                                        <button type="button" class="btn btn-default btn-primary" aria-label="Left Align">
+                                        <button name="action" value="settings" type="submit" class="btn btn-primary" aria-label="Left Align">
                                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                         </button>
-                                        <button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+                                        <button name="action" value="stop" type="submit" class="btn btn-danger" aria-label="Left Align">
                                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                                         </button>
-                                </div></td>
+                                    </form></div>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -98,7 +105,9 @@
         </div>
     </div>
 
-    {% include "modals/createProject.html" %}
+    {% for form_data in cloud_modals %}
+        {% include "modals/cloudModal.html" %}
+    {% endfor %}
 
 </div>
 {% endblock %}

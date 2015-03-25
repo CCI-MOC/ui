@@ -19,11 +19,19 @@ def front_page(request):
 
 def clouds(request): 
     """List projects and vms in user's clouds""" 
+    
+    cloud_modals = [{'id': 'createProject', 'title': 'Create Project', 'form': forms.createProject()},
+                    {'id': 'deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
+                    {'id': 'createCluster', 'title': 'Create Cluster', 'form': forms.createCluster()},
+                    {'id': 'deleteCluster', 'title': 'Delete Cluster', 'form': forms.deleteCluster()},
+                    {'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
+                    {'id': 'deleteVM', 'title': 'Delete VM', 'form': forms.deleteVM()},]
+
     try:
         user = models.User.objects.get(name=request.session['username'])
         projects = models.Project.objects.filter(user=user)
     except:
-        return HttpResponseRedirect('/') 
+        pass
 
     project_list = []
     for project in projects:
@@ -36,10 +44,7 @@ def clouds(request):
         project_list.append(project)
 
 
-    return render(request, 'clouds.html', 
-                  {'project_list': project_list, 
-                  'createProject': forms.createProject(), 'deleteProject': forms.deleteProject(), 
-                  'createVM': forms.createVM(), 'deleteVM': forms.deleteVM(), 'controlVM': forms.controlVM(),})
+    return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals})
 
 ### User Actions ### 
 def login(request): 
@@ -112,243 +117,100 @@ def dustProject(request):
 
     return HttpResponseRedirect('/clouds') 
 
+def dustCluster(request):
+    """Create or destroy cluster - from dust to dust"""
+    if request.method == "POST": 
+        try:
+            user = models.User.objects.get(name=request.session['username'])
+        except:
+            print "No such user"
+            return HttpResponseRedirect('/') 
+
+        form = forms.createCluster(request.POST) 
+        if form.is_valid(): 
+            cluster_name = form.cleaned_data['name'] 
+            cluster_user_name = form.cleaned_data['user_name'] 
+            cluster_password = form.cleaned_data['password'] 
+            endpoint = form.cleaned_data['endpoint'] 
+
+            if action == 'create':
+                cluster = models.Cluster(name=cluster_name, user_name=cluster_user_name, password=cluster_password, 
+                                         endpoint=endpoint, user=user) 
+                cluster.save()
+                return HttpResponseRedirect('/clouds')
+
+        form = forms.deleteCluster(request.POST)
+        if form.is_valid():
+            cluster_name = form.cleaned_data['name'] 
+            action = form.cleaned_data['action']
+
+            try:
+                cluster = models.Cluster.objects.get(name=cluster_name, user=user) 
+            except: 
+                cluster = None 
+
+            if action == 'destroy' and cluster is not None:
+                cluster.delete()
+
+    return HttpResponseRedirect('/clouds') 
     
 def dustVM(request):
     """Create or destroy vm - from dust to dust"""
     if request.method == "POST":
+        try:
+            user = models.User.objects.get(name=request.session['username'])
+        except:
+            print "No such user"
+            return HttpResponseRedirect('/') 
 
         form = forms.createVM(request.POST)
         if form.is_valid():
-            user = models.User.objects.get(name=request.session['username'])
             vm_name = form.cleaned_data['name']
-            action = form.cleaned_data['action']
+            OSProject = form.cleaned_data['cloud']
+            try: 
+                vm = models.VM.objects.get(name=vm_name, user=user)
+            except:
+                vm = None
 
-            if action == 'create':
+            if action == 'create' and vm is None:
                 vm = models.VM(name=vm_name, user=user)
                 vm.save()
                 return HttpResponseRedirect('/clouds')
 
         form = forms.deleteVM(request.POST)
         if form.is_valid():
+            vm_name = form.cleaned_data['name']
             try:
                 vm = models.VM.objects.get(name=vm_name, user=user)
-                if action == 'destroy' and 'pk' in vm:
-                    vm.delete()
             except:
-                pass
+                vm = None
+
+            if action == 'destroy' and vm is not None:
+                vm.delete()
 
 def controlVM(request):
     """Control operations on vm"""
     if request.method == "POST": 
-        form = forms.control(request.POST) 
+        form = forms.controlVM(request.POST) 
         if form.is_valid(): 
             user_name = request.session['username']
-            vm_name = form.cleaned_data['name'] 
+            vm_uuid = form.cleaned_data['name'] 
             action = form.cleaned_data['action']
 
-            vm = models.Project.objects.get(name=vm_name, user=user_name) 
-            
-            if action is 'power_on' and 'pk' not in vm:
+            ## we need to ensure that our UUIDs cannot collide
+            try: 
+                vm = models.VM.objects.get(uuid=vm_uuid)
+            except: 
+                vm = None 
+
+            if action is 'power_on' and vm is not None:
                 pass
 
-            if action is 'power_off' and 'pk' in vm:
+            if action is 'power_off' and vm is not None:
+                pass
+
+            if action is 'vnc' and vm is not None:
                 pass
 
     return HttpResponseRedirect('/clouds') 
 
-
-#def enterProject(request):
-#    """
-#    Called when a tenant is chosen on Projects page; 
-#    attempt to enter tenant via keystone
-#    """
-#    if request.method == 'POST':
-#        form = forms.Tenantlogin(request.POST)
-#        if form.is_valid():
-#            tenantName = form.cleaned_data['tenantName']
-#            request.session['tenant'] = tenantName
-#            tenantID = form.cleaned_data['tenantID']
-#            
-#            # send session user/pw and selected tenant to keystone
-#            api.joinTenant(request.session['username'], request.session['password'], tenantName, request.session['auth_url'])
-#            return HttpResponseRedirect('/project_space/manage')
-#    print('Invalid User')
-#    return HttpResponseRedirect('/projects/')
-#
-#def createProject(request):
-#    """
-#    Create new project from Projects page
-#    """
-#    if request.method == 'POST':
-#        form = forms.TenantCreateForm(request.POST)
-#        if form.is_valid():
-#            projectName = form.cleaned_data['tenantName']
-#            projectDesc = form.cleaned_data['tenantDesc']
-#            
-#            # work around for user to have project creation privileges
-#            # for some reason, unable to create a project unless
-#            # keystone client is passed a tenant_name arguement; can't create solely as user
-#            api.joinTenant('admin', 'admin', 'demo')
-#            # create project with current keystone session
-#            api.createTenant(projectName, projectDesc)
-#            # add user to new project with admin role
-#            api.addUser(request.session['username'], 'admin', projectName)      
-#
-#    print ('Unable to create new Project')
-#    return HttpResponseRedirect('/projects')
-#
-#
-#### Marketplace Page ###
-#
-#def market(request):
-#    """
-#    Marketplace page; hardcoded values
-#    """
-#    resources = [
-#        {'name': 'Hadoop','desc':'Hadoop as a Service', 'tag': 'service', 'icon': 'http://cdn.blog-sap.com/innovation/files/2012/09/hadoop-elephant.jpg'},
-#        {'name': 'Wireshark','desc':'Wireshark Appliance', 'tag': 'appliance', 'icon': 'http://halozatbiztonsag.hu/sites/default/files/WireShark_2.png'},
-#        {'name': 'NGINX','desc':'NGINX Loadbalancer Appliance', 'tag': 'appliance', 'icon': 'http://shailan.com/wp-content/uploads/nginx-logo-1.png'},
-#        {'name': 'BU-Compute','desc':'BU Computing', 'tag': 'compute', 'icon': 'http://www.openstack.org/themes/openstack/images/new-icons/openstack-compute-icon.png'},
-#        {'name': 'HU-Storage','desc':'HU Storage', 'tag': 'storage', 'icon': 'http://openstack.org//themes/openstack/images/new-icons/openstack-object-storage-icon.png'} ]
-#    return render(request, 'market.html', {'market': resources})
-#
-#
-####Project Management Page###
-#
-#def manage(request):
-#    """
-#    Project Management page; edit VMs, project settings
-#    """
-#    if request.method == 'POST':
-#        form = forms.VMCreateForm(request.POST)
-#        if form.is_valid():
-#            VMname = form.cleaned_data['newVM']
-#            image = form.cleaned_data['imageName']
-#            flavor = form.cleaned_data['flavorName']
-#            return HttpResponseRedirect('/project_space/manage/create/'+VMname+';'+image+';'+flavor)    
-#
-#    # temporary fix to ensure user stays connected to current project
-#    api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
-#    VMs = api.listVMs()
-#    images = api.listImages()
-#    flavors = api.listFlavors()
-#    return render(request, 'manage.html', {'project_VMs':VMs, 
-#                  'images':images, 'flavors':flavors, 
-#                  'tenant':request.session['tenant']})
-#
-#def deleteVM(request, VMname):
-#    """
-#    Delete selected VM; called from editVM modal
-#    """
-#    api.delete(VMname)
-#    return HttpResponseRedirect('/project_space/manage')
-#
-#def createVM(request, VMname, imageName, flavorName):
-#    """
-#    Create VM with specified fields; from createVM modal
-#    """
-#    api.createVM(VMname, imageName, flavorName)
-#    return HttpResponseRedirect('/project_space/manage')
-#
-#def createDefaultVM(request, VMname):
-#    """Unused; previously for testing"""
-#    api.createDefault(VMname)
-#    return HttpResponseRedirect('/project_space/manage')
-#
-#def edit(request):
-#    """
-#    EditVM modal (pop up); retrieves VM/flavor IDs
-#    """
-#    if request.method == 'POST':
-#        form = forms.VMEditForm(request.POST)
-#        if form.is_valid():
-#            VM_id = form.cleaned_data['VM_id']
-#            flavor_id = form.cleaned_data['flavor_id']  
-#            api.editVM(VM_id, flavor_id)
-#            return HttpResponseRedirect('/project_space/manage')
-#    else:
-#        return HttpResponseRedirect('/project_space/manage')
-#
-#def editControlVM(request):
-#    """
-#    EditVM modal footer; submission of VM controlling actions
-#    """
-#    if request.method == 'POST':
-#        form = forms.VMControlForm(request.POST)
-#        if form.is_valid():
-#            VM_id = form.cleaned_data['VM_id']
-#            if(form.cleaned_data['action'] == 'start'):
-#                api.startVM(VM_id)
-#            elif(form.cleaned_data['action'] == 'pause'):
-#                api.pauseVM(VM_id)
-#            elif(form.cleaned_data['action'] == 'stop'):
-#                api.stopVM(VM_id)
-#    return HttpResponseRedirect('/project_space/manage')
-#
-#
-#### Project Settings ###
-#
-#def settings(request):
-#    """
-#    Project Settings; ADMIN ONLY; 
-#    add/edit/delete current tenant's users
-#    """
-#    # work around lack of keystone session; recreate keystone client on page arrival
-#    api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
-#    tenant = api.getTenant(request.session['tenant'])
-#    users = api.listUsers(tenant)
-#    return render(request, 'settings.html', {'tenant': tenant.name, 'users': users})
-#
-#def deleteProject(request, projectName):
-#    """
-#    Delete current project
-#    """
-#    api.deleteTenant(projectName)
-#    return HttpResponseRedirect('/projects')
-#
-#def addUser(request, projectName):
-#    """
-#    Add user to current project
-#    """
-#    if request.method == "POST":
-#        form = forms.UserAddForm(request.POST)
-#        if form.is_valid():
-#            # recreate keystone client; keystone session work around
-#            api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])
-#            api.addUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
-#        return HttpResponseRedirect('/project_space/manage/settings')
-#
-#def editRole(request):
-#    """
-#    Add role to selected user for current project
-#    """
-#    if request.method == "POST":
-#        form = forms.RoleEditForm(request.POST)
-#        if form.is_valid():
-#            # recreate keystone client; keystone session work around
-#            api.joinTenant(request.session['username'], request.session['password'], request.session['tenant'], request.session['auth_url'])
-#            if form.cleaned_data['editAction'] == 'add':
-#                api.addRole(form.cleaned_data['userName'], form.cleaned_data['roleName'], request.session['tenant'])
-#            elif form.cleaned_data['editAction'] == 'remove':
-#                api.removeUserRole(form.cleaned_data['userName'], form.cleaned_data['roleName'], request.session['tenant'])
-#        return HttpResponseRedirect('/project_space/manage/settings')
-#
-#def removeUser(request):
-#    """
-#    Remove user from current project
-#    """
-#    if request.method == "POST":
-#        form = forms.UserRemoveForm(request.POST)
-#        if form.is_valid():
-#            # recreate keystone client; keystone session work around
-#            api.joinTenant(request.session['username'], request.session['password'], projectName, request.session['auth_url'])
-#            api.removeUser(form.cleaned_data['userName'], form.cleaned_data['roleName'], projectName)
-#        return HttpResponseRedirect('/project_space/manage/settings')
-#
-## Misc.
-#def modal(request):
-#    options = [
-#        {'compute': 'small'},
-#        {'storage': 'BU'},
-#        {'network': 'private'}]
-#    return render(request, 'modal.html', {'options': options})

@@ -7,25 +7,22 @@
 
 {% block title %}Welcome!{% endblock %}
 
-{% block background %}
-<body class="blue_clouds">
-{% endblock %}
-
-
 {% block content %}
 
   <!-- login form -->
 <div class = "container-fluid">
     <div class = "row">
-        <div class = "col-md-5 col-centered">
+        <div class = "col-md-8 col-centered">
             <div class="panel panel-default floating-block">
                 <div class="panel-heading">
-                    <div class="panel-title">{{ login_data.name }}</div>
+                    <div class="panel-title"><h1><small>Massachusettes Open Cloud Login</small></h1></div>
                 </div>
                 <div class="panel-body">
                     {% with login_data as form_data and login_form as form %}
                         {% include "form.html" %}
                     {% endwith %}
+                </div>
+                <div class="panel-footer">
                 </div>
             </div>
         </div>
@@ -33,7 +30,7 @@
   
     <!-- modal pop-ups for buttons -->
     {% with reg_modal as modal_data and reg_form as form %}
-        {% include "modal.html" %}
+        {% include "modals/modal.html" %}
     {% endwith %}
 </div>
 
