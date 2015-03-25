@@ -5,7 +5,7 @@ from moc_ui.views import *
 urlpatterns = patterns('',
     # front page
     url(r'^$', front_page),
-    # login 
+    # login
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),

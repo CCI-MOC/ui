@@ -1,15 +1,13 @@
-from django.shortcuts import render 
-from django.http import HttpResponse, HttpResponseRedirect 
-#import ui_api as api 
-import time 
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 # Forms to use in pages
-import forms 
+import forms
 # Dictionaries to pass to template context
 import dicts
 # Models to access our db's tables
 import models 
 
-### Splash Page ### 
+### Template Pages ### 
 def front_page(request): 
     """ Front page; Enter credentials to be processed by the login view """ 
     
@@ -29,7 +27,7 @@ def clouds(request):
 
     try:
         user = models.User.objects.get(name=request.session['username'])
-        projects = models.Project.objects.filter(user=user)
+        projects = models.UIProject.objects.filter(user=user)
     except:
         pass
 
@@ -46,76 +44,80 @@ def clouds(request):
 
     return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals})
 
-### User Actions ### 
-def login(request): 
-    """ Login view; Checks post credentials, redirects 
-    to clouds or back to front page with error """ 
-    if request.method == 'POST': 
-        form = forms.login(request.POST) 
-        if form.is_valid(): 
-            username = form.cleaned_data['username'] 
-            password = form.cleaned_data['password'] 
-            
-            try: 
-                user = models.User.objects.get(name=username) 
-                if user.verify_password(password=password): 
-                    request.session['username'] = username 
-                    return HttpResponseRedirect('/clouds') 
-            except: 
-                pass 
-    return HttpResponseRedirect('/') 
+### User Actions ###
+def login(request):
+    """ Login view; Checks post credentials, redirects
+    to clouds or back to front page with error """
+    if request.method == 'POST':
+        form = forms.login(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-def logout(request): 
-    """ Logout of session; remove session variables and return to login page """ 
-    for state, sessionInfo in request.session.items(): 
-        sessionInfo = None 
+            try:
+                user = models.User.objects.get(name=username)
+                if user.verify_password(password=password):
+                    request.session['username'] = username
+                    return HttpResponseRedirect('/clouds')
+            except:
+                pass
+    return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/') 
+def logout(request):
+    """ Logout of session; remove session variables and return to login page """
+    for state, sessionInfo in request.session.items():
+        sessionInfo = None
 
-def register(request): 
-    """ Register new user with keystone; 
-    called from login page Needs error checking """ 
-    if request.method == "POST": 
-        form = forms.userRegister(request.POST) 
-        if form.is_valid(): 
-            username = form.cleaned_data['username'] 
-            password = form.cleaned_data['password'] 
-            user_exist = models.User.objects.filter(name=username) 
-            
-            if 'pk' not in user_exist: 
-                newuser = models.User(name=username) 
-                newuser.set_password(password=password) 
-                newuser.save() 
-                request.session['username'] = username 
-                return HttpResponseRedirect('/clouds') 
+    return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/') 
+def register(request):
+    """ Register new user with keystone;
+    called from login page Needs error checking """
+    if request.method == "POST":
+        form = forms.userRegister(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            try:
+                user = models.User.objects.get(name=username)
+            except models.User.DoesNotExist:
+                user = None
+
+            if user is None:
+                newuser = models.User(name=username)
+                newuser.set_password(password=password)
+                newuser.save()
+                request.session['username'] = username
+                return HttpResponseRedirect('/clouds')
+
+    return HttpResponseRedirect('/')
 
 def dustProject(request):
     """Create or destroy project - from dust to dust"""
-    if request.method == "POST": 
+    if request.method == "POST":
 
-        form = forms.createProject(request.POST) 
-        if form.is_valid(): 
+        form = forms.createProject(request.POST)
+        if form.is_valid():
             user = models.User.objects.get(name=request.session['username'])
-            project_name = form.cleaned_data['name'] 
+            project_name = form.cleaned_data['name']
             action = form.cleaned_data['action']
 
             if action == 'create':
-                project = models.Project(name=project_name, user=user) 
+                project = models.Project(name=project_name, user=user)
                 project.save()
                 return HttpResponseRedirect('/clouds')
 
         form = forms.deleteProject(request.POST)
         if form.is_valid():
             try:
-                project = models.Project.objects.get(name=project_name, user=user) 
+                project = models.Project.objects.get(name=project_name, user=user)
                 if action == 'destroy' and 'pk' in project:
                     project.delete()
-            except: 
+            except:
                 pass
 
-    return HttpResponseRedirect('/clouds') 
+    return HttpResponseRedirect('/clouds')
 
 def dustCluster(request):
     """Create or destroy cluster - from dust to dust"""
@@ -188,6 +190,7 @@ def dustVM(request):
             if action == 'destroy' and vm is not None:
                 vm.delete()
 
+
 def controlVM(request):
     """Control operations on vm"""
     if request.method == "POST": 
@@ -213,4 +216,3 @@ def controlVM(request):
                 pass
 
     return HttpResponseRedirect('/clouds') 
-
