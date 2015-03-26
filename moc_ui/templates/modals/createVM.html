@@ -7,7 +7,7 @@
                 <h2 class="modal-title">Create VM</h2>
             </div>
 
-            <form action="/dustVM/" method='POST'>
+            <form action="/createVM" method='POST'>
                 {% csrf_token %}
                 <div class="modal-body">
                     {% for field in createVMform %}

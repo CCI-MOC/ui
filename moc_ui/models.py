@@ -116,9 +116,13 @@ class OSProject(models.Model):
 
 class VM(models.Model):
     """A user's vm."""
-    ui_project = models.ForeignKey(UIProject)
-    os_project = models.ForeignKey(OSProject)
-    os_uuid = models.CharField(max_length=UUID_LEN)
+    ui_project  = models.ForeignKey(UIProject)
+    os_project  = models.ForeignKey(OSProject)
+    name        = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
+    state       = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
+    provider    = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
+    image       = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    os_uuid     = models.CharField(max_length=UUID_LEN)
 
     def __unicode__(self):
         return self.name

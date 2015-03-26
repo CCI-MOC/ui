@@ -44,7 +44,7 @@ def clouds(request):
     for project in projects:
         vm_list = []
         for vm in models.VM.objects.filter(ui_project=project):
-            vm_list.append(vm.name)
+            vm_list.append(vm)
         project_list.append({'name':project.name, 'vm_list': vm_list})
 
     for project in dicts.test_project_list:
@@ -210,14 +210,14 @@ def createVM(request):
         if form.is_valid():
             user = retrieveUser(request.session['username'])
             vm_name = form.cleaned_data['name']
-            OSProject = form.cleaned_data['cloud']
+            OSProject = form.cleaned_data['provider']
             try: 
-                vm = models.VM.objects.get(name=vm_name, user=user)
+                vm = models.VM.objects.get(name=vm_name)
             except:
                 vm = None
 
             if vm is None:
-                vm = models.VM(name=vm_name, user=user)
+                vm = models.VM(name=vm_name)
                 vm.save()
     return HttpResponseRedirect('/clouds')
 

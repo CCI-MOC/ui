@@ -1,5 +1,7 @@
 from django import forms
 
+import models
+
 class login(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -31,8 +33,14 @@ class deleteOSProject(forms.Form):
 class createVM(forms.Form):
     providers = [('buprod', 'BU-PROD'), ('huprod', 'HU-PROD'), ('neprod', 'NE-PROD'), 
                  ('umassprod', 'UMASS-PROD'), ('mitprod', 'MIT-PROD')]
-    name = forms.CharField()
-    provider= forms.ChoiceField(widget=forms.Select, choices=providers)
+    name        = forms.CharField()
+    provider    = forms.ChoiceField(widget=forms.Select, choices=providers)
+
+    projects    = []
+    for p in models.UIProject.objects.all().values('name').distinct():
+        projects.append((p['name'], p['name']))
+
+    project     = forms.ChoiceField(widget=forms.Select, choices=projects)
 
 class deleteVM(forms.Form):
     name = forms.CharField()
