@@ -17,13 +17,14 @@ class deleteProject(forms.Form):
     name = forms.CharField()
 
 # cluster actions
-class createCluster(forms.Form):
-    name = forms.CharField()
+class createOSProject(forms.Form):
+    project_name = forms.CharField()
     user_name = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-    endpoint = forms.URLField()
+    providers = [('buprod', 'BU-PROD'), ('huprod', 'HU-PROD'), ('neprod', 'NE-PROD'), 
+                 ('umassprod', 'UMASS-PROD'), ('mitprod', 'MIT-PROD')]
 
-class deleteCluster(forms.Form):
+class deleteOSProject(forms.Form):
     name = forms.CharField()
 
 # vm actions
