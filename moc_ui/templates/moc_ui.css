@@ -1,15 +1,23 @@
+/* over-arching overrides */
+@font-face {
+    font-family: lane_narrow_regular;
+    src: url("/static/lane_narrow_regular/LANENAR.tff");
+}
+
 /* html div over-rides */
 body {
     /* background options */
     background-image: url("/static/low-poly-landscape.png");
     background-size:   contain contain;                      
     background-repeat: no-repeat;
-    background-position: center center;            /* optionally, center the image */
+    /*background-position: center center;             optionally, center the image */
     background-attachment: fixed;
+    background-size: cover;
 
     /* text defaults */
     /* color: #428BCA; /* light blue */
     color: #444; /* gray */
+    font-family: lane_narrow_regular;
 
     /* margins for elements */
     padding: 25px 50px;

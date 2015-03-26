@@ -12,34 +12,30 @@ class userRegister(forms.Form):
 # project actions
 class createProject(forms.Form):
     name = forms.CharField()
-    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
 
 class deleteProject(forms.Form):
     name = forms.CharField()
-    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
 
 # cluster actions
 class createCluster(forms.Form):
-    OpenStackUsername = forms.CharField()
-    OpenStackPassword = forms.CharField(widget=forms.PasswordInput)
-    OpenStackEndpoint = forms.URLField()
+    name = forms.CharField()
+    user_name = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    endpoint = forms.URLField()
 
 class deleteCluster(forms.Form):
-    OpenStackUsername = forms.CharField()
-    OpenStackPassword = forms.CharField(widget=forms.PasswordInput)
-    OpenStackEndpoint = forms.URLField()
+    name = forms.CharField()
 
 # vm actions
 class createVM(forms.Form):
     providers = [('buprod', 'BU-PROD'), ('huprod', 'HU-PROD'), ('neprod', 'NE-PROD'), 
                  ('umassprod', 'UMASS-PROD'), ('mitprod', 'MIT-PROD')]
     name = forms.CharField()
-    provider= forms.ChoiceField(widget=forms.RadioSelect, choices=providers)
-    action = forms.CharField(widget=forms.HiddenInput(), initial='create')
+    provider= forms.ChoiceField(widget=forms.Select, choices=providers)
 
 class deleteVM(forms.Form):
     name = forms.CharField()
-    action = forms.CharField(widget=forms.HiddenInput(), initial='delete')
 
 class controlVM(forms.Form):
+    name = forms.CharField()
     action = forms.CharField()

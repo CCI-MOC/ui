@@ -6,20 +6,20 @@
 <div class="row vert-padded"></div>
 
 <div class="container-fluid">
-    <div class="col-md-10 col-centered">
+    <div class="col-md-8 col-centered">
         <div class="panel-group" id="accordion">
             <div class="panel panel-default floating-block">
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div class="row">
-                            <h2 class="col-md-6 pull-left">  {{request.session.username}}'s <small>cloud</small></h2>
-                            <div class="col-md-4 btn-group pull-right" role="group">
+                            <h2 class="col-md-7 pull-left">  {{request.session.username}}'s <small>cloud</small></h2>
+                            <div class="col-md-5 btn-group pull-right" role="group">
                                 <button type='button' data-toggle="modal" data-target="#createProject" 
                                 class="btn btn-success" aria-label="Left">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> project
                                 </button>
                                 <button type='button' data-toggle="modal" data-target="#createCluster" 
-                                class="btn btn-primary" aria-label="Left"> 
+                                class="btn btn-info" aria-label="Left"> 
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> cluster
                                 </button>
                                 <button type='button' data-toggle="modal" data-target="#deleteCluster" 
@@ -33,26 +33,38 @@
                 {% for project in project_list %}
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-6 btn-group pull-left">
-                            <button type="button" class="btn btn-default" data-toggle="collapse" 
-                            data-parent="#accordian" data-target="#{{project.name}}">
-                                    <h4>{{project.name}}</h4>
-                            </button>
+                        <div class="col-md-7 pull-left">
+                                <h3>{{project.name}}</h3>
                         </div>
-                        <div class="col-md-4 btn-group pull-right" role="group">
-                            <button type="button" class="btn btn-success" aria-label="Left Align" action="#createVM">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> vm
+                        <div class="col-md-5 btn-group pull-right" role="group">
+                            <button type="button" class="btn btn-default" data-toggle="collapse" 
+                            data-parent="#accordian" data-target="#{{project.name}}_vms">
+                                <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-primary" aria-label="Left Align" action="/clouds/">
+                            <button type="button" class="btn btn-info" data-toggle="collapse" 
+                            data-parent="#accordian" data-target="#{{project.name}}_info">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" data-toggle="modal" data-target="#createVM"
+                            class="btn btn-primary" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" data-toggle="modal" data-target="#createVM"
+                            class="btn btn-success" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-warning" data-toggle="collapse" 
+                            data-parent="#accordian" data-target="#{{project.name}}_settings">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-danger" aria-label="Left Align" action="#deleteProject">
-                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> project
+                            <button type="button" data-toggle="modal" data-target="#deleteProject"
+                            class="btn btn-danger" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
                             </button>
                         </div>
                     </div>
                 </div>
-                <div id="{{project.name}}" class="panel-collapse collapse">
+                <div id="{{project.name}}_vms" class="panel-collapse collapse">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -108,6 +120,8 @@
     {% for form_data in cloud_modals %}
         {% include "modals/cloudModal.html" %}
     {% endfor %}
+
+    {% include "modals/createVM.html" %}
 
 </div>
 {% endblock %}

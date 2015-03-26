@@ -5,17 +5,22 @@ from moc_ui.views import *
 urlpatterns = patterns('',
     # front page
     url(r'^$', front_page),
-    # login
+    # user management 
+#    url('^account', account),
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),
     # cloud splash
     url(r'^clouds', clouds),
     # projects control
-    url(r'^dustProject', dustProject),
-    url(r'^dustCluster', dustCluster),
+    url(r'^createProject', createProject),
+    url(r'^deleteProject', deleteProject),
+    # projects control
+    url(r'^createCluster', createCluster),
+    url(r'^deleteCluster', deleteCluster),
     # vm control 
-    url(r'^dustVM', dustVM),
+    url(r'^createVM', createVM),
+    url(r'^deleteVM', deleteVM),
     url(r'^controlVM', controlVM),
 #    # marketplace
 #    url(r'^project_space/market', market),

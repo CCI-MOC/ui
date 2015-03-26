@@ -7,6 +7,13 @@ import dicts
 # Models to access our db's tables
 import models 
 
+## helper functions
+def retrieveUser(userName):
+    try:
+        return models.User.objects.get(name=userName)
+    except: 
+        return None 
+
 ### Template Pages ### 
 def front_page(request): 
     """ Front page; Enter credentials to be processed by the login view """ 
@@ -18,15 +25,17 @@ def front_page(request):
 def clouds(request): 
     """List projects and vms in user's clouds""" 
     
-    cloud_modals = [{'id': 'createProject', 'title': 'Create Project', 'form': forms.createProject()},
-                    {'id': 'deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
-                    {'id': 'createCluster', 'title': 'Create Cluster', 'form': forms.createCluster()},
-                    {'id': 'deleteCluster', 'title': 'Delete Cluster', 'form': forms.deleteCluster()},
-                    {'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
+    cloud_modals = [{'id': 'createProject', 'action': '/createProject', 'title': 'Create Project', 'form': forms.createProject()},
+                    {'id': 'deleteProject', 'action': '/deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
+                    {'id': 'createCluster', 'action': '/createCluster', 'title': 'Create Cluster', 'form': forms.createCluster()},
+                    {'id': 'deleteCluster', 'action': '/deleteCluster', 'title': 'Delete Cluster', 'form': forms.deleteCluster()},
+                    #{'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
                     {'id': 'deleteVM', 'title': 'Delete VM', 'form': forms.deleteVM()},]
+    createVMform = forms.createVM()
+
+    user = retrieveUser(request.session['username'])
 
     try:
-        user = models.User.objects.get(name=request.session['username'])
         projects = models.UIProject.objects.filter(user=user)
     except:
         pass
@@ -34,7 +43,7 @@ def clouds(request):
     project_list = []
     for project in projects:
         vm_list = []
-        for vm in models.VM.objects.filter(project=project):
+        for vm in models.VM.objects.filter(ui_project=project):
             vm_list.append(vm.name)
         project_list.append({'name':project.name, 'vm_list': vm_list})
 
@@ -42,7 +51,7 @@ def clouds(request):
         project_list.append(project)
 
 
-    return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals})
+    return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals, 'createVMform': createVMform })
 
 ### User Actions ###
 def login(request):
@@ -54,13 +63,11 @@ def login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            try:
-                user = models.User.objects.get(name=username)
-                if user.verify_password(password=password):
-                    request.session['username'] = username
-                    return HttpResponseRedirect('/clouds')
-            except:
-                pass
+            user = retrieveUser(username)
+            if user.verify_password(password=password):
+                request.session['username'] = username
+                return HttpResponseRedirect('/clouds')
+
     return HttpResponseRedirect('/')
 
 def logout(request):
@@ -79,11 +86,7 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            try:
-                user = models.User.objects.get(name=username)
-            except models.User.DoesNotExist:
-                user = None
-
+            user = retrieveUser(username)
             if user is None:
                 newuser = models.User(name=username)
                 newuser.set_password(password=password)
@@ -93,56 +96,88 @@ def register(request):
 
     return HttpResponseRedirect('/')
 
-def dustProject(request):
-    """Create or destroy project - from dust to dust"""
+## Project form processing
+def createProject(request):
+    """
+    Process form to create a project, 
+    if the project doesn't exist and user is registered,
+    make new project in db
+    """
     if request.method == "POST":
-
         form = forms.createProject(request.POST)
         if form.is_valid():
+            print "form is valid"
             user = models.User.objects.get(name=request.session['username'])
+            print user
             project_name = form.cleaned_data['name']
-            action = form.cleaned_data['action']
+            print project_name
 
-            if action == 'create':
-                project = models.Project(name=project_name, user=user)
-                project.save()
-                return HttpResponseRedirect('/clouds')
-
-        form = forms.deleteProject(request.POST)
-        if form.is_valid():
             try:
-                project = models.Project.objects.get(name=project_name, user=user)
-                if action == 'destroy' and 'pk' in project:
-                    project.delete()
+                project = models.UIProject(name=project_name, user=user)
+                print project
             except:
-                pass
+                print "Error, project not made"
+                project = None
+
+            if project is not None:
+                project.save()
 
     return HttpResponseRedirect('/clouds')
 
-def dustCluster(request):
-    """Create or destroy cluster - from dust to dust"""
-    if request.method == "POST": 
-        try:
-            user = models.User.objects.get(name=request.session['username'])
-        except:
-            print "No such user"
-            return HttpResponseRedirect('/') 
+def deleteProject(request):
+    """
+    Process form to delete a project, 
+    if the project doesn't exist and user is registered,
+    make new project in db
+    """
+    if request.method == "POST":
+        form = forms.deleteProject(request.POST)
+        if form.is_valid():
+            user = retrieveUser(request.session['username'])
+            project_name = form.cleaned_data['name']
 
+            try:
+                project = models.UIProject.objects.get(name=project_name, user=user)
+            except:
+                project = None  
+
+            if project is not None:
+                project.delete()
+
+    return HttpResponseRedirect('/clouds')
+
+## cluster form processing
+def createCluster(request):
+    """
+    Process form to create a cluster, 
+    if the cluster doesn't exist and user is registered,
+    make new cluster in db
+    """
+    if request.method == "POST": 
         form = forms.createCluster(request.POST) 
         if form.is_valid(): 
+            user = retrieveUser(request.session['username'])
             cluster_name = form.cleaned_data['name'] 
             cluster_user_name = form.cleaned_data['user_name'] 
             cluster_password = form.cleaned_data['password'] 
             endpoint = form.cleaned_data['endpoint'] 
 
-            if action == 'create':
+            try:
                 cluster = models.Cluster(name=cluster_name, user_name=cluster_user_name, password=cluster_password, 
                                          endpoint=endpoint, user=user) 
-                cluster.save()
-                return HttpResponseRedirect('/clouds')
+            except:
+                cluster = None
 
+            if cluster is not None:
+                cluster.save()
+
+    return HttpResponseRedirect('/clouds')
+
+def deleteCluster(request):
+    if request.method == "POST": 
         form = forms.deleteCluster(request.POST)
         if form.is_valid():
+            user = retrieveUser(request.session['username'])
             cluster_name = form.cleaned_data['name'] 
             action = form.cleaned_data['action']
 
@@ -151,22 +186,18 @@ def dustCluster(request):
             except: 
                 cluster = None 
 
-            if action == 'destroy' and cluster is not None:
+            if cluster is not None:
                 cluster.delete()
 
     return HttpResponseRedirect('/clouds') 
     
-def dustVM(request):
-    """Create or destroy vm - from dust to dust"""
+## vm form processing
+def createVM(request):
+    """Process form to create vm"""
     if request.method == "POST":
-        try:
-            user = models.User.objects.get(name=request.session['username'])
-        except:
-            print "No such user"
-            return HttpResponseRedirect('/') 
-
         form = forms.createVM(request.POST)
         if form.is_valid():
+            user = retrieveUser(request.session['username'])
             vm_name = form.cleaned_data['name']
             OSProject = form.cleaned_data['cloud']
             try: 
@@ -174,14 +205,19 @@ def dustVM(request):
             except:
                 vm = None
 
-            if action == 'create' and vm is None:
+            if vm is None:
                 vm = models.VM(name=vm_name, user=user)
                 vm.save()
-                return HttpResponseRedirect('/clouds')
+    return HttpResponseRedirect('/clouds')
 
+def deleteVM(request):
+    """Process form to delete vm"""
+    if request.method == "POST":
         form = forms.deleteVM(request.POST)
         if form.is_valid():
+            user = retrieveUser(request.session['username'])
             vm_name = form.cleaned_data['name']
+
             try:
                 vm = models.VM.objects.get(name=vm_name, user=user)
             except:

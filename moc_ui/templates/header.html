@@ -9,15 +9,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="/clouds">Cloud</a></li>
-        <li><a href="/market">Market</a></li>
-        <li><a href="/account">Account</a></li>
       </ul>
       <div class="dropdown navbar-right">
         <button class="btn glyphicon glyphicon-user" style="font-size:1.5em" id="userProfile" data-toggle="dropdown" aria-expanded="true">
         {{ request.session.username }}
         </button>
         <ul class="dropdown-menu navbar-right" role="menu" aria-labelledby="userProfile">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Billing</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Change Password</a></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Logout</a></li>
         </ul>
       </div>
