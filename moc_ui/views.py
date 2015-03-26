@@ -27,8 +27,8 @@ def clouds(request):
     
     cloud_modals = [{'id': 'createProject', 'action': '/createProject', 'title': 'Create Project', 'form': forms.createProject()},
                     {'id': 'deleteProject', 'action': '/deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
-                    {'id': 'createCluster', 'action': '/createCluster', 'title': 'Create Cluster', 'form': forms.createCluster()},
-                    {'id': 'deleteCluster', 'action': '/deleteCluster', 'title': 'Delete Cluster', 'form': forms.deleteCluster()},
+                    {'id': 'createCluster', 'action': '/createCluster', 'title': 'Add Openstack Project', 'form': forms.createOSProject()},
+                    {'id': 'deleteCluster', 'action': '/deleteCluster', 'title': 'Delete Openstack Project', 'form': forms.deleteOSProject()},
                     #{'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
                     {'id': 'deleteVM', 'title': 'Delete VM', 'form': forms.deleteVM()},]
     createVMform = forms.createVM()
