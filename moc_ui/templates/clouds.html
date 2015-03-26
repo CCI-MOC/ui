@@ -65,6 +65,7 @@
                     </div>
                 </div>
                 <div id="{{project.name}}_vms" class="panel-collapse collapse">
+                    <h5>your machines</h5>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -105,6 +106,29 @@
                                         </button>
                                     </form></div>
                                 </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="{{project.name}}_info" class="panel-collapse collapse">
+                    <h5>your usage</h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td>name</td>
+                                <td>uptime</td>
+                                <td>% active</td>
+                                <td>% quota</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vm in project.vm_list %}
+                            <tr>
+                                <td>{{vm.name}}</td>
+                                <td>300 days</td>
+                                <td>30%</td>
+                                <td>25%</td>
                             </tr>
                             {% endfor %}
                         </tbody>
