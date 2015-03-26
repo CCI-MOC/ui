@@ -1,0 +1,5 @@
+django
+passlib
+python-keystoneclient
+python-novaclient
+python-glanceclient

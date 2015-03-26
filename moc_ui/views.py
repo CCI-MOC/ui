@@ -53,6 +53,17 @@ def clouds(request):
 
     return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals, 'createVMform': createVMform })
 
+def market(request):
+    market_list = []
+    # for market in markets:
+    #     market_choice_list = []
+    #     for choice in dicts.test_
+    for market in dicts.test_market_list:
+        market_list.append(market)
+
+    return render(request, 'market.html', 
+                  {'market_list': market_list})
+
 ### User Actions ###
 def login(request):
     """ Login view; Checks post credentials, redirects

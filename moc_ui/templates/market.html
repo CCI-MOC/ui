@@ -4,118 +4,93 @@
 
     {% block title %}Marketplace{% endblock %}
 
-    {% block js %}
-        {% include "externalJS.html" %}
-        <script src="{% static "moc_ui/j.js" %}" ></script>
-    {% endblock %}
+{% block content %}
+<div class="row vert-padded"></div>
 
+<div class="container-fluid">
+    <div class="col-md-8 col-centered">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default floating-block">
 
-    <h1>Welcome to the Marketplace</h1>
-
-    <nav class="navbar navbar-default nb" role="navigation">
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse nc">
-            <ul class="nav nb-nav">
-                <li name="service" class="market-nav a"><a href="#services">Services</a></li>
-                <li name="appliance" class="market-nav"><a href="#appliances">Appliances</a></li>
-                <li name="storage" class="market-nav"><a href="#storage">Storage</a></li>
-                <li name="compute" class="market-nav"><a href="#compute">Compute</a></li>
-
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </nav>
-
-
-    <table class="table table-striped table-hover table-responsive">
-        <thead>
-            <tr class="col-lg-12">
-                <th class="col-lg-6">NAME</th>
-                <th class="col-lg-6">DESCRIPTION</th>
-                <th class="col-lg-6">PROVIDER</th>
-                <th class="col-lg-6"> </th>
-            </tr>
-        </thead>
-        {% for items in market %}
-        {% if items.tag == "service"%}
-        <tr class="col-lg-12 service item">
-            {% elif items.tag == "appliance"%}
-            <tr class="col-lg-12 appliance item">
-                {% elif items.tag == "compute"%}
-                <tr class="col-lg-12 compute item">
-                    {% elif items.tag == "storage"%}
-                    <tr class="col-lg-12 storage item">
-                        {% endif %}
-                        <td class="col-lg-6 ">{{items.name}}</td>
-                        <td class="col-lg-6 ">{{items.desc}}</td>
-                        <td class="col-lg-6"><img width="50px" height="50px" src="{{items.icon}}"></td>
-                        <td class="cart col-lg-6">
-                            <button type="button" class="btn btn-primary btn-lg" data-toggle="" data-target="">
-                                <span class="add-icon glyphicon glyphicon-plus text-center"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-
-                </table>
-
-
-                <!-- Button trigger modal -->
-
-
-                <!-- Modal -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Title of Service</h4>
-                            </div>
-                            <div class="modal-body text-center">
-                                <input placeholder="name"></input>
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle ddoption-compute" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                                        Compute
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu option-compute" role="menu" aria-labelledby="dropdownMenu1">
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Small</a></li>
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Medium</a></a></li>
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Large</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle ddoption-storage" type="button" id="dropdownMenu2" data-toggle="dropdown">
-                                        Storage
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu option-storage" role="menu" aria-labelledby="dropdownMenu2">
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">BU-small</a></li>
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">EMC-large</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle ddoption-network" type="button" id="dropdownMenu3" data-toggle="dropdown">
-                                        Network
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu option-network" role="menu" aria-labelledby="dropdownMenu3">
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Public</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="project-add btn btn-primary">ADD</button>
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <h2 class="col-md-6 pull-left">  {{request.session.username}}'s <small>market</small></h2>
+                            <div class="col-md-4 btn-group pull-right" role="group">
+                                 <div class="sidebar-form">
+                                        <form class="form-inline">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="Search the Market">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default btn-primary" aria-label:"leftalign">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </div>
                             </div>
                         </div>
                     </div>
+                </div>              
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3" style="padding: 0px">
+                            <div class="sidebar">
+                                <ul class="sidebar-nav">              
+                                    <li><h3><a href = '#all'>All</a></h3></li>
+                                    <br>
+                                    <li><a href = '#apps'>Apps</a></li>
+                                    <li><a href = '#compute'>Compute</a></li>
+                                    <li><a href = '#network'>Network</a></li>
+                                    <li><a href = '#service'>Service</a></li>
+                                    <li><a href = '#storage'>Storage</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-9 content">                      
+                            <div class="row">
+                            	{% for market in market_list %}
+                                <div class="col-md-4 grid-item">
+                                <br>                                 
+                                    <div class="image"></div>
+                                    <p>{{market.name}}</p>	
+                                    <h3><a href = ""><img src={{market.img_url}} alt="Hadoop" style="width:100px;height:100px"></a></h3>                                  
+                                    <div class="dropdown">
+	                                    <div class="btn-group" role="group">
+	                                        <button type="button" class="btn btn-default btn-success glyphicon glyphicon-plus" aria-label:"leftalign">
+	                                            <!-- <span class = "glyphicon glyphicon-plus"  id="dropdownMenu1" aria-hidden="true"></span> -->
+	                                        </button>
+	                                        <button type="button" class="btn btn-default btn-warning glyphicon glyphicon-star" aria-label:"leftalign">
+	                                            <!-- <span class = "glyphicon glyphicon-star" id="dropdownMenu2" aria-hidden="true"></span> -->
+	                                        </button>
+	                                        <button  type="button" class="btn btn-primary dropdown-toggle glyphicon glyphicon-info-sign" data-toggle="dropdown" aria-hidden="false" >
+	                                            <!-- <span class="caret glyphicon glyphicon-info-sign" id="dropdownMenu3" aria-hidden="true"></span>	 -->
+                                                <span class="caret"></span>
+                                                <!-- <span class="sr-only"></span> -->
+	                                        </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Another action</a></li>
+                                            <li><a href="#">Something else here</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Separated link</a></li>
+                                          </ul>            
+	                                    </div>
+                                   	</div>
+                                </div>
+                        		{% endfor %}
+                        </div>
+                    </div>
+                </div>    
+                <div class="panel-footer">
                 </div>
+            </div>
+            
+        </div>
+    </div>
 
-                <div id="footer">
-                    {% block footer %}
-                    {% include "footer.html" %}
-                    {% endblock %}
-                </div>
-            </body>
-            </html>
+
+</div>
+{% endblock %}
+    
