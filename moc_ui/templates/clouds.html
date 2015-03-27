@@ -45,10 +45,8 @@
                             data-parent="#accordian" data-target="#{{project.name}}_info">
                                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                             </button>
-                            <button type="button" data-toggle="modal" data-target="#createVM"
-                            class="btn btn-primary" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                            </button>
+                            <a href="/market/{{project.name}}" class="btn btn-primary" 
+                            aria-label="Left Align"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
                             <button type="button" data-toggle="modal" data-target="#createVM"
                             class="btn btn-success" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -112,7 +110,7 @@
                     </table>
                 </div>
                 <div id="{{project.name}}_info" class="panel-collapse collapse">
-                    <h5>your usage</h5>
+                    <h4>your usage</h4>
                     <table class="table table-hover">
                         <thead>
                             <tr>

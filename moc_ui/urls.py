@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^deleteVM', deleteVM),
     url(r'^controlVM', controlVM),
 #    # marketplace
-    url(r'^market', market),
+    url(r'^market/(?P<project>.+)', market),
 #    # project settings
 #    url(r'^project_space/manage/settings/deleteProject/(?P<projectName>.+)', deleteProject),
 #    url(r'^project_space/manage/settings/addUser/(?P<projectName>.+)', addUser),

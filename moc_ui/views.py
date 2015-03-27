@@ -30,7 +30,7 @@ def clouds(request):
                     {'id': 'createCluster', 'action': '/createCluster', 'title': 'Add Openstack Project', 'form': forms.createOSProject()},
                     {'id': 'deleteCluster', 'action': '/deleteCluster', 'title': 'Delete Openstack Project', 'form': forms.deleteOSProject()},
                     #{'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
-                    {'id': 'deleteVM', 'title': 'Delete VM', 'form': forms.deleteVM()},]
+                    {'id': 'deleteVM', 'action': '/deleteCluster', 'title': 'Delete VM', 'form': forms.deleteVM()},]
     createVMform = forms.createVM()
 
     user = retrieveUser(request.session['username'])
@@ -53,16 +53,17 @@ def clouds(request):
 
     return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals, 'createVMform': createVMform })
 
-def market(request):
+def market(request, project):
     market_list = []
     # for market in markets:
     #     market_choice_list = []
     #     for choice in dicts.test_
+
     for market in dicts.test_market_list:
         market_list.append(market)
 
     return render(request, 'market.html', 
-                  {'market_list': market_list})
+            {'project': project, 'market_list': market_list})
 
 ### User Actions ###
 def login(request):

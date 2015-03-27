@@ -118,7 +118,7 @@ class VM(models.Model):
     """A user's vm."""
     ui_project = models.ForeignKey(UIProject)
     os_project = models.ForeignKey(OSProject)
-    os_uuid = models.CharField(max_length=UUID_LEN)
+    #os_uuid = models.CharField(max_length=UUID_LEN)
 
     def __unicode__(self):
         return self.name
