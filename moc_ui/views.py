@@ -27,8 +27,10 @@ def clouds(request):
     
     cloud_modals = [{'id': 'createProject', 'action': '/createProject', 'title': 'Create Project', 'form': forms.createProject()},
                     {'id': 'deleteProject', 'action': '/deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
-                    {'id': 'createCluster', 'action': '/createCluster', 'title': 'Add Openstack Project', 'form': forms.createOSProject()},
-                    {'id': 'deleteCluster', 'action': '/deleteCluster', 'title': 'Delete Openstack Project', 'form': forms.deleteOSProject()},
+                    {'id': 'createClusterAccount', 'action': '/createClusterAccount', 'title': 'Add Cluster Account', 'form': forms.createClusterAccount()},
+                    {'id': 'deleteClusterAccount', 'action': '/deleteClusterAccount', 'title': 'Delete Openstack Project', 'form': forms.deleteClusterAccount()},
+                    {'id': 'createOSProject', 'action': '/createOSProject', 'title': 'Add Cluster Project', 'form': forms.createOSProject()},
+                    {'id': 'deleteOSProject', 'action': '/deleteOSProject', 'title': 'Delete Cluster Project', 'form': forms.deleteOSProject()},
                     #{'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
                     {'id': 'deleteVM', 'action': '/deleteCluster', 'title': 'Delete VM', 'form': forms.deleteVM()},]
     createVMform = forms.createVM()
@@ -76,9 +78,10 @@ def login(request):
             password = form.cleaned_data['password']
 
             user = retrieveUser(username)
-            if user.verify_password(password=password):
-                request.session['username'] = username
-                return HttpResponseRedirect('/clouds')
+            if user is not None:
+                if user.verify_password(password=password):
+                    request.session['username'] = username
+                    return HttpResponseRedirect('/clouds')
 
     return HttpResponseRedirect('/')
 
@@ -159,7 +162,7 @@ def deleteProject(request):
     return HttpResponseRedirect('/clouds')
 
 ## cluster form processing
-def createCluster(request):
+def createClusterAccount(request):
     """
     Process form to create a cluster, 
     if the cluster doesn't exist and user is registered,
@@ -169,40 +172,58 @@ def createCluster(request):
         form = forms.createCluster(request.POST) 
         if form.is_valid(): 
             user = retrieveUser(request.session['username'])
-            cluster_name = form.cleaned_data['name'] 
-            cluster_user_name = form.cleaned_data['user_name'] 
-            cluster_password = form.cleaned_data['password'] 
-            endpoint = form.cleaned_data['endpoint'] 
+            cluster_name = form.cleaned_data['cluster'] 
+            cluster_username = form.cleaned_data['cluster_username'] 
+            cluster_password = form.cleaned_data['cluster_password'] 
 
             try:
-                cluster = models.Cluster(name=cluster_name, user_name=cluster_user_name, password=cluster_password, 
-                                         endpoint=endpoint, user=user) 
+                cluster = models.Cluster.objects.get(name=cluster_name, user=user) 
             except:
-                cluster = None
+                try:
+                    cluster = models.Cluster(title=cluster_name, auth_url="http://140.247.152.207" )
+                    cluster.save()
+                except:
+                    print "Couldn't create cluster"
+                    return HttpResponseRedirect('/')
 
-            if cluster is not None:
-                cluster.save()
+
+            if cluster is not None and user is not None:
+                try:
+                    clusterAccount = models.ClusterAccount(cluster_username=cluster_username, cluster_password=cluster_password, 
+                                             cluster=cluster, user=user) 
+                except:
+                    clusterAccount = None
+
+                if clusterAccount is not None:
+                    clusterAccount.save()
 
     return HttpResponseRedirect('/clouds')
 
-def deleteCluster(request):
+def deleteClusterAccount(request):
     if request.method == "POST": 
         form = forms.deleteCluster(request.POST)
         if form.is_valid():
             user = retrieveUser(request.session['username'])
-            cluster_name = form.cleaned_data['name'] 
-            action = form.cleaned_data['action']
+            osProject_name = form.cleaned_data['name'] 
 
             try:
-                cluster = models.Cluster.objects.get(name=cluster_name, user=user) 
+                OSProject = models.OSProject.objects.get(name=osProject_name, user=user) 
             except: 
-                cluster = None 
+                OSProject = None 
 
             if cluster is not None:
                 cluster.delete()
 
     return HttpResponseRedirect('/clouds') 
+
+def createOSProject(request):
+    if request.method == "POST":
+        form = forms.createOSProject(request.POST) 
     
+def deleteOSProject(request):
+    if request.method == "POST":
+        form = forms.createOSProject(request.POST) 
+
 ## vm form processing
 def createVM(request):
     """Process form to create vm"""

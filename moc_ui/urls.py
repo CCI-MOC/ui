@@ -15,9 +15,11 @@ urlpatterns = patterns('',
     # projects control
     url(r'^createProject', createProject),
     url(r'^deleteProject', deleteProject),
-    # projects control
-    url(r'^createCluster', createCluster),
-    url(r'^deleteCluster', deleteCluster),
+    # cluster control
+    url(r'^createClusterAccount', createClusterAccount),
+    url(r'^deleteClusterAccount', deleteClusterAccount),
+    url(r'^createOSProject', createOSProject),
+    url(r'^deleteOSProject', deleteOSProject),
     # vm control 
     url(r'^createVM', createVM),
     url(r'^deleteVM', deleteVM),
