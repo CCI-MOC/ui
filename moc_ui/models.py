@@ -31,9 +31,9 @@ class User(models.Model):
 
 class UIProject(models.Model):
     """A user's project in the moc ui."""
-    user = models.ForeignKey(User)
-
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+
+    user = models.ForeignKey(User)
 
     def __unicode__(self):
         return self.name
@@ -55,10 +55,11 @@ class ClusterAccount(models.Model):
     openstack credentials in the database, including username/password.
     These are used by OSProject to obtain a token when necessary.
     """
-    user = models.ForeignKey(User)
-    cluster = models.ForeignKey(Cluster)
     cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
     cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
+
+    user = models.ForeignKey(User)
+    cluster = models.ForeignKey(Cluster)
 
     def __unicode__(self):
         return '%r@%r' % (self.cluster_username, self.cluster.title)
@@ -67,8 +68,21 @@ class ClusterAccount(models.Model):
 class OSProject(models.Model):
     """An openstack project that a user has access to."""
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    cluster_account = models.ForeignKey(ClusterAccount)
     token = models.TextField(default=None, blank=True, null=True)
+
+    ## Link to a cluster    
+    cluster_account = models.ForeignKey(ClusterAccount)
+
+    ## Service Defaults 
+    default_compute = models.ForeignKey(Service)
+    default_storage = models.ForeignKey(Service)
+    default_image = models.ForeignKey(Service)
+
+    ## Service Options
+    compute_list = models.ManyToManyField(Service)
+    storage_list = models.ManyToManyField(Service)
+    image_list = models.ManyToManyField(Service)
+
 
     def __unicode__(self):
         return self.name
@@ -123,6 +137,19 @@ class VM(models.Model):
     provider    = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
     image       = models.CharField(max_length=DEFAULT_FIELD_LEN)
     os_uuid     = models.CharField(max_length=UUID_LEN)
+
+    def __unicode__(self):
+        return self.name
+
+class Service(models.Model)
+   """A service in the directory"""
+   ui_project = models.ManyToManyField(UIProject)
+
+   name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+   service_type = models.CharField(max_length=DEFAULT_FIELD_LEN)
+   availability = models.CharField(max_length=DEFAULT_FIELD_LEN)
+   description = models.CharField(max_length=DEFAULT_FIELD_LEN)
+   logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
 
     def __unicode__(self):
         return self.name

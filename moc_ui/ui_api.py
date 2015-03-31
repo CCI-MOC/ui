@@ -79,9 +79,9 @@ def createVM(VMname, imageName, flavorName):
 	"""
 	Create VM on current tenant with specified information
 	"""
-        image = nova.images.find(name=imageName)
+    image = nova.images.find(name=imageName)
 	fl = nova.flavors.find(name=flavorName)
-        nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
+    nova.servers.create(VMname, image=image, flavor=fl, meta=None,files=None)
 
 def createDefault(VMname):
 	"""Previously used for testing"""

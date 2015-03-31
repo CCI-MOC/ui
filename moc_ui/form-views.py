@@ -6,66 +6,8 @@ import forms
 import dicts
 # Models to access our db's tables
 import models 
-
-## helper functions
-def retrieveUser(userName):
-    try:
-        return models.User.objects.get(name=userName)
-    except: 
-        return None 
-
-### Template Pages ### 
-def front_page(request): 
-    """ Front page; Enter credentials to be processed by the login view """ 
-    
-    return render(request, 'front_page.html', 
-                 {'login_data': dicts.login_data, 'login_form': forms.login(), 
-                  'reg_modal': dicts.reg_modal, 'reg_form': forms.userRegister()}) 
-
-def clouds(request): 
-    """List projects and vms in user's clouds""" 
-    
-    cloud_modals = [{'id': 'createProject', 'action': '/createProject', 'title': 'Create Project', 'form': forms.createProject()},
-                    {'id': 'deleteProject', 'action': '/deleteProject', 'title': 'Delete Project', 'form': forms.deleteProject()},
-                    {'id': 'createClusterAccount', 'action': '/createClusterAccount', 'title': 'Add Cluster Account', 'form': forms.createClusterAccount()},
-                    {'id': 'deleteClusterAccount', 'action': '/deleteClusterAccount', 'title': 'Delete Openstack Project', 'form': forms.deleteClusterAccount()},
-                    {'id': 'createOSProject', 'action': '/createOSProject', 'title': 'Add Cluster Project', 'form': forms.createOSProject()},
-                    {'id': 'deleteOSProject', 'action': '/deleteOSProject', 'title': 'Delete Cluster Project', 'form': forms.deleteOSProject()},
-                    #{'id': 'createVM', 'title': 'Create VM', 'form': forms.createVM()},
-                    {'id': 'deleteVM', 'action': '/deleteCluster', 'title': 'Delete VM', 'form': forms.deleteVM()},]
-    createVMform = forms.createVM()
-
-    user = retrieveUser(request.session['username'])
-
-    try:
-        projects = models.UIProject.objects.filter(user=user)
-    except:
-        pass
-
-    project_list = []
-    for project in projects:
-        vm_list = []
-        for vm in models.VM.objects.filter(ui_project=project):
-            vm_list.append(vm)
-        project_list.append({'name':project.name, 'vm_list': vm_list})
-
-    for project in dicts.test_project_list:
-        project_list.append(project)
-
-
-    return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': cloud_modals, 'createVMform': createVMform })
-
-def market(request, project):
-    market_list = []
-    # for market in markets:
-    #     market_choice_list = []
-    #     for choice in dicts.test_
-
-    for market in dicts.test_market_list:
-        market_list.append(market)
-
-    return render(request, 'market.html', 
-            {'project': project, 'market_list': market_list})
+# Helper functions to make form processing easier 
+import helpers 
 
 ### User Actions ###
 def login(request):
@@ -77,7 +19,7 @@ def login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = retrieveUser(username)
+            user = retrieveObject("User", username)
             if user is not None:
                 if user.verify_password(password=password):
                     request.session['username'] = username
@@ -101,7 +43,7 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = retrieveUser(username)
+            user = retrieveObject("User", username)
             if user is None:
                 newuser = models.User(name=username)
                 newuser.set_password(password=password)
@@ -111,6 +53,57 @@ def register(request):
 
     return HttpResponseRedirect('/')
 
+## Default create view
+def createObject(request, object_class):
+    """
+    Process POST form for generic Object 
+    if the object doesn't exist and the user is registered,
+    creates the object
+    """
+    if request.method == "POST":
+        ## concatinate object_class with create to get correct form
+        formName = "create%s" % object_class
+        form = forms.formName(request.POST)
+        
+        if form.is_valid():
+            user = retrieveObject("User", request.session['username'])
+
+            try:
+                new_object = models.object_class(user=user, **form.cleaned_data)
+            except:
+                print "Error, %s not made" % object_class
+                new_object = None
+
+            if project is not None:
+                new_object.save()
+
+    return HttpResponseRedirect('/clouds')
+
+def deleteObject(request, object_class):
+    """
+    Process form to delete an object.
+    if the object exists and user is registered,
+    deletes object from database.
+    """
+    if request.method == "POST":
+        ## grab the appropriate form
+        formName = "create%s" % object_class
+        form = forms.formName(request.POST)
+
+        if form.is_valid():
+            user = retrieveObject("User", request.session['username'])
+
+            try:
+                del_object = models.object_class.objects.get(user=user, **form.cleaned_data)
+            except:
+                print "Error, %s not made" % object_class
+                del_object = None
+
+            if del_object is not None:
+                project.delete()
+
+    return HttpResponseRedirect('/clouds')
+
 ## Project form processing
 def createProject(request):
     """
@@ -119,7 +112,7 @@ def createProject(request):
     make new project in db
     """
     if request.method == "POST":
-        form = forms.createProject(request.POST)
+        
         if form.is_valid():
             print "form is valid"
             user = models.User.objects.get(name=request.session['username'])
