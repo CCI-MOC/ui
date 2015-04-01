@@ -1,0 +1,29 @@
+A pure Python network address representation and manipulation library.
+
+netaddr provides a Pythonic way of working with :-
+
+- IPv4 and IPv6 addresses and subnets
+- MAC addresses, OUI and IAB identifiers, IEEE EUI-64 identifiers
+- arbitrary (non-aligned) IP address ranges and IP address sets
+- various non-CIDR IP range formats such as nmap and glob-style formats
+
+Included are routines for :-
+
+- generating, sorting and summarizing IP addresses and networks
+- performing easy conversions between address notations and formats
+- detecting, parsing and formatting network address representations
+- performing set-based operations on groups of IP addresses and subnets
+- working with arbitrary IP address ranges and formats
+- accessing OUI and IAB organisational information published by IEEE
+- accessing IP address and block information published by IANA
+
+For details on the latest updates and changes, see :-
+
+    https://github.com/drkjam/netaddr/blob/rel-0.7.x/CHANGELOG
+
+API documentation for the latest release is available here :-
+
+    - http://netaddr.readthedocs.org/en/latest/
+    - https://pythonhosted.org/netaddr/
+
+
