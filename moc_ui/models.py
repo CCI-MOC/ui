@@ -12,8 +12,11 @@ PASSHASH_LEN = len(sha512_crypt.encrypt(''))
 UUID_LEN = len(str(uuid.uuid1()))
 DEFAULT_FIELD_LEN = 255
 
+#########################
+# Basic building blocks #
+#########################
 
-# user specifics
+# User information 
 class User(models.Model):
     """A user of the marketplace UI"""
     name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
@@ -28,17 +31,20 @@ class User(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class UIProject(models.Model):
-    """A user's project in the moc ui."""
+# A service in the marketplace
+class Service(models.Model):
+    """A service in the directory"""
+    ## specifications for a service
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-
-    user = models.ForeignKey(User)
-
+    service_type = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    description = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    availability = models.BooleanField()
+    
     def __unicode__(self):
         return self.name
 
-
+# Cluster information
 class Cluster(models.Model):
     """An openstack cluster."""
     title = models.CharField(max_length=DEFAULT_FIELD_LEN)
@@ -47,42 +53,55 @@ class Cluster(models.Model):
     def __unicode__(self):
         return self.title
 
-
-class ClusterAccount(models.Model):
+class Cluster_Account(models.Model):
     """A user account within an openstack cluster.
 
     Each of these belongs to a marketplace UI user. We store that user's
     openstack credentials in the database, including username/password.
     These are used by OSProject to obtain a token when necessary.
     """
+    ## Account Specific Information, for authorization
     cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
     cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
 
+    ## Foreign Keys for to link to a user and cluster 
     user = models.ForeignKey(User)
     cluster = models.ForeignKey(Cluster)
 
     def __unicode__(self):
         return '%r@%r' % (self.cluster_username, self.cluster.title)
 
+##################
+# Project tables #
+##################
 
-class OSProject(models.Model):
-    """An openstack project that a user has access to."""
+# A project in our UI
+class UI_Project(models.Model):
+    """A user's project in the moc ui."""
+    ## Project information
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    token = models.TextField(default=None, blank=True, null=True)
-
-    ## Link to a cluster    
-    cluster_account = models.ForeignKey(ClusterAccount)
+    users = models.ManyToManyField(User)
 
     ## Service Defaults 
     default_compute = models.ForeignKey(Service)
     default_storage = models.ForeignKey(Service)
     default_image = models.ForeignKey(Service)
 
-    ## Service Options
+    ## Registered Service Options
     compute_list = models.ManyToManyField(Service)
     storage_list = models.ManyToManyField(Service)
     image_list = models.ManyToManyField(Service)
 
+    def __unicode__(self):
+        return self.name
+
+class Cluster_Project(models.Model):
+    """An openstack project that a user has access to."""
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    token = models.TextField(default=None, blank=True, null=True)
+
+    ## Link to a cluster    
+    cluster_account = models.ManyToManyField(ClusterAccount)
 
     def __unicode__(self):
         return self.name
@@ -127,29 +146,3 @@ class OSProject(models.Model):
                                  self.name,
                                  self.cluster_account.cluster.auth_url)
 
-
-class VM(models.Model):
-    """A user's vm."""
-    ui_project  = models.ForeignKey(UIProject)
-    os_project  = models.ForeignKey(OSProject)
-    name        = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
-    state       = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
-    provider    = models.CharField(max_length=DEFAULT_FIELD_LEN) # For demo
-    image       = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    os_uuid     = models.CharField(max_length=UUID_LEN)
-
-    def __unicode__(self):
-        return self.name
-
-class Service(models.Model)
-   """A service in the directory"""
-   ui_project = models.ManyToManyField(UIProject)
-
-   name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-   service_type = models.CharField(max_length=DEFAULT_FIELD_LEN)
-   availability = models.CharField(max_length=DEFAULT_FIELD_LEN)
-   description = models.CharField(max_length=DEFAULT_FIELD_LEN)
-   logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
-
-    def __unicode__(self):
-        return self.name

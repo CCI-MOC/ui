@@ -66,7 +66,7 @@ def createObject(request, object_class):
         form = forms.formName(request.POST)
         
         if form.is_valid():
-            user = retrieveObject("User", request.session['username'])
+            user = helpers.retrieveObject("User", request.session['username'])
 
             try:
                 new_object = models.object_class(user=user, **form.cleaned_data)
@@ -74,7 +74,7 @@ def createObject(request, object_class):
                 print "Error, %s not made" % object_class
                 new_object = None
 
-            if project is not None:
+            if new_object is not None:
                 new_object.save()
 
     return HttpResponseRedirect('/clouds')
@@ -112,6 +112,8 @@ def createProject(request):
     make new project in db
     """
     if request.method == "POST":
+
+        form = forms.createProject(request.POST)
         
         if form.is_valid():
             print "form is valid"

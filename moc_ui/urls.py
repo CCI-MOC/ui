@@ -17,6 +17,8 @@ urlpatterns += patterns('form-views',
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),
+    url(r'^create(?P<object_name>.+)', createObject),
+    url(r'^delete(?P<object_name>.+)', deleteObject),
     # projects control
     url(r'^createProject', createProject),
     url(r'^deleteProject', deleteProject),
