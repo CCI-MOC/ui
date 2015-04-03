@@ -57,11 +57,11 @@ class Cluster_Account(models.Model):
     """A user account within an openstack cluster.
 
     Each of these belongs to a marketplace UI user. We store that user's
-    openstack credentials in the database, including username/password.
+    openstack credentials in the database, including user_name/password.
     These are used by OSProject to obtain a token when necessary.
     """
     ## Account Specific Information, for authorization
-    cluster_username = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    cluster_user_name = models.CharField(max_length=DEFAULT_FIELD_LEN)
     cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
 
     ## Foreign Keys for to link to a user and cluster 
@@ -69,7 +69,7 @@ class Cluster_Account(models.Model):
     cluster = models.ForeignKey(Cluster)
 
     def __unicode__(self):
-        return '%r@%r' % (self.cluster_username, self.cluster.title)
+        return '%r@%r' % (self.cluster_user_name, self.cluster.title)
 
 ##################
 # Project tables #
@@ -83,14 +83,9 @@ class UI_Project(models.Model):
     users = models.ManyToManyField(User)
 
     ## Service Defaults 
-    default_compute = models.ForeignKey(Service)
-    default_storage = models.ForeignKey(Service)
-    default_image = models.ForeignKey(Service)
 
     ## Registered Service Options
-    compute_list = models.ManyToManyField(Service)
-    storage_list = models.ManyToManyField(Service)
-    image_list = models.ManyToManyField(Service)
+    service_list = models.ManyToManyField(Service)
 
     def __unicode__(self):
         return self.name
@@ -101,7 +96,7 @@ class Cluster_Project(models.Model):
     token = models.TextField(default=None, blank=True, null=True)
 
     ## Link to a cluster    
-    cluster_account = models.ManyToManyField(ClusterAccount)
+    cluster_account = models.ManyToManyField(Cluster_Account)
 
     def __unicode__(self):
         return self.name
@@ -117,7 +112,7 @@ class Cluster_Project(models.Model):
         """
         try:
             if self.token is None:
-                client = keystoneclient.Client(username=self.cluster_account.cluster_username,
+                client = keystoneclient.Client(user_name=self.cluster_account.cluster_user_name,
                                                password=self.cluster_account.cluster_password,
                                                auth_url=self.cluster_account.cluster.auth_url,
                                                tenant_name=self.name,
@@ -141,7 +136,7 @@ class Cluster_Project(models.Model):
         """Get a nova client for the tenant."""
         # TODO: We ought to be able to derive this from the keystone client,
         # but it's proving trickier than I expected --isd
-        return novaclient.Client(self.cluster_account.cluster_username,
+        return novaclient.Client(self.cluster_account.cluster_user_name,
                                  self.cluster_account.cluster_password,
                                  self.name,
                                  self.cluster_account.cluster.auth_url)

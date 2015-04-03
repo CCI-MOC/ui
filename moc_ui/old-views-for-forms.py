@@ -16,13 +16,13 @@ def login(request):
     if request.method == 'POST':
         form = forms.login(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            user_name = form.cleaned_data['user_name']
             password = form.cleaned_data['password']
 
-            user = retrieveObject("User", username)
+            user = retrieveObject("User", user_name)
             if user is not None:
                 if user.verify_password(password=password):
-                    request.session['username'] = username
+                    request.session['user_name'] = user_name
                     return HttpResponseRedirect('/clouds')
 
     return HttpResponseRedirect('/')
@@ -38,23 +38,23 @@ def register(request):
     """ Register new user with keystone;
     called from login page Needs error checking """
     if request.method == "POST":
-        form = forms.userRegister(request.POST)
+        form = forms.User_Register(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            user_name = form.cleaned_data['user_name']
             password = form.cleaned_data['password']
 
-            user = retrieveObject("User", username)
+            user = retrieveObject("User", user_name)
             if user is None:
-                newuser = models.User(name=username)
-                newuser.set_password(password=password)
-                newuser.save()
-                request.session['username'] = username
+                new_user = models.User(name=user_name)
+                new_user.set_password(password=password)
+                new_user.save()
+                request.session['user_name'] = user_name
                 return HttpResponseRedirect('/clouds')
 
     return HttpResponseRedirect('/')
 
 ## Default create view
-def createObject(request, object_class):
+def Create_Object(request, object_class):
     """
     Process POST form for generic Object 
     if the object doesn't exist and the user is registered,
@@ -62,11 +62,11 @@ def createObject(request, object_class):
     """
     if request.method == "POST":
         ## concatinate object_class with create to get correct form
-        formName = "create%s" % object_class
-        form = forms.formName(request.POST)
+        form_name = "Create_%s" % object_class
+        form = forms.form_name(request.POST)
         
         if form.is_valid():
-            user = helpers.retrieveObject("User", request.session['username'])
+            user = helpers.Retrieve_Object("User", request.session['user_name'])
 
             try:
                 new_object = models.object_class(user=user, **form.cleaned_data)
@@ -79,7 +79,7 @@ def createObject(request, object_class):
 
     return HttpResponseRedirect('/clouds')
 
-def deleteObject(request, object_class):
+def Delete_Object(request, object_class):
     """
     Process form to delete an object.
     if the object exists and user is registered,
@@ -87,11 +87,11 @@ def deleteObject(request, object_class):
     """
     if request.method == "POST":
         ## grab the appropriate form
-        formName = "create%s" % object_class
-        form = forms.formName(request.POST)
+        form_name = "Create_%s" % object_class
+        form = forms.form_name(request.POST)
 
         if form.is_valid():
-            user = retrieveObject("User", request.session['username'])
+            user = retrieve_object("User", request.session['user_name'])
 
             try:
                 del_object = models.object_class.objects.get(user=user, **form.cleaned_data)
@@ -117,7 +117,7 @@ def createProject(request):
         
         if form.is_valid():
             print "form is valid"
-            user = models.User.objects.get(name=request.session['username'])
+            user = models.User.objects.get(name=request.session['user_name'])
             print user
             project_name = form.cleaned_data['name']
             print project_name
@@ -143,7 +143,7 @@ def deleteProject(request):
     if request.method == "POST":
         form = forms.deleteProject(request.POST)
         if form.is_valid():
-            user = retrieveUser(request.session['username'])
+            user = retrieveUser(request.session['user_name'])
             project_name = form.cleaned_data['name']
 
             try:
@@ -166,9 +166,9 @@ def createClusterAccount(request):
     if request.method == "POST": 
         form = forms.createCluster(request.POST) 
         if form.is_valid(): 
-            user = retrieveUser(request.session['username'])
+            user = retrieveUser(request.session['user_name'])
             cluster_name = form.cleaned_data['cluster'] 
-            cluster_username = form.cleaned_data['cluster_username'] 
+            cluster_user_name = form.cleaned_data['cluster_user_name'] 
             cluster_password = form.cleaned_data['cluster_password'] 
 
             try:
@@ -184,7 +184,7 @@ def createClusterAccount(request):
 
             if cluster is not None and user is not None:
                 try:
-                    clusterAccount = models.ClusterAccount(cluster_username=cluster_username, cluster_password=cluster_password, 
+                    clusterAccount = models.ClusterAccount(cluster_user_name=cluster_user_name, cluster_password=cluster_password, 
                                              cluster=cluster, user=user) 
                 except:
                     clusterAccount = None
@@ -198,7 +198,7 @@ def deleteClusterAccount(request):
     if request.method == "POST": 
         form = forms.deleteCluster(request.POST)
         if form.is_valid():
-            user = retrieveUser(request.session['username'])
+            user = retrieveUser(request.session['user_name'])
             osProject_name = form.cleaned_data['name'] 
 
             try:
@@ -225,7 +225,7 @@ def createVM(request):
     if request.method == "POST":
         form = forms.createVM(request.POST)
         if form.is_valid():
-            user = retrieveUser(request.session['username'])
+            user = retrieveUser(request.session['user_name'])
             vm_name = form.cleaned_data['name']
             OSProject = form.cleaned_data['provider']
             try: 
@@ -243,7 +243,7 @@ def deleteVM(request):
     if request.method == "POST":
         form = forms.deleteVM(request.POST)
         if form.is_valid():
-            user = retrieveUser(request.session['username'])
+            user = retrieveUser(request.session['user_name'])
             vm_name = form.cleaned_data['name']
 
             try:
@@ -260,7 +260,7 @@ def controlVM(request):
     if request.method == "POST": 
         form = forms.controlVM(request.POST) 
         if form.is_valid(): 
-            user_name = request.session['username']
+            user_name = request.session['user_name']
             vm_uuid = form.cleaned_data['name'] 
             action = form.cleaned_data['action']
 

@@ -11,8 +11,8 @@ def retrieveUser(userName):
     except: 
         return None 
 
-def retrieveObject(Object, objectName):
+def Retrieve_Object(Object, object_name):
     try:
-        return models.Object.objects.get(name=objectName)
+        return models.Object.objects.get(name=object_name)
     except: 
         return None 

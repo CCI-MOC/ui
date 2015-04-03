@@ -7,7 +7,7 @@
 /* html div over-rides */
 body {
     /* background options */
-    background-image: url("/static/coloring_flowers.jpg");
+    background-image: url("/static/low_poly_wave.png");
     background-size:   contain contain;                      
     background-repeat: no-repeat;
     /*background-position: center center;             optionally, center the image */

@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from moc_ui.views import *
+from views import *
 
 ##Template Rendering and querying state
-urlpatterns = patterns('template-views',
+urlpatterns = patterns('',
     # front page
     url(r'^$', front_page),
     # cloud splash
@@ -12,23 +12,24 @@ urlpatterns = patterns('template-views',
     url(r'^market/(?P<project>.+)', market),
 )
 ##Form Processing
-urlpatterns += patterns('form-views',
+urlpatterns += patterns('',
     # user management 
     url(r'^login', login),
     url(r'^register', register),
     url(r'^logout', logout),
-    url(r'^create(?P<object_name>.+)', createObject),
-    url(r'^delete(?P<object_name>.+)', deleteObject),
+    ## DB dusting
+    url(r'^Create/(?P<object_class>.+)', Create_Object),
+    url(r'^Delete/(?P<object_class>.+)', Delete_Object),
     # projects control
-    url(r'^createProject', createProject),
-    url(r'^deleteProject', deleteProject),
-    # cluster control
-    url(r'^createClusterAccount', createClusterAccount),
-    url(r'^deleteClusterAccount', deleteClusterAccount),
-    url(r'^createOSProject', createOSProject),
-    url(r'^deleteOSProject', deleteOSProject),
-    # vm control 
-    url(r'^createVM', createVM),
-    url(r'^deleteVM', deleteVM),
-    url(r'^controlVM', controlVM),
+#    url(r'^createProject', createProject),
+#    url(r'^deleteProject', deleteProject),
+#    # cluster control
+#    url(r'^createClusterAccount', createClusterAccount),
+#    url(r'^deleteClusterAccount', deleteClusterAccount),
+#    url(r'^createOSProject', createOSProject),
+#    url(r'^deleteOSProject', deleteOSProject),
+#    # vm control 
+#    url(r'^createVM', createVM),
+#    url(r'^deleteVM', deleteVM),
+#    url(r'^controlVM', controlVM),
 )
