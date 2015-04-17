@@ -7,6 +7,6 @@
 
 python manage.py syncdb
 
-mkdir sessions
+mkdir session
 
-pip install requirements.txt
+pip install -r requirements.txt
