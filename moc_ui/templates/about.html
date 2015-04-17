@@ -3,149 +3,93 @@
 {% block title %}{{request.session.user_name}}'s Clouds{% endblock %}
 
 {% block content %}
-<div class="row vert-padded"></div>
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>What is MOC</h1>
+                        <p>
+                            The Massachusetts Open Cloud (MOC) is a new public cloud, designed and implemented in Massachusetts as the first “Open Cloud eXchange” <a href="http://www.cs.bu.edu/fac/best/res/papers/ic14.pdf">(OCX) </a>— a novel, transformative marketplace model for public cloud offerings. 
+                        </p>
 
-<div class="container-fluid">
-    <div class="col-md-10 col-centered">
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default floating-block">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <div class="row">
-                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>cloud</small></h2>
-                            <div class="col-md-5 btn-group pull-right" role="group">
-                                <button type='button' data-toggle="modal" data-target="#create_UI_Project" 
-                                class="btn btn-success" aria-label="Left">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OCX project
-                                </button>
-                                <!--
-                                <button type='button' data-toggle="modal" data-target="#createClusterAccount" 
-                                class="btn btn-info" aria-label="Left"> 
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OS Account
-                                </button>
-                                <button type='button' data-toggle="modal" data-target="#deleteClusterAccount" 
-                                class="btn btn-danger" aria-label="Left"> 
-                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> OS Account
-                                </button>
-                                -->
-                            </div>
-                        </div>
+                        <p>The OCX marketplace model provides an open and customizable approach to the design and operation of cloud computing that stands in sharp contrast to the closed and prescribed solutions offered by today’s single-provider clouds. 
+                        </p>
+
+                        <p>
+                        In the MOC, multiple entities engage on a level playing field to provide computing resources and services as well as to add value to offerings by other entities in support of a wide range of data-driven applications.
+                        </p>
+                        
                     </div>
                 </div>
-                {% for project in project_list %}
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-7 pull-left">
-                                <h3>{{project.name}}</h3>
-                        </div>
-                        <div class="col-md-5 btn-group pull-right" role="group">
-                            <button type="button" class="btn btn-default" data-toggle="collapse" 
-                            data-parent="#accordian" data-target="#{{project.name}}_vms">
-                                <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" class="btn btn-info" data-toggle="collapse" 
-                            data-parent="#accordian" data-target="#{{project.name}}_info">
-                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                            </button>
-                            <a href="/market/{{project.name}}" class="btn btn-primary" 
-                            aria-label="Left Align"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
-                            <button type="button" data-toggle="modal" data-target="#add_Cluster_Project"
-                            class="btn btn-success" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" class="btn btn-warning" data-toggle="collapse" 
-                            data-parent="#accordian" data-target="#{{project.name}}_settings">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" data-toggle="modal" data-target="#delete_UI_Project"
-                            class="btn btn-danger" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
-                            </button>
-                        </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Benefits of using MOC</h1>
+
+                        <h4>Completely Open</h4>
+                        <p>
+                            The MOC is based on the concept of an Open Cloud eXchange (OCX). In an OCX, multiple vendors, multiple solution providers, and multiple resellers and aggregators of services can all set up shop in the MOC. 
+                        </p>
+
+                        <h4>Choosing your hardware provider</h4>
+                        <p>
+                            Because of this diversity, unlike a closed cloud, customers would not be locked in — they can choose, compare, and switch between different offerings. The MOC, as an open cloud, stands in sharp contrast to the monopoly of closed clouds where choices are limited and competition is almost non-existent. You can use one platform to manage the hardware(datacenter) provided by CISCO or lenovo. 
+                        </p>
+
+                        <h4>Leveraging Assets</h4>
+                        <p> 
+                            In the MOC setting, the owner of a data asset (say the city of Boston) could store its data on storage devices provided by a hardware vendor (say EMC), allowing an entrepreneur (say a student), with a novel idea that leverages this data, to develop an app that can be sold in the App Store. Of course, the entrepreneur will have to pay Dell for using their computers, and will have to pay the city of Boston for the right to access their data; the city of Boston will have to pay EMC for using their storage; and both EMC and Dell will have to pay the data center (say MGHPCC) for the space and power that their devices use. This marketplace where multiple stakeholders can contribute different assets and where these assets are bought and sold is what is unique about the MOC and what stands in sharp contrast to today’s closed clouds stood up by a single provider.
+                        </p>
+
+                        <h4>Give users complete control of resource</h4>
+                        <p>Current cloud offerings expose a constrained set of resources, e.g., a few differently sized virtual machines via AWS. The MOC”s OCX-based architecture exposes resources from the raw hardware up through application-layer services, providing a richer environment for developers and solution providers. For example, the MOC will provide and expose the capabilities of more diverse hardware, e.g., GPU clusters, HPC machines, gateways to other facilities. Also, it will enable significantly greater control of its services than what is typically possible with commercial providers. For example, the MOC will allow the deployment of experimental or special-purpose hypervisors; it will allow the development and use of different aggregation and pricing mechanisms; and it will allow the development of new services, such as checkpointing and highly-elastic provisioning of services.
+                        </p>
+
                     </div>
                 </div>
-                <div id="{{project.name}}_vms" class="panel-collapse collapse">
-                    <h4>your machines</h4>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <td>vm name</td>
-                                <td>vm state</td>
-                                <td>vm image</td>
-                                <td>vm provider</td>
-                                <td>controls</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for vm in project.vm_list %}
-                            <tr>
-                                <td>{{vm.name}}</td>
-                                <td>{{vm.state}}</td>
-                                <td>{{vm.image}}</td>
-                                <td>{{vm.provider}}</td>
-                                <td>
-                                    <form action="/controlVM/" method="POST"><div class="btn-group" role="group">
-                                        {% csrf_token %}
-                                        {% if vm.state == 'off' %}
-                                        <button name="action" value="start" type="submit" class="btn btn-success" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                        </button>
-                                        {% else %}
-                                        <button name="action" value="stop" type="submit" class="btn btn-warning" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
-                                        </button>
-                                        {% endif %}
-                                        <button name="action" value="VNC" type="submit" class="btn btn-info" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-                                        </button>
-                                        <button name="action" value="settings" type="submit" class="btn btn-primary" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                        </button>
-                                        <button name="action" value="stop" type="submit" class="btn btn-danger" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                                        </button>
-                                    </form></div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>News about MOC</h1>
+
+                    <a href="http://techcrunch.com/2014/07/02/massachusetts-open-cloud-project-hopes-to-create-ad-hoc-infrastructure-marketplace/">
+                        <h4>July 2, 2014:</h4>
+                        <h4>Massachusetts Open Cloud Project Hopes To Create Ad-Hoc Infrastructure Marketplace</h4>
+                    </a>
+
+                    <a href="http://masstech.org/press-releases/governor-patrick-announces-funding-launch-massachusetts-open-cloud-project-celebrates">
+                        <h4>April 25, 2014:</h4>
+                        <h4 >Governor Patrick Announces Funding to Launch Massachusetts Open Cloud Project
+Celebrates Release of 2014 Mass Big Data Report
+                        </h4>
+                    </a>
+                    
+
+
+                        <p>
+
+                        </p>
+                    </div>
                 </div>
-                <div id="{{project.name}}_info" class="panel-collapse collapse">
-                    <h4>your usage</h4>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <td>name</td>
-                                <td>uptime</td>
-                                <td>% active</td>
-                                <td>% quota</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for vm in project.vm_list %}
-                            <tr>
-                                <td>{{vm.name}}</td>
-                                <td>300 days</td>
-                                <td>30%</td>
-                                <td>25%</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+
+
+                 <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Collaborators</h1>
+                        <p>
+                            Boston University , Hardvard  University, Massachusetts Institute of Technology, University of Massachusetts, Northeastern University, Intel, Redhat, lenovo, FUJITSU, Mellanox Technology, Cisco, Two Sigma, Juniper Networks, SGI, Brocade, MathWorks, DataDirect Networks, EnterpriseDB, riverbed, Plexxi 
+                        </p>
+                    </div>
                 </div>
-                {% endfor %}
-                <div class="panel-footer">
-                </div>
+
+
             </div>
         </div>
-    </div>
 
-    {% for form_data in cloud_modals %}
-        {% include "modals/cloudModal.html" %}
-    {% endfor %}
-
-    {% include "modals/createVM.html" %}
+  
 
 </div>
 {% endblock %}
