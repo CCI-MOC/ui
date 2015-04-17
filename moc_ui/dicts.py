@@ -16,16 +16,6 @@ reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title
 
 
 # CLOUDS PAGE
-cloud_modals = [{'id': 'Create_UI_Project', 'action': '/Create/UI_Project', 'title': 'Create Project', 'form': forms.Create_UI_Project()},
-                 {'id': 'Delete_UI_Project', 'action': '/Delete/Project', 'title': 'Delete Project', 'form': forms.Delete_UI_Project()},
-                 {'id': 'Create_Cluster_Account', 'action': '/Create/Cluster_Account', 'title': 'Add Cluster Account', 'form': forms.Create_Cluster_Account()},
-                 {'id': 'Delete_Cluster_Account', 'action': '/Delete/Cluster_Account', 'title': 'Delete Cluster Account', 'form': forms.Delete_Cluster_Account()},
-                 {'id': 'Create_Cluster_Project', 'action': '/create/OSProject', 'title': 'Add Cluster Project', 'form': forms.Create_Cluster_Project()},
-                 {'id': 'deleteOSProject', 'action': '/deleteOSProject', 'title': 'Delete Cluster Project', 'form': forms.Delete_Cluster_Project()},
-                 #{'id': 'createVM', 'title': 'Create VM', 'form': forms.create_VM()},
-                 {'id': 'deleteVM', 'action': '/deleteCluster', 'title': 'Delete VM', 'form': forms.Delete_VM()},]
-
-
 test_vm_list_1 = [{'name': 'hadoop master', 'state': '=)', 'provider': 'HU-prod', 'image': 'centOS 7'},
                 {'name': 'hadoop slave 1', 'state': '=)', 'provider': 'BU-prod', 'image': 'centOS 7'},
                 {'name': 'hadoop slave 2', 'state': '=)', 'provider': 'NE-prod', 'image': 'centOS 7'},

@@ -1,13 +1,18 @@
+# Django helpers for rendering html and redirecting
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-# Forms to use in pages
-import forms
 # Dictionaries to pass to template context
 import dicts
-# Models to access our db's tables
+# Forms to use in pages
+import forms
+# Models to access our database's tables
 import models 
 # Helper functions to make form processing easier 
-import helpers 
+import query_helpers as helpers
+# HTML descriptions mixed with modal calls, 
+# passed to template context in order to
+# render modal / button / table templates
+import html_helpers as html
 
 
 ####################
@@ -22,20 +27,24 @@ def front_page(request):
     
     return render(request, 'front_page.html', 
                  {'login_data': dicts.login_data, 'login_form': forms.Login(), 
-                  'reg_modal': dicts.reg_modal, 'reg_form': forms.User_Register()}) 
+                  'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegister()}) 
 
 def clouds(request): 
     """List projects and vms in user's clouds""" 
     
     createVMform = forms.Create_VM()
 
-    user = helpers.Retrieve_Object("User", request.session['username'])
+    user = helpers.retrieve_object("User", "user_name", request.session['user_name'])
+    if user is not None:
+        try:
+            projects = models.UIProject.objects.filter(users=user)
+            print projects
+        except Exception as e:
+            print e 
+            projects = []
+    else:
+        return HttpResponseRedirect('/')
 
-    try:
-        projects = models.UI_Project.objects.filter(users=user)
-    except Exception as e:
-        print e 
-        projects = []
 
     project_list = []
     for project in projects:
@@ -48,7 +57,10 @@ def clouds(request):
         project_list.append(project)
 
 
-    return render(request, 'clouds.html', {'project_list': project_list, 'cloud_modals': dicts.cloud_modals, 'createVMform': createVMform })
+    return render(request, 'clouds.html', 
+                  {'project_list': project_list, 
+                   'cloud_modals': html.cloud_modals(request), 
+                   'createVMform': createVMform })
 
 def market(request, project):
     market_list = []
@@ -58,6 +70,8 @@ def market(request, project):
 
     for market in dicts.test_market_list:
         market_list.append(market)
+
+    return HttpResponseRedirect('/')
 
 ################
 ## FORM VIEWS ##
@@ -73,16 +87,21 @@ def login(request):
     if request.method == 'POST':
         form = forms.Login(request.POST)
         if form.is_valid():
+            print "form is valid"
             user_name = form.cleaned_data['user_name']
             password = form.cleaned_data['password']
 
-            user = helpers.Retrieve_Object("User", user_name)
+            user = helpers.retrieve_object("User", "user_name", user_name)
             if user is not None:
+                print "verifying password"
                 if user.verify_password(password=password):
                     request.session['user_name'] = user_name
                     return HttpResponseRedirect('/clouds')
 
-    return HttpResponseRedirect('/')
+    # temporary workaround to auto-login
+    print "using workaround"
+    request.session['user_name'] = "jbell" 
+    return HttpResponseRedirect('/clouds')
 
 def logout(request):
     """View to Logout of session 
@@ -94,7 +113,7 @@ def logout(request):
 
     return HttpResponseRedirect('/')
 ## STILL EXISTS BECAUSE OWEN IS WORKING ON LOGIN PAGE 
-## I DON'T WANT TO RESTRUCTURE FORMS, WILL BE Create_Object
+## I DON'T WANT TO RESTRUCTURE REG FORMS, WILL BE Create_Object
 def register(request):
     """Register new user with keystone;
 
@@ -102,94 +121,95 @@ def register(request):
     """
 
     if request.method == "POST":
-        form = forms.User_Register(request.POST)
+        form = forms.UserRegister(request.POST)
         if form.is_valid():
             user_name = form.cleaned_data['user_name']
             password = form.cleaned_data['password']
 
-            user = helpers.Retrieve_Object("User", user_name)
+            user = helpers.retrieve_object("User", "user_name", user_name)
             if user is None:
-                new_user = models.User(name=user_name)
-                new_user.set_password(password=password)
+                new_user = models.User.create_user(user_name=user_name,
+                                                   password=password)
                 new_user.save()
                 request.session['user_name'] = user_name
                 return HttpResponseRedirect('/clouds')
+            else:
+                print "user %s exists" % user
+        else:
+            print form.errors 
+        
 
     return HttpResponseRedirect('/')
 
-## Default create view
-def Create_Object(request, object_class):
-    """Process POST form for generic Object 
-
-    if the object doesn't exist and the user is registered,
-    creates the object
-    """
+# Generic dust views
+# Earth to earth, ashes to ashes, dust to dust
+def create_object(request, object_class):
+    """Process POST form to create generic database object"""
     if request.method == "POST":
-        ## Concatinate object class to get correct form name
-        form_name = "Create_%s" % object_class
-        ## Grab class for db creation and initialize with POST info
-        post_form = getattr(forms, form_name)(request.POST)
+        # get the current user for auth and fk creation
+        current_user = request.session['user_name']
+        # Grab form class for object creation and initialize with request info
+        # Passing request.POST for django auto-pop, request to pull session info out
+        post_form = getattr(forms, object_class)(request.POST)
+        # Debug code to print form html to console
+        for field in post_form:
+           print "%s: %s" % (field.label_tag(), field.value())
         if post_form.is_valid():
-            ## Sort form variables into dicts of init variables and foreign keys
-            init_dict = {}
-            fk_dict = {}
-            ## iterate through a sanatized dict of inputs
-            for form_field, form_value in post_form.cleaned_data.iteritems():
-                if '_fk' in form_field:
-                    fk_dict.update({form_field:form_value})
-                else:
-                    init_dict.update({form_field:form_value})
+            # Debug code to print form info in better format
+            for key, value in post_form.cleaned_data.iteritems():
+                print "%s: %s" % (key, value)
             try:
-                ## Grab Class for db creation
-                initializer = getattr(models, object_class)
-                ## Create new_object
-                new_object = initializer(**init_dict)
+                # Creates a new database object
+                # Saves the new object by default
+                new_object = post_form.save(request)
+                # Create the foreing key and many-to-many relations
+                #new_object.users.add(current_user)
+                #new_object.save()
+                # iterate through fks and print them out
+                object_model = getattr(models, object_class)
+                print "object model: %s" % object_model
+                print "fields: "
+                field_names = []
+                for field in object_model._meta.get_fields():
+                    print field
+                    field_names.push(field_names)
+#                for field, field_name in object_model._meta.fields:
+#                    print field_name 
+#                    if field.many_to_many:
+#                        print field.rel.to
             except Exception as e:
+                print "Hit exception:"
                 print e 
-                new_object = None
-
-            ## Save object before adding many-to-many relation
-            if new_object is not None:
-                new_object.save()
-
-            ## Iterate through foreign keys and add them to the 
-            for fk in fk_dict:
-                print blah
-
-            user = helpers.Retrieve_Object("User", request.session['user_name'])
-
-            try:
-                new_object.users.add(user)
-            except Exception as e:
-                print e 
-                new_object = None
-
-            if new_object is not None:
-                new_object.save()
-
+        else:
+            print post_form.errors
     return HttpResponseRedirect('/clouds')
 
-def Delete_Object(request, object_class):
-    """Process form to delete an object.
-
-    if the object exists and user is registered,
-    deletes object from database.
-    """
+def delete_object(request, object_class):
+    """Process POST form to delete generic database object"""
     if request.method == "POST":
-        ## grab the appropriate form
-        form_name = "Create_%s" % object_class
-        form = forms.form_name(request.POST)
-
-        if form.is_valid():
-            user = retrieve_object("User", request.session['user_name'])
-
+        # Grab form class for object deletion and initialize with request and POST info
+        post_form = getattr(forms, object_class)(request.POST, request)
+        # Debug code to print form html to console
+        for field in post_form:
+            print "%s: %s" % (field.label_tag(), field.value())
+        if post_form.is_valid():
+            # Debug code to print form info in better format
+            for key, value in post_form.cleaned_data.iteritems():
+                print "%s: %s" % (key, value)
             try:
-                del_object = models.object_class.objects.get(user=user, **form.cleaned_data)
-            except:
-                print "Error, %s not made" % object_class
-                del_object = None
-
-            if del_object is not None:
-                del_object.delete()
-
+                # Create a database object from the post form, but doesn't commit
+                form_object_from_form = post_form.save(commit=False)
+                # Delete object, commits to database
+                form_object_from_form.delete()
+            except Exception as e:
+                print "Hit exception:"
+                print e 
+        else:
+            print post_form.errors
     return HttpResponseRedirect('/clouds')
+
+def control_vm(request, action, vm_name):
+    if request.method == "PUT":
+    # check that the user has privalidge on vm
+    # actually do the action
+        pass

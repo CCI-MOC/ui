@@ -19,7 +19,7 @@ DEFAULT_FIELD_LEN = 255
 # User information 
 class User(models.Model):
     """A user of the marketplace UI"""
-    name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
+    user_name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
     password_hash = models.CharField(max_length=PASSHASH_LEN)
 
     def verify_password(self, password):
@@ -29,57 +29,71 @@ class User(models.Model):
         self.password_hash = sha512_crypt.encrypt(password)
 
     def __unicode__(self):
-        return self.name
+        return self.user_name
+
+    @classmethod
+    def create_user(cls, user_name, password):
+        new_user = cls(user_name=user_name)
+        new_user.set_password(password)
+        return new_user 
 
 # A service in the marketplace
 class Service(models.Model):
-    """A service in the directory"""
+    """A service in the marketplace"""
     ## specifications for a service
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
     service_type = models.CharField(max_length=DEFAULT_FIELD_LEN)
     description = models.CharField(max_length=DEFAULT_FIELD_LEN)
     logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    availability = models.BooleanField()
+    availability = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name
 
 # Cluster information
 class Cluster(models.Model):
-    """An openstack cluster."""
+    """An openstack installation available to users."""
+    CLUSTER_CHOICES = (('HARVARD_PROD', 'Harvard'),
+                       ('NORTHEASTERN_PROD', 'Northeastern'),
+                      )
     title = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    auth_url = models.URLField()
+    cluster = models.CharField(max_length=DEFAULT_FIELD_LEN,
+                               choices=CLUSTER_CHOICES, 
+                               default='HARVARD_PROD')
+    # auth_url = models.URLField()
 
     def __unicode__(self):
         return self.title
-
-class Cluster_Account(models.Model):
-    """A user account within an openstack cluster.
-
-    Each of these belongs to a marketplace UI user. We store that user's
-    openstack credentials in the database, including user_name/password.
-    These are used by OSProject to obtain a token when necessary.
-    """
-    ## Account Specific Information, for authorization
-    cluster_user_name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
-
-    ## Foreign Keys for to link to a user and cluster 
-    user = models.ForeignKey(User)
-    cluster = models.ForeignKey(Cluster)
-
-    def __unicode__(self):
-        return '%r@%r' % (self.cluster_user_name, self.cluster.title)
+# old cluster_account code, now assuming User_name and password from our user
+#info are valid for OS
+#class Cluster_Account(models.Model):
+#    """A user account within an openstack cluster.
+#
+#    Each of these belongs to a marketplace UI user. We store that user's
+#    openstack credentials in the database, including user_name/password.
+#    These are used by OSProject to obtain a token when necessary.
+#    """
+#    ## Account Specific Information, for authorization
+#    cluster_user_name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+#    cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
+#
+#    ## Foreign Keys for to link to a user and cluster 
+#    user = models.ForeignKey(User)
+#    cluster = models.ForeignKey(Cluster)
+#
+#    def __unicode__(self):
+#        return '%r@%r' % (self.cluster_user_name, self.cluster.title)
 
 ##################
 # Project tables #
 ##################
 
 # A project in our UI
-class UI_Project(models.Model):
+class UIProject(models.Model):
     """A user's project in the moc ui."""
     ## Project information
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    ## Foreign Keys
     users = models.ManyToManyField(User)
 
     ## Service Defaults 
@@ -90,13 +104,19 @@ class UI_Project(models.Model):
     def __unicode__(self):
         return self.name
 
-class Cluster_Project(models.Model):
-    """An openstack project that a user has access to."""
+class ClusterProject(models.Model):
+    """An openstack project that a user has access to.
+       Currently a workaround because keystone doesn't
+       have list_projects for a non-admin in our
+       policy file
+    """
     name = models.CharField(max_length=DEFAULT_FIELD_LEN)
     token = models.TextField(default=None, blank=True, null=True)
 
     ## Link to a cluster    
-    cluster_account = models.ManyToManyField(Cluster_Account)
+    cluster = models.ForeignKey(Cluster)
+    ## UI Project that the ClusterProject is attached to
+    ui_project = models.ForeignKey(UIProject)
 
     def __unicode__(self):
         return self.name

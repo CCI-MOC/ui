@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{request.session.username}}'s Cloud{% endblock %}
+{% block title %}{{request.session.user_name}}'s Clouds{% endblock %}
 
 {% block content %}
 <div class="row vert-padded"></div>
@@ -12,12 +12,13 @@
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div class="row">
-                            <h2 class="col-md-7 pull-left">  {{request.session.username}}'s <small>cloud</small></h2>
+                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>cloud</small></h2>
                             <div class="col-md-5 btn-group pull-right" role="group">
-                                <button type='button' data-toggle="modal" data-target="#Create_UI_Project" 
+                                <button type='button' data-toggle="modal" data-target="#create_UI_Project" 
                                 class="btn btn-success" aria-label="Left">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> MOC project
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OCX project
                                 </button>
+                                <!--
                                 <button type='button' data-toggle="modal" data-target="#createClusterAccount" 
                                 class="btn btn-info" aria-label="Left"> 
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OS Account
@@ -26,6 +27,7 @@
                                 class="btn btn-danger" aria-label="Left"> 
                                     <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> OS Account
                                 </button>
+                                -->
                             </div>
                         </div>
                     </div>
@@ -47,7 +49,7 @@
                             </button>
                             <a href="/market/{{project.name}}" class="btn btn-primary" 
                             aria-label="Left Align"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
-                            <button type="button" data-toggle="modal" data-target="#createOSProject"
+                            <button type="button" data-toggle="modal" data-target="#add_Cluster_Project"
                             class="btn btn-success" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                             </button>
@@ -55,7 +57,7 @@
                             data-parent="#accordian" data-target="#{{project.name}}_settings">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
-                            <button type="button" data-toggle="modal" data-target="#deleteProject"
+                            <button type="button" data-toggle="modal" data-target="#delete_UI_Project"
                             class="btn btn-danger" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
                             </button>

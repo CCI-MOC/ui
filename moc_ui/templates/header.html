@@ -12,7 +12,7 @@
       </ul>
       <div class="dropdown navbar-right">
         <button class="btn glyphicon glyphicon-user" style="font-size:1.5em" id="userProfile" data-toggle="dropdown" aria-expanded="true">
-        {{ request.session.username }}
+        {{ request.session.user_name }}
         </button>
         <ul class="dropdown-menu navbar-right" role="menu" aria-labelledby="userProfile">
           <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout/">Change Password</a></li>

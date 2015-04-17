@@ -18,16 +18,8 @@ urlpatterns += patterns('',
     url(r'^register', register),
     url(r'^logout', logout),
     ## DB dusting
-    url(r'^Create/(?P<object_class>.+)', Create_Object),
-    url(r'^Delete/(?P<object_class>.+)', Delete_Object),
-    # projects control
-#    url(r'^createProject', createProject),
-#    url(r'^deleteProject', deleteProject),
-#    # cluster control
-#    url(r'^createClusterAccount', createClusterAccount),
-#    url(r'^deleteClusterAccount', deleteClusterAccount),
-#    url(r'^createOSProject', createOSProject),
-#    url(r'^deleteOSProject', deleteOSProject),
+    url(r'^create/(?P<object_class>.+)', create_object),
+    url(r'^delete/(?P<object_class>.+)', delete_object),
 #    # vm control 
 #    url(r'^createVM', createVM),
 #    url(r'^deleteVM', deleteVM),

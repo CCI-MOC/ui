@@ -7,13 +7,13 @@
 /* html div over-rides */
 body {
     /* background options */
-    background-image: url("/static/low_poly_wave.png");
-    background-size:   contain contain;                      
-    background-repeat: no-repeat;
-    /*background-position: center center;             optionally, center the image */
+    background-image: url("/static/blue_clouds.jpg");
     background-attachment: fixed;
     background-size: cover;
+    background-repeat: no-repeat; 
+    /*background-position: center center;             optionally, center the image */
 
+    /* background-color: #3366FF; */
     /* text defaults */
     /* color: #428BCA; /* light blue */
     color: #444; /* gray */
@@ -90,7 +90,7 @@ input, select, textarea{
 
     background: #eeeeee;
 
-    opacity: .7;
+    opacity: .8;
 }
 
 .vert-padded { 
