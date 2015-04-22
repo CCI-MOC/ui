@@ -33,13 +33,13 @@ def front_page(request):
 
 
 def about(request):
-	return render(request,"about.html")
+	return render(request,"aboutPage.html")
 
 def terms(request):
-	return render(request, "terms.html")
+	return render(request, "termsPage.html")
 
 def helps(request):
-	return render(request, 'helps.html')
+	return render(request, 'helpPage.html')
 
 
 
