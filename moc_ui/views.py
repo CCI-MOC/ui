@@ -1,4 +1,4 @@
-# Django helpers for rendering html and redirecting
+    # Django helpers for rendering html and redirecting
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # Dictionaries to pass to template context
@@ -32,13 +32,12 @@ def front_page(request):
 def clouds(request): 
     """List projects and vms in user's clouds""" 
     
-    createVMform = forms.Create_VM()
 
     user = helpers.retrieve_object("User", "user_name", request.session['user_name'])
     if user is not None:
         try:
             projects = models.UIProject.objects.filter(users=user)
-            print projects
+            #print projects
         except Exception as e:
             print e 
             projects = []
@@ -60,7 +59,8 @@ def clouds(request):
     return render(request, 'clouds.html', 
                   {'project_list': project_list, 
                    'cloud_modals': html.cloud_modals(request), 
-                   'createVMform': createVMform })
+                  }
+                 )
 
 def market(request, project):
     market_list = []
@@ -149,34 +149,19 @@ def create_object(request, object_class):
         # get the current user for auth and fk creation
         current_user = request.session['user_name']
         # Grab form class for object creation and initialize with request info
+        form_name = "Create%s" % object_class
         # Passing request.POST for django auto-pop, request to pull session info out
-        post_form = getattr(forms, object_class)(request.POST)
+        post_form = getattr(forms, form_name)(request, request.POST)
         # Debug code to print form html to console
-        for field in post_form:
-           print "%s: %s" % (field.label_tag(), field.value())
+        #for field in post_form:
+           #print "%s: %s" % (field.label_tag(), field.value())
         if post_form.is_valid():
             # Debug code to print form info in better format
-            for key, value in post_form.cleaned_data.iteritems():
-                print "%s: %s" % (key, value)
+            #for key, value in post_form.cleaned_data.iteritems():
+                #print "%s: %s" % (key, value)
             try:
-                # Creates a new database object
-                # Saves the new object by default
+                # Call the save function on the form 
                 new_object = post_form.save(request)
-                # Create the foreing key and many-to-many relations
-                #new_object.users.add(current_user)
-                #new_object.save()
-                # iterate through fks and print them out
-                object_model = getattr(models, object_class)
-                print "object model: %s" % object_model
-                print "fields: "
-                field_names = []
-                for field in object_model._meta.get_fields():
-                    print field
-                    field_names.push(field_names)
-#                for field, field_name in object_model._meta.fields:
-#                    print field_name 
-#                    if field.many_to_many:
-#                        print field.rel.to
             except Exception as e:
                 print "Hit exception:"
                 print e 
@@ -187,20 +172,22 @@ def create_object(request, object_class):
 def delete_object(request, object_class):
     """Process POST form to delete generic database object"""
     if request.method == "POST":
-        # Grab form class for object deletion and initialize with request and POST info
-        post_form = getattr(forms, object_class)(request.POST, request)
+        form_name = "Delete%s" % object_class
+        # Grab form class and initialize with request and POST info
+        post_form = getattr(forms, form_name)(request, request.POST)
         # Debug code to print form html to console
-        for field in post_form:
-            print "%s: %s" % (field.label_tag(), field.value())
+#        for field in post_form:
+#            print "%s: %s" % (field.label_tag(), field.value())
         if post_form.is_valid():
             # Debug code to print form info in better format
-            for key, value in post_form.cleaned_data.iteritems():
-                print "%s: %s" % (key, value)
+#            for key, value in post_form.cleaned_data.iteritems():
+#                print "%s: %s" % (key, value)
+#            print "end of form data"
             try:
-                # Create a database object from the post form, but doesn't commit
-                form_object_from_form = post_form.save(commit=False)
-                # Delete object, commits to database
-                form_object_from_form.delete()
+                # Call the save function on the form 
+                form_object = post_form.save()
+                #print "name: %s" % form_object
+                #print "id: %d" % form_object.id
             except Exception as e:
                 print "Hit exception:"
                 print e 

@@ -12,12 +12,27 @@
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div class="row">
-                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>cloud</small></h2>
-                            <div class="col-md-5 btn-group pull-right" role="group">
+                            <h1 class="col-md-6 pull-left">  {{request.session.user_name}}'s <small>cloud</small></h1>
+                            <div class="col-md-3 btn-group" role="group">
                                 <button type='button' data-toggle="modal" data-target="#create_UI_Project" 
                                 class="btn btn-success" aria-label="Left">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OCX project
+                                    Create <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
                                 </button>
+                                <button type='button' data-toggle="modal" data-target="#delete_UI_Project" 
+                                class="btn btn-danger" aria-label="Left">
+                                    Delete <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-3 btn-group pull-right" role="group">
+                                <button type='button' data-toggle="modal" data-target="#add_Cluster_Project" 
+                                class="btn btn-success" aria-label="Left">
+                                    Create <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                                <button type='button' data-toggle="modal" data-target="#delete_Cluster_Project" 
+                                class="btn btn-danger" aria-label="Left">
+                                    Delete <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                            </div>
                                 <!--
                                 <button type='button' data-toggle="modal" data-target="#createClusterAccount" 
                                 class="btn btn-info" aria-label="Left"> 
@@ -28,7 +43,6 @@
                                     <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> OS Account
                                 </button>
                                 -->
-                            </div>
                         </div>
                     </div>
                 </div>

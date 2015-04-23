@@ -12,10 +12,6 @@ PASSHASH_LEN = len(sha512_crypt.encrypt(''))
 UUID_LEN = len(str(uuid.uuid1()))
 DEFAULT_FIELD_LEN = 255
 
-#########################
-# Basic building blocks #
-#########################
-
 # User information 
 class User(models.Model):
     """A user of the marketplace UI"""
@@ -53,40 +49,16 @@ class Service(models.Model):
 # Cluster information
 class Cluster(models.Model):
     """An openstack installation available to users."""
-    CLUSTER_CHOICES = (('HARVARD_PROD', 'Harvard'),
-                       ('NORTHEASTERN_PROD', 'Northeastern'),
-                      )
-    title = models.CharField(max_length=DEFAULT_FIELD_LEN)
-    cluster = models.CharField(max_length=DEFAULT_FIELD_LEN,
-                               choices=CLUSTER_CHOICES, 
-                               default='HARVARD_PROD')
-    # auth_url = models.URLField()
+    # CLUSTER_CHOICES = (('HARVARD_PROD', 'Harvard'),
+    #                    ('NORTHEASTERN_PROD', 'Northeastern'),
+    #                   )
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN,)
+                               # choices=CLUSTER_CHOICES, 
+                               # default='HARVARD_PROD')
+    auth_url = models.URLField()
 
     def __unicode__(self):
-        return self.title
-# old cluster_account code, now assuming User_name and password from our user
-#info are valid for OS
-#class Cluster_Account(models.Model):
-#    """A user account within an openstack cluster.
-#
-#    Each of these belongs to a marketplace UI user. We store that user's
-#    openstack credentials in the database, including user_name/password.
-#    These are used by OSProject to obtain a token when necessary.
-#    """
-#    ## Account Specific Information, for authorization
-#    cluster_user_name = models.CharField(max_length=DEFAULT_FIELD_LEN)
-#    cluster_password = models.CharField(max_length=DEFAULT_FIELD_LEN)
-#
-#    ## Foreign Keys for to link to a user and cluster 
-#    user = models.ForeignKey(User)
-#    cluster = models.ForeignKey(Cluster)
-#
-#    def __unicode__(self):
-#        return '%r@%r' % (self.cluster_user_name, self.cluster.title)
-
-##################
-# Project tables #
-##################
+        return self.name
 
 # A project in our UI
 class UIProject(models.Model):
@@ -124,11 +96,11 @@ class ClusterProject(models.Model):
     def get_keystoneclient(self):
         """Get a keystone client object for the tenant.
 
-        Returns the client object.
+           Returns the client object.
 
-        This may raise ``keystone.exceptions.AuthorizationFailure`` if
-        authorization fails for any reason, including stale tokens in
-        the database.
+           This may raise ``keystone.exceptions.AuthorizationFailure`` if
+           authorization fails for any reason, including stale tokens in
+           the database.
         """
         try:
             if self.token is None:
