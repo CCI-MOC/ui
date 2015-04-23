@@ -1,0 +1,150 @@
+/* over-arching overrides */
+@font-face {
+    font-family: lane_narrow_regular;
+    src: url("/static/lane_narrow_regular/LANENAR_.ttf");
+}
+
+/* html div over-rides */
+body {
+    /* background options */
+    background-image: url("/static/blue_clouds.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat; 
+    /*background-position: center center;             optionally, center the image */
+
+    /* background-color: #3366FF; */
+    /* text defaults */
+    /* color: #428BCA; /* light blue */
+    color: #444; /* gray */
+    font-family: lane_narrow_regular;
+
+    /* margins for elements */
+    padding: 25px 50px;
+    margin: 10px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px;
+    border-color: transparent;
+    vertical-align: center;
+    text-align: center;
+}
+
+td {
+    vertical-align: center;
+}
+
+th {
+    font-size: large; 
+    font-weight: bold;
+    text-align: center;
+
+}
+h1, h2, h3, h4 {
+    margin:auto;
+    text-align: center;
+    vertical-align: middle;
+}
+
+input, select, textarea{
+    color: #000000;
+}
+
+/* bootstrap 3 over-rides */
+.list-group {
+    text-align: center;
+    vertical-align: center;
+
+}
+
+.panel {
+    text-align: center;
+    vertical-align: center;
+}
+
+.panel-body {
+    margin: 0 auto;
+    vertical-align: center;
+
+}
+
+.modal-content {
+
+    background: #eeeeee;
+
+}
+
+/* custom classes */
+.floating-block {
+    /*border: 1px solid #000000;
+    border-radius: 75px;*/
+
+    .center-block();
+
+    vertical-align: center;
+
+    background: #eeeeee;
+
+    opacity: .8;
+}
+
+.vert-padded { 
+    margin-top:15px; 
+    margin-bottom:15px;
+}
+
+
+.col-centered{
+     float: none;
+     margin: 0 auto;
+ }
+
+ .blue_clouds{
+    background-image: url("/static/blue_clouds.jpg");
+ }
+
+@media (min-width: 500px) {
+  .nc {
+    height: auto;
+    border-top: 0;
+    box-shadow: none;
+    max-height: none;
+    padding-left:0;
+    padding-right:0;
+  }
+  .nc {
+    display: block !important;
+    width: auto !important;
+    padding-bottom: 0;
+    overflow: visible !important;
+  }
+  .nc.in {
+    overflow-x: visible;
+  }
+
+.nb
+{
+    width:200px;
+	margin-right: 0;
+	margin-left: 0;
+    position: fixed;
+    z-index: 900;
+}
+
+.nb-nav,
+.nb-nav > li,
+.nb-left,
+.nb-right,
+.nb-header
+{float:none !important;}
+
+.nb-right .dd-menu {left:0;right:auto;}
+.nb-collapse .nb-nav.nb-right:last-child {
+    margin-right: 0;
+}
+}

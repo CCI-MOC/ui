@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+ 
+{% block header %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+  <body background="https://s3.amazonaws.com/moc-picture/pattern-bxer.png" class="container">
+{% endblock %}
+
+{% block content %}
+  <h1 style="font-size:48px;font-weight:bold;padding-left:240px;padding-top:50px;">Open Cloud Exchange <span style="font-family: 'Bilbo Swash Caps', cursive;">interface</span></h1>
+  <div style="padding-left:300px;padding-right:300px;padding-top:50px;">
+  <form action="/projects/" method="post">
+    {% csrf_token %}
+    <input name="username" type="text" class="form-control text-center medium" placeholder="Username">
+    <input name="password" type="password" class="form-control text-center medium" placeholder="Password">
+    <input name="auth_url" type="text" class="form-control text-center medium" placeholder="Auth_url">
+  <div class="btn-group">
+    <button class="btn btn-primary">Login</button>
+    <button data-toggle="modal" data-target="#createUser" type="button" class="btn btn-primary">Register</button>
+    <button type="button" class="btn btn-primary">Forgot Password</button>
+  </form>
+  </div>
+  </div>
+
+  {% with reg_modal as modal_data %}
+      {% include "post_modal.html" %}
+  {% endwith %}
+
+{% endblock %}
+
+

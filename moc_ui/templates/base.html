@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    {% block header %}
+        {% include "header.html" %}
+    {% endblock %}
+
+    <title>{% block title %}Home{% endblock %}</title>
+
+    {% block css %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <style>
+            {% include "moc_ui.css" %}
+        </style>
+    {% endblock %}
+
+    </head>
+
+    {% block background %}
+    <body>
+    {% endblock %}
+
+    {% block navbar %} 
+    {% endblock %} 
+
+    {% block content %}
+    {% endblock %}
+
+
+
+    <div id="footer">
+        {% block footer %}
+            {% include "footer.html" %}
+        {% endblock %}
+    </div>
+
+    {% block js %}
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    {% endblock %}
+
+    </body>
+</html>

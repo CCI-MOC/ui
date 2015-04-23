@@ -1,0 +1,18 @@
+[
+  {
+    "model": "moc_ui.cluster",
+    "pk": 1,
+    "fields": {
+      "name": "Northeastern University",
+      "auth_url": "http://140.247.152.207:35357/v2.0"
+    }
+  },
+  {
+    "model": "moc_ui.cluster",
+    "pk": 2,
+    "fields": {
+      "name": "Harvard University",
+      "auth_url": "http://140.247.152.207:35357/v2.0"
+    }
+  }
+]
