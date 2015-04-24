@@ -1,10 +1,16 @@
+
+
+
+
 <form id="login-form" action="{{ form_data.action }}" method="{{ form_data.method }}">
     {% csrf_token %}
     
     {% for field in form %}
-    <div id="u" class="form-group">
-        {{ field.errors }}
-        {{ field }}
+    <div id="loginform" >
+        <!--  {{ field.errors }} -->
+        <div class="form-control">
+        {{ field }} 
+        </div>
     </div>
     {% endfor %}
 
@@ -13,19 +19,18 @@
     <div id="u" class="form-group" >
     {% for button in form_data.button_list %}
       {% if button.type != 'modal' %}
-        <button type='{{ button.type }}' class="btn btn-large pull-right {{ button.class }} " action="{{ button.action }}">{{ button.name }}</button>
+        <button type='button.type' class="btn btn-large pull-right {{ button.class }} " action="{{ button.action }}">{{ button.name }}</button>
       {% else %}
-        <button type='button'  data-toggle="modal"   data-target="{{ button.data_target }}" class="btn btn-large pull-right {{ button.class }} " >
+        <button type='button'  data-toggle="modal"   data-target="{{ button.data_target }}" class="btn btn-large pull-left {{ button.class }} " >
         {{ button.name }}</button>
       {% endif %}
     {% endfor %}
     </div>
 
 
-
 </form>
 
-<!--      <form action="" id="login-form">
+<!-- <form action="" id="login-form">
 
         <div id="u" class="form-group">
           <input id="username" spellcheck=false class="form-control" name="username" type="text" size="18" alt="login" required="">
@@ -54,6 +59,8 @@
         </div>
 
         <div class="form-group">
+
+
         <input type="checkbox" id="rem">
         <label for="rem">Stay Signed in</label>
         <button id="submit" type="submit" ripple>Sign in</button>
