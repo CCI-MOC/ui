@@ -139,7 +139,7 @@ class CreateVM(forms.Form):
     name = forms.CharField()
 
     def create(self):
-
+	pass
     
 
 class DeleteVM(forms.Form):
