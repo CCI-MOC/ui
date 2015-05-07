@@ -8,6 +8,12 @@ urlpatterns = patterns('',
     url(r'^$', front_page),
     # cloud splash
     url(r'^clouds', clouds),
+    # about page
+    url(r'^about', about),
+    # terms page
+    url(r'^terms',terms),
+    # help page
+    url(r'^help', helps),
     # marketplace
     url(r'^market/(?P<project>.+)', market),
 )

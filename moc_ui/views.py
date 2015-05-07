@@ -29,6 +29,17 @@ def front_page(request):
                  {'login_data': dicts.login_data, 'login_form': forms.Login(), 
                   'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegister()}) 
 
+
+def about(request):
+    return render(request,"aboutPage.html")
+
+def terms(request):
+    return render(request, "termsPage.html")
+
+def helps(request):
+    return render(request, 'helpPage.html')
+
+
 def clouds(request): 
     """List projects and vms in user's clouds""" 
     
