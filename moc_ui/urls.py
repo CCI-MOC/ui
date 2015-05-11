@@ -15,7 +15,13 @@ urlpatterns = patterns('',
     # help page
     url(r'^help', helps),
     # marketplace
-    url(r'^market/(?P<project>.+)', market),
+    url(r'^(?!.+toggle_active\/?$|.+toggle_default\/?$)market\/(?P<project>.+)?\/$', market),
+    # Market Place filtering functionality:
+    #url(r'^market\/(?P<project>.+)\/(?P<filter>.+)\/?$', market),
+    url(r'^(?!.+toggle_active\/?$|.+toggle_default\/?$)market\/(?P<project>.+)?\/(?P<filter>.+)\/?$', market),
+
+    # Tells the view to perform an action on a service. 
+    url(r'^market\/(?P<project>.+)\/(?P<service>.+)\/(?P<action>toggle_active|toggle_default)\/?$', market),
 )
 ##Form Processing
 urlpatterns += patterns('',
