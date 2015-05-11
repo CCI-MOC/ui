@@ -13,7 +13,7 @@ import query_helpers as helpers
 # passed to template context in order to
 # render modal / button / table templates
 import html_helpers as html
-
+from models import Service, ClusterProject
 
 ####################
 ## TEMPLATE VIEWS ##
@@ -73,16 +73,147 @@ def clouds(request):
                   }
                  )
 
-def market(request, project):
-    market_list = []
-    # for market in markets:
-    #     market_choice_list = []
-    #     for choice in dicts.test_
+def market(request, project, filter = 'all', service = '', action = ''):
+    def _toggle_active (project, service):
+        #Get the models of the queried objects:
+        project = UIProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
 
-    for market in dicts.test_market_list:
-        market_list.append(market)
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return False
 
-    return HttpResponseRedirect('/')
+        # Checks if the relation already exist
+        search = models.UIProject_service_list.objects.filter(project = project, service = service)
+        if len(search) > 0:
+            search[0].delete()
+        else:
+            uipr_serv = models.UIProject_service_list (service = service[0], project = project[0], type = 'NOR')
+            uipr_serv.save()
+        return True
+
+    def toggle_active (project, service):
+        #Get the models of the queried objects:
+        project = ClusterProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return False
+
+        # Checks if the relation already exist
+        search = models.ClusterProject_service.objects.filter(project = project, service = service)
+        if len(search) > 0:
+            search[0].delete()
+        else:
+            uipr_serv = models.ClusterProject_service (service = service[0], project = project[0], default = False)
+            uipr_serv.save()
+        return True
+
+    def _toggle_default (project, service):
+        #Get the models of the queried objects:
+        project = UIProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return False
+
+        # Checks if the relation already exist
+        # Toggles the state of the relationship
+        search = models.UIProject_service_list.objects.filter(project = project, service = service)
+        if len(search) > 0:
+            if search[0].type == 'NOR':
+                search[0].type = 'DEA'
+            else:
+                search[0].type = 'NOR'
+            search[0].save()
+        else:
+            uipr_serv = models.UIProject_service_list (service = service[0], project = project[0], type = 'DEA')
+            uipr_serv.save()
+        return True
+
+    def toggle_default (project, service):
+        #Get the models of the queried objects:
+        project = ClusterProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return False
+
+        # Checks if the relation already exist
+        # Toggles the state of the relationship
+        search = models.ClusterProject_service.objects.filter(project = project, service = service)
+        search2 = models.ClusterProject_service.objects.filter(project = project)
+        
+        for r in search2:
+            if r.service.service_type == service[0].service_type and r.service.name != service[0].name:
+               
+                r.default = False
+                r.save()
+        if len(search) > 0:
+            if not search[0].default:
+                search[0].default = True
+            else:
+                search[0].default = False
+            search[0].save()
+        else:
+            uipr_serv = models.ClusterProject_service (service = service[0], project = project[0], default = True)
+            uipr_serv.save()
+        return True
+
+    def _check_status (service, project = project):
+        #Get the models of the queried objects:
+        project = UIProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+        
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return (False, False, 'Failure')
+
+        search = models.UIProject_service_list.objects.filter(project = project, service = service)
+        if len(search) == 0:
+            return (False, False)
+        elif len(search) > 0 and search[0].type == 'NOR':
+            return (True, False)
+        else:
+            return (True, True)
+
+    def check_status (service, project = project):
+        #Get the models of the queried objects:
+        project = ClusterProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+        
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return (False, False, 'Failure')
+
+        search = models.ClusterProject_service.objects.filter(project = project, service = service)
+        if len(search) == 0:
+            return (False, False)
+        elif len(search) > 0 and not search[0].default:
+            return (True, False)
+        else:
+            return (True, True)
+
+    if service != '' and action != '':
+        print('hit')
+        if action == 'toggle_active':
+            if toggle_active (project, service):
+                print('t_a_s')
+        else:
+            if toggle_default (project, service):
+                print ('t_d_s')
+       
+        return HttpResponseRedirect('/market/' + project + '/')
+    market_list = [x.__dict__ for x in Service.objects.all() if x.service_type == filter or filter == 'all']
+    for x in market_list:
+        cs = check_status(x['name'], project)
+        x['act'] = cs[0]
+        x['dea'] = cs[1]
+
+    return render(request, 'market.html', {'project': project, 'market_list': market_list})
 
 ################
 ## FORM VIEWS ##

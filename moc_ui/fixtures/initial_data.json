@@ -14,5 +14,156 @@
       "name": "Harvard University",
       "auth_url": "http://140.247.152.207:35357/v2.0"
     }
-  }
+  },
+  {
+    "model":"moc_ui.user",
+    "pk": 1,
+    "fields": {
+      "user_name": "xuh",
+      "password_hash": "$6$rounds=100000$wroWL0h4EVKrnMEa$UzEFNumbOj2mmDxlRfXM8DQ3FRuWxakNFL43NJxCRYQSfRDzj4wPuWiHAvyY6hPZu5YgL8qnAIfrgbRcD0U2C0"
+    }
+  },
+  {
+    "model": "moc_ui.service",
+    "pk": 1,
+    "fields": {
+      "name": "Red Hat",
+      "service_type": "Support",
+      "description" : "Linux Platform Support",
+      "logo_url":"/static/redhat-logo.jpg",
+      "availability":"True"
+    }
+  },
+  {
+    "model": "moc_ui.service",
+    "pk": 2,
+    "fields": {
+      "name": "Dell",
+      "service_type": "Compute",
+      "description" : "Dell Compute",
+      "logo_url":"/static/Dell.png",
+      "availability":"True"
+    }
+  },
+  {
+    "model": "moc_ui.service",
+    "pk": 3,
+    "fields": {
+      "name": "Lenovo",
+      "service_type": "Compute",
+      "description" : "Lenovo  Compute",
+      "logo_url":"/static/lenovo-logo.jpg",
+      "availability":"True"
+    }
+    },
+    {
+    "model": "moc_ui.service",
+    "pk": 4,
+    "fields": {
+      "name": "HP",
+      "service_type": "Compute",
+      "description" : "HP Compute",
+      "logo_url":"/static/HP.png",
+      "availability":"True"
+    }
+	},
+	{
+    "model": "moc_ui.service",
+    "pk": 5,
+    "fields": {
+      "name": "Brocade",
+      "service_type": "Network",
+      "description" : "Brocade Networking",
+      "logo_url":"/static/Brocade.png",
+      "availability":"True"
+    }
+	},
+	{
+    "model": "moc_ui.service",
+    "pk": 6,
+    "fields": {
+      "name": "Fujitsu",
+      "service_type": "Storage",
+      "description" : "Fujitsu Storage",
+      "logo_url":"/static/Fujitsu-logo.jpg",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 7,
+    "fields": {
+      "name": "EMC",
+      "service_type": "Storage",
+      "description" : "EMC Storage",
+      "logo_url":"/static/EMC.jpg",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 8,
+    "fields": {
+      "name": "Juniper",
+      "service_type": "Network",
+      "description" : "Juniper Networking",
+      "logo_url":"/static/Juniper.png",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 9,
+    "fields": {
+      "name": "Cisco",
+      "service_type": "Network",
+      "description" : "Cisco Networking",
+      "logo_url":"/static/Cisco.jpg",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 10,
+    "fields": {
+      "name": "OpenShift",
+      "service_type": "Application",
+      "description" : "OpenShift PaaS",
+      "logo_url":"/static/OpenShift.jpg",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 11,
+    "fields": {
+      "name": "Hadoop",
+      "service_type": "Service",
+      "description" : "Apache Hadoop",
+      "logo_url":"/static/hadoop.jpg",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 12,
+    "fields": {
+      "name": "NetApp",
+      "service_type": "Storage",
+      "description" : "NetApp Storage",
+      "logo_url":"/static/Netapp.png",
+      "availability":"True"
+    }
+	},
+    {
+    "model": "moc_ui.service",
+    "pk": 13,
+    "fields": {
+      "name": "PostgreSQL",
+      "service_type": "Application",
+      "description" : "PostgreSQL",
+      "logo_url":"/static/Postgre.jpg",
+      "availability":"True"
+    }
+	}
 ]
