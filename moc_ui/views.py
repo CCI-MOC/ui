@@ -52,15 +52,20 @@ def control(request, project):
 
     createVMform = forms.Create_VM()   
     vms = api.listVMs(api.get_nova(request, project))
-    project = [project]
+
     return render(request, 'control.html', 
-                  {'project': project, 'vms': vms,
+                  {'project': [project], 'vms': vms,
                    'createVMform': createVMform })
+## Network Page
+def network(request, project):
+
+    return render(request, 'network.html')
 
 # VM CONTROLS
-# VM pause/unpause
 def VM_active_state_toggle (request, project, VMid):
-    print (project, VMid)
+    print  (project, VMid)
+    print  VMid[len(VMid)-1]
+    print  VMid[:len(VMid)-1]
     if VMid[len(VMid)-1] == '/':
         VMid = VMid[:len(VMid)-1]
     nova = api.get_nova(request, project)

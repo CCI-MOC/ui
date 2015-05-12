@@ -29,6 +29,8 @@ def listVMs(nova):
 	
 	vms = []
 	server_list = nova.servers.list()
+	network = nova.networks.list()
+	print network
 	for server in server_list:
 		vm = {
 		'name':server.name,
