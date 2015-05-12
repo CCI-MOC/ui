@@ -1,19 +1,5 @@
 [
   {
-    "model": "moc_ui.user",
-    "fields": {
-      "user_name": "admin",
-      "password_hash": "$6$rounds=100000$t4THXaZB9WBdPWk.$.GIm1TM5wLBc.tu2Zi1mVLMkpfnh/mBwo8RpvS3SoanLhDcWn2MZGGmv0BsgiH6e9PxfGlMtAkVryL7gTfeux1"
-    }
-  },
-  {
-  	"model":"moc_ui.user",
-  	"fields": {
-  		"user_name": "thsu8",
-  		"password_hash": "$6$rounds=100000$t4THXaZB9WBdPWk.$.GIm1TM5wLBc.tu2Zi1mVLMkpfnh/mBwo8RpvS3SoanLhDcWn2MZGGmv0BsgiH6e9PxfGlMtAkVryL7gTfeux1"
-  	}
-  },
-  {
     "model":"moc_ui.user",
     "fields": {
       "user_name": "xuh",
