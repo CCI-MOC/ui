@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding-left:100px; padding-right:100px;">
+  <h1><span style="font-weight:bold">{{ tenant }}</span> Users
+    <button data-target="#deleteProj-Modal" data-toggle="modal" style="float:right; font-size:large" class="btn btn-danger">Delete Project</button>
+  </h1>
+
+  <table class="table table-hover">
+    <thead>
+      <tr style="font-size:medium; font-weight:bold">
+        <th class="col-md-2">Name</td>
+        <th class="col-md-4">Roles</td>
+        <th class="col-md-3">Enabled</td>
+        <th class="col-md-3">Email</td>
+      </tr>
+    </thead>
+
+    {% for user in users %}
+      <tr>
+        <td style="font-size:medium">
+	  <button class="btn btn-primary chosenUser" data-toggle="modal" data-target="#editUser-Modal" value="{{ user.id }}">{{ user.name }}</button>
+	</td>
+        <td>
+	{% for role in user.roles %}
+		{{ role }}; 
+	{% endfor %}
+	</td>
+        <td>{{ user.enabled }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% include "addUserModal.html" %}
+</div>
+{% include "editUserModal.html" %}
+{% include "deleteProjModal.html" %}
+{% endblock %}

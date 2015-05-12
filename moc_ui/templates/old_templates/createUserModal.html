@@ -1,0 +1,33 @@
+<!-- Modal -->
+<div class="modal fade" id="createUser-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
+        <h4 class="modal-title" id="myModalLabel">Register as New User</h4>
+      </div>
+      <form action='/login/register' method='post'>
+        {% csrf_token %}
+      <div class="modal-body">
+	<div class="input-group-lg">
+          <input type="text" placeholder="Name" name="userName" class="text-center">
+        </div>
+	<div class="input-group-lg">
+	  <input type="password" placeholder="Password" name="userPwd" class="text-center">
+	</div>
+	<div class="input-group-lg">
+	  <input type="password" placeholder="Re-enter Password" name="userPwd2" class="text-center">
+	</div>
+	<div class="input-group-lg">
+	  <input type="text" placeholder="Email Address" name="userEmail" class="text-center">
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Create</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+

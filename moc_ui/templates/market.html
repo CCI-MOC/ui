@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+    {% load staticfiles %}
+
+    {% block title %}Marketplace{% endblock %}
+
+{% block content %}
+<div class="row vert-padded"></div>
+
+<div class="container-fluid">
+    <div class="col-md-8 col-centered">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default floating-block">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <h2 class="col-md-6 pull-left">  {{project}}'s <small>market</small></h2>
+                            <div class="col-md-4 btn-group pull-right" role="group">
+                                 <div class="sidebar-form">
+                                        <form class="form-inline">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="Search the Market">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default btn-primary" aria-label:"leftalign">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>       
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3" style="padding: 0px">
+                            <div class="sidebar">
+                                <ul class="sidebar-nav">              
+                                    <li><h3><a href = 'all'>All</a></h3></li>
+                                    <br>
+                                    <li><a href = 'Application'>Application</a></li>
+                                    <li><a href = 'Compute'>Compute</a></li>
+                                    <li><a href = 'Network'>Network</a></li>
+                                    <li><a href = 'Service'>Service</a></li>
+                                    <li><a href = 'Storage'>Storage</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-9 content">                      
+                            <div class="row">
+                                {% for market in market_list %}
+                                <div class="col-md-4 grid-item">
+                                <br>                                 
+                                    <div class="image"></div>
+                                    <p>{{market.name}}</p>  
+                                    <h3><a href = ""><img src={{market.logo_url}} alt={{market.name}} style="width:100px;height:100px"></a></h3>                                  
+                                    <div class="dropdown">
+                                        <div class="btn-group" role="group">
+                                            {% if not market.act %}
+                                            <a href= "/market/{{project}}/{{market.name}}/toggle_active" class="btn btn-default btn-success" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            </a>
+                                            {% endif %}
+                                            {% if market.act %}
+                                            <a href= "/market/{{project}}/{{market.name}}/toggle_active" class="btn btn-default btn-danger" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                            </a>
+                                            {% endif %}
+                                            {% if market.dea %}
+                                            <a href= "/market/{{project}}/{{market.name}}/toggle_default" class="btn btn-default btn-warning" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                                            </a>
+                                            {% endif %}
+                                            {% if not market.dea %}
+                                            <a href= "/market/{{project}}/{{market.name}}/toggle_default" class="btn btn-default btn-warning" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            </a>
+                                            {% endif %}
+                                            <button  type="button" class="btn btn-primary dropdown-toggle glyphicon glyphicon-info-sign" data-toggle="dropdown" aria-hidden="false" >
+                                                <!-- <span class="caret glyphicon glyphicon-info-sign" id="dropdownMenu3" aria-hidden="true"></span>     -->
+                                                <span class="caret"></span>
+                                                <!-- <span class="sr-only"></span> -->
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Conpany Info</a></li>
+                                            <li><a href="#">Price</a></li>
+                                            <li><a href="#">Policy</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">FAQ</a></li>
+                                          </ul>            
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                        </div>
+                    </div>
+                </div>    
+                <div class="panel-footer">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+    

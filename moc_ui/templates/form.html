@@ -1,0 +1,30 @@
+<form class="col-md-4 col-centered form-inline" action="{{ form_data.action }}" method="{{ form_data.method }}">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="row form-group">
+        {{ field.errors }}
+            {% if field.name == 'user_name' %}
+                <p>Username</p>
+            {% elif field.name == 'password' %}
+                <p>Password</p>
+            {% endif %}       
+        {{ field }}
+    </div>
+    {% endfor %}
+
+    <br>
+        
+    <div class="row btn-group" role="group">
+    {% for button in form_data.button_list %}
+      {% if button.type != 'modal' %}
+        <button type='{{ button.type }}' class="btn btn-large {{ button.class }}" action="{{ button.action }}">{{ button.name }}</button>
+      {% else %}
+        <button type='button'data-toggle="modal" data-target="{{ button.data_target }}" class="btn btn-large {{ button.class }}">
+        {{ button.name }}</button>
+      {% endif %}
+    {% endfor %}
+
+</form>
+
+
+

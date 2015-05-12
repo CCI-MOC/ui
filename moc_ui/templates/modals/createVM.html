@@ -1,0 +1,31 @@
+<!-- createVM Modal -->
+<div class="modal fade" id="createVM" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
+                <h2 class="modal-title">Create a New VM</h2>
+            </div>
+
+            <form action="/createVM" method='POST'>
+                {% csrf_token %}
+                <div class="modal-body">
+                    
+
+
+
+                    {% for field in createVMform %}
+                    <div class="row form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button> <!---Submit Form--->
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button> <!---Cancel--->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

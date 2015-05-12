@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" id="editUser-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cancel</span></button>
+        <h4 class="modal-title editUserName" id="myModalLabel"><span style="font-weight:bold"></span></h4>
+      </div>
+      <form action='/project_space/manage/settings/editRole' method='post'>
+        {% csrf_token %}
+	<input name="userName" class="editUserName" type="hidden"></input>
+	<input name="editAction" class="editAction" type="hidden"></input>
+      <div class="modal-body">
+	<div class="input-group-lg">
+          <input type="text" placeholder="Role" name="roleName" class="text-center">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary editRoleAction" value="add">Add Role</button>
+        <button class="btn btn-danger editRoleAction" value="remove">Remove Role</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
