@@ -15,10 +15,9 @@ import query_helpers as helpers
 import html_helpers as html
 from models import Service
 from models import UIProject
-#keystone api
-import ui_api as api
-
 from models import ClusterProject
+#API for keystone, nova and other services 
+import ui_api as api
 
 
 ####################
@@ -38,31 +37,22 @@ def front_page(request):
 
 def projects(request):
 
-
     tenant = api.joinTenant(request, 'ui')
-
     project_name =  models.ClusterProject.objects.all()
     project_list = []
     for project in project_name:
         project_list += [{'name': project}]
-    
-    
     return render(request, 'projects.html', 
                   {'project_list': project_list, 
                    'project_modals': html.project_modals(request)
                    })
-
-      
+  
 ## Project Control Page
 def control(request, project):
 
     createVMform = forms.Create_VM()   
-     # UIProject.objects.filter(name = project).__dict__
-
     vms = api.listVMs(api.get_nova(request, project))
-
     project = [project]
-
     return render(request, 'control.html', 
                   {'project': project, 'vms': vms,
                    'createVMform': createVMform })
@@ -125,11 +115,6 @@ def VM_add(request, project, VMname, imageName, flavorName):
 	nova = api.get_nova(request, project)	#get nova object
 	api.createVM(nova, VMname, imageName, flavorName)			#add specified Nova object
 	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-
-		
-
-
 
 #def login(request):
 #    """View to Login a user

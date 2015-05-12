@@ -1,4 +1,6 @@
 from os import environ as env
+
+# Client package
 import novaclient.v1_1.client as nvclient
 import glanceclient.v2.client as glclient
 import keystoneclient.v2_0.client as ksclient
@@ -7,18 +9,18 @@ import keystoneclient.v2_0.client as ksclient
 from keystoneclient import session
 from novaclient import client
 
-# Socks Stuff
+# Socks
 import socks
 import socket
 
 # Set up SOCKS proxy usage:
 s = socks.socksocket()
+
 # Set up the Port number as the one used for connecting Harvard Cluster
-socks.set_default_proxy(socks.SOCKS5, 'localhost', 5678)
+socks.set_default_proxy(socks.SOCKS5, 'localhost', 5507)
 socket.socket = socks.socksocket
 
-
-
+# Log User to his/her associated Tenant 
 def loginTenant(request, tenant_name):
 	"""
 	Create keystone, nova, and glance clients for tenant; on tenant selection

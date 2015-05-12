@@ -17,11 +17,8 @@ def joinTenant(request, tenant_name):
 	Create keystone client for specified tenant;
 	User's credentials already authenticated on login
 	"""
-        #global keystone, nova, glance
-        #keystone, nova, glance = loginTenant(username, password, tenantName,request)
         return loginTenant(request = request, tenant_name = tenant_name)
-        #keystone, nova, glance = request.session['keystone'], request.session['nova'], request.session['glance']
-
+ 
 
 #### VMs ####
 
@@ -165,7 +162,6 @@ def VM_active_state_toggle(nova, VMid):
 		nova.servers.pause(VMid)
 	else:
 		pass
-
 
 
 

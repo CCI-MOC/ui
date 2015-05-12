@@ -8,35 +8,23 @@ urlpatterns = patterns('',
     url(r'^$', front_page),
     # cloud splash
     url(r'^projects', projects),
-    # marketplace
-    # Add & Remove are placeholders at the moment. I think we shouldn't have in particular add and remove, but a
-    # Sort of toggle function. Like toggle_service and toggle_default. Just add and remove in the regex with whatever
-    # function name you want to pass to the view. 
+    # market page
     url(r'^(?!.+toggle_active\/?$|.+toggle_default\/?$)market\/(?P<project>.+)?\/$', market),
-    # project control page
-    url(r'^control\/(?P<project>.+)?\/$', control),
     # Market Place filtering functionality:
-    #url(r'^market\/(?P<project>.+)\/(?P<filter>.+)\/?$', market),
     url(r'^(?!.+toggle_active\/?$|.+toggle_default\/?$)market\/(?P<project>.+)?\/(?P<filter>.+)\/?$', market),
-
     # Tells the view to perform an action on a service. 
     url(r'^market\/(?P<project>.+)\/(?P<service>.+)\/(?P<action>toggle_active|toggle_default)\/?$', market),
-
-    # Control Functionality market\/(?P<project>.+)?\/(?P<filter>.+)\/?$
+     # project control page
+    url(r'^control\/(?P<project>.+)?\/$', control),
 
 	#VM pause/unpause
     url(r'^VM_active_state_toggle\/(?P<project>.+)?\/(?P<VMid>.+)\/?$', VM_active_state_toggle),
-
     #VM default add
     url(r'VM_add_default\/(?P<project>.+)\/?$', VM_add_default),
-
     #VM add
     #url(r'VM_add\/(?P<project>.+)?\/(?P<VMname>.+)?\/(?P<imageName>.+)?\/(?P<flavorName>.+)\/?$',  VM_add),
-    
-
     #VM delete
     url(r'VM_delete\/(?P<project>.+)?\/(?P<VMid>.+)\/?$', VM_delete),
-
     #VM start
     url(r'VM_start\/(?P<project>.+)?\/(?P<VMid>.+)\/?$', VM_start),
 
