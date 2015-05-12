@@ -1,7 +1,0 @@
-django<1.9
-django-extensions
-werkzeug
-passlib
-python-keystoneclient
-python-novaclient
-python-glanceclient
