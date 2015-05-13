@@ -61,64 +61,6 @@ class UIProject(forms.ModelForm):
             new_project.save()
 
         return new_project
-
-# Cluster_Project actions
-class ClusterProject(forms.ModelForm):
-
-    class Meta:
-        model = models.ClusterProject
-        fields = ['name',]#'cluster', 'ui_project']
-
-# vm actions
-
-# class CreateVM(forms.Form):
-#     name = forms.CharField()
-
-#     def create(self):
-# 	pass
-    
-
-# class DeleteVM(forms.Form):
-
-
-# class CreateVM(forms.Form):
-#     name = forms.CharField()
-
-#     def create(self):
-# 	pass
-    
-
-# class DeleteVM(forms.Form):
-
-
-class Create_VM(forms.Form):
-    name = forms.CharField()
-    cluster_projects = []
-    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
-        cluster_projects.append((p['name'], p['name']))
-    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
-
-    #nova = api.get_nova(request, project)	#get nova object
-
-    #image choices
-    #image_choices = []
-    #for option in nova.images.list():
-    #    image_coices.append(str(option.name))    
-    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
-
-    #flavor choices
-    #flavor_choices = []
-    #for option in nova.flavors.list():
-    #    flavor_choices.append(str(option.name))
-    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
-
-class Delete_VM(forms.Form):
-    name = forms.CharField()
-
-class Control_VM(forms.Form):
-    name = forms.CharField()
-    action = forms.CharField()
-
 # project actions
 class CreateUIProject(forms.ModelForm):
     def __init__(self,request,*args,**kwargs):
@@ -167,6 +109,13 @@ class DeleteUIProject(forms.ModelForm):
             return
 
         return new_ui_project
+
+# Cluster_Project actions
+class ClusterProject(forms.ModelForm):
+
+    class Meta:
+        model = models.ClusterProject
+        fields = ['name',]#'cluster', 'ui_project']
 
 # Cluster_Project actions
 class CreateClusterProject(forms.ModelForm):
@@ -227,3 +176,36 @@ class DeleteClusterProject(forms.ModelForm):
             return
 
         return new_cluster_project
+
+# vm actions
+class Create_VM(forms.Form):
+    name = forms.CharField()
+    cluster_projects = []
+    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
+        cluster_projects.append((p['name'], p['name']))
+    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
+
+    #nova = api.get_nova(request, project)	#get nova object
+
+    #image choices
+    #image_choices = []
+    #for option in nova.images.list():
+    #    image_coices.append(str(option.name))    
+    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
+
+    #flavor choices
+    #flavor_choices = []
+    #for option in nova.flavors.list():
+    #    flavor_choices.append(str(option.name))
+    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
+
+class Delete_VM(forms.Form):
+    name = forms.CharField()
+
+class Control_VM(forms.Form):
+    name = forms.CharField()
+    action = forms.CharField()
+
+
+
+

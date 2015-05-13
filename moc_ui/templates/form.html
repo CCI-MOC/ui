@@ -2,13 +2,7 @@
     {% csrf_token %}
     
     {% for field in form %}
-<<<<<<< HEAD
-    <div id="loginform" >
-        <!--  {{ field.errors }} -->
-        <div class="form-control">
-        {{ field }} 
-        </div>
-=======
+
     <div class="row form-group">
         {{ field.errors }}
             {% if field.name == 'user_name' %}
@@ -17,7 +11,6 @@
                 <p>Password</p>
             {% endif %}       
         {{ field }}
->>>>>>> lucasRefactor
     </div>
     {% endfor %}
 
@@ -32,13 +25,9 @@
         {{ button.name }}</button>
       {% endif %}
     {% endfor %}
-<<<<<<< HEAD
+
     </div>
 
-
-</form>
-
-=======
 
 </form>
 
