@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{request.session.user_name}}'s Clouds{% endblock %}
+{% block title %}{{request.session.user_name}}'s Projects{% endblock %}
 
 {% block content %}
 <div class="row vert-padded"></div>
@@ -12,37 +12,17 @@
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div class="row">
-                            <h1 class="col-md-6 pull-left">  {{request.session.user_name}}'s <small>cloud</small></h1>
-                            <div class="col-md-3 btn-group" role="group">
+                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>project</small></h2>
+                            <div class="col-md-5 btn-group pull-right" role="group">
                                 <button type='button' data-toggle="modal" data-target="#create_UI_Project" 
                                 class="btn btn-success" aria-label="Left">
-                                    Create <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OCX project
                                 </button>
                                 <button type='button' data-toggle="modal" data-target="#delete_UI_Project" 
                                 class="btn btn-danger" aria-label="Left">
-                                    Delete <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+                                    Leave project <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                                 </button>
                             </div>
-                            <div class="col-md-3 btn-group pull-right" role="group">
-                                <button type='button' data-toggle="modal" data-target="#add_Cluster_Project" 
-                                class="btn btn-success" aria-label="Left">
-                                    Create <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                </button>
-                                <button type='button' data-toggle="modal" data-target="#delete_Cluster_Project" 
-                                class="btn btn-danger" aria-label="Left">
-                                    Delete <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                                <!--
-                                <button type='button' data-toggle="modal" data-target="#createClusterAccount" 
-                                class="btn btn-info" aria-label="Left"> 
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> OS Account
-                                </button>
-                                <button type='button' data-toggle="modal" data-target="#deleteClusterAccount" 
-                                class="btn btn-danger" aria-label="Left"> 
-                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> OS Account
-                                </button>
-                                -->
                         </div>
                     </div>
                 </div>
@@ -52,7 +32,9 @@
                         <div class="col-md-7 pull-left">
                                 <h3>{{project.name}}</h3>
                         </div>
-                        <div class="col-md-5 btn-group pull-right" role="group">
+                        <a href="/control/{{project.name}}" class="btn btn-default" 
+                            aria-label="Left Align"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span></a>
+                        <!-- <div class="col-md-5 btn-group pull-right" role="group">
                             <button type="button" class="btn btn-default" data-toggle="collapse" 
                             data-parent="#accordian" data-target="#{{project.name}}_vms">
                                 <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
@@ -75,10 +57,10 @@
                             class="btn btn-danger" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div id="{{project.name}}_vms" class="panel-collapse collapse">
+                <!-- <div id="{{project.name}}_vms" class="panel-collapse collapse">
                     <h4>your machines</h4>
                     <table class="table table-hover">
                         <thead>
@@ -147,7 +129,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>
+                </div> -->
                 {% endfor %}
                 <div class="panel-footer">
                 </div>
@@ -155,11 +137,10 @@
         </div>
     </div>
 
-    {% for form_data in cloud_modals %}
-        {% include "modals/cloudModal.html" %}
+    {% for form_data in project_modals %}
+        {% include "modals/projectModal.html" %}
     {% endfor %}
 
-    {% include "modals/createVM.html" %}
 
 </div>
 {% endblock %}

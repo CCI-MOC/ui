@@ -1,0 +1,18 @@
+[
+  {
+    "model": "moc_ui.ClusterProject",
+    "pk": 1,
+    "fields": {
+      "name": "ui",
+      "token": ""
+    }
+  },
+  {
+    "model": "moc_ui.ClusterProject",
+    "pk": 2,
+    "fields": {
+      "name": "bit_coin_farm",
+      "token": ""
+    }
+  }
+]

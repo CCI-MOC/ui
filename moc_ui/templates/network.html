@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}{{request.session.user_name}}'s Network{% endblock %}
+
+{% block content %}
+{% for project in project %}
+<div class="row vert-padded"></div>
+
+<div class="container-fluid">
+    <div class="col-md-10 col-centered">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default floating-block">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>network</small></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-7 pull-left">
+                            <h3>{{project}}'s Virtual Machine</h3>                  
+                        </div>
+                        <div class="col-md-7 pull-right">
+                             <a href="/vm/{{project}}" class="btn btn-primary" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+                            </a>                      
+                        </div>     
+                    </div>
+                </div>
+                <!-- VM Control -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <h2>{{project}}'s VMs</h2>
+
+
+                            <!-- Custom VM -->
+                            
+                           <!--  <a href="/VM_add/{{project}}/{{VMname}}/{{imageName}}/{{flavorName}}" class="btn btn-default btn-success" aria-label:"leftalign">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                            </a> -->
+
+                            <!-- Default VM -->
+                            <a href="/VM_add_default/{{project}}" class="btn btn-default btn-success" aria-label:"leftalign">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </a>
+
+
+                        </div>     
+                        <row>
+                            <table class = "table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>ID</td>
+                                        <td>Status</td>
+                                        <td>Image</td>
+                                        <td>Flavour</td>
+                                        <td>Network</td>
+                                        <td>VNC</td>
+                                        <td>Actions</td>
+                                    </tr>
+                                </thead>
+                            <tbody>
+                            {% for vm in vms %}
+                                <tr>
+                                    <td>{{vm.name}}</td>
+                                    <td>{{vm.id}}</td>
+                                    <td>{{vm.status}}</td>
+                                    <td>{{vm.image}}</td>
+                                    <td>{{vm.flavor}}</td>
+                                    <td>{{vm.network}}</td>
+                                    <td>{{vm.vnc}}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                        {% if vm.status = 'ACTIVE' %}
+                                            <a href= "/VM_active_state_toggle/{{project}}/{{vm.id}}" class="btn btn-default btn-warning" aria-label:"leftalign">
+                                            <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                                            </a>
+                                        {% else %}
+                                                <a href= "/VM_active_state_toggle/{{project}}/{{vm.id}}" class="btn btn-default btn-success" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                                </a>
+                                        {% endif %}
+                                        <a href = "VM_delete/{{project}}/{{vm.id}}" class="btn btn-default btn-danger" aria-label:"leftalign">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </a>
+                                        {% if vm.status = 'SHUTOFF' %}
+                                            <a href = "VM_start/{{project}}/{{vm.id}}" class="btn btn-default btn-success" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                            </a>
+                                        {% else %}
+                                            <a href = "VM_stop/{{project}}/{{vm.id}}" class="btn btn-default btn-danger" aria-label:"leftalign">
+                                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                            </a>
+                                        {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </row>                   
+
+                </div>
+                <div class="panel-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+

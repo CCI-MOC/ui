@@ -39,6 +39,8 @@ def loginTenant(username, password, tenantName, auth_url):
 # admin keystone auth
 #keystone = ksclient.Client(token='admin', endpoint='http://10.0.2.15:35357/v2.0')
 
+# keystone = ksclient.Client(username = username, password=password, tenant_name = tenant_name, auth_url = auth_url)
+
 #keystoneImages = ksclient.Client(auth_url=env['OS_AUTH_URL'],
 #username=env['OS_USERNAME'],
 #password=env['OS_PASSWORD'],

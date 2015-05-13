@@ -7,8 +7,9 @@ sample_form_data = {'name': 'TITLE', 'action': '/URL', 'method': 'post', 'button
 sample_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'} 
 
 ## FRONT PAGE
-login_buttons = [{'name': 'log in', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'}, 
-                 {'name': 'sign up', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}] 
+login_buttons = [{'name': 'Login', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'},
+{'name': 'Register', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}] 
+
 
 login_data = {'name': 'MassOpenCloud Login', 'action': '/login', 'method': 'post', 'button_list': login_buttons} 
 

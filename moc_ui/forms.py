@@ -1,5 +1,12 @@
 from django import forms
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+
 import models
+import novaclient.v1_1.client as nvclient
+import glanceclient.v2.client as glclient
+import keystoneclient.v2_0.client as ksclient
+import ui_api as api
 
 class Login(forms.Form):
     user_name = forms.CharField()
@@ -26,9 +33,19 @@ class UserRegister(forms.ModelForm):
         return new_user 
 
 # project actions
-class CreateUIProject(forms.ModelForm):
-    def __init__(self,request,*args,**kwargs):
-        super (CreateUIProject, self).__init__(*args,**kwargs)
+class UIProject(forms.ModelForm):
+    # We need a custom init function to initialize the user from the request 
+#    def __init__(self,request,*args,**kwargs):
+#        # populates with request.POST 
+#        super (UIProject,self ).__init__(*args,**kwargs)
+#        print request.session["user_name"]
+#        # populate user field with user_name
+#        current_user = models.User.objects. \
+#                                        filter(user_name=request.session["user_name"])
+#        self.fields['users'].queryset = current_user
+#        print "user being added to form is: %s" % current_user
+#        for user in self.fields['users'].queryset:
+#            print "part of query-set for 'users' is: %s" % user 
 
     class Meta:
         model = models.UIProject
@@ -36,105 +53,24 @@ class CreateUIProject(forms.ModelForm):
         # widgets = {'users': forms.HiddenInput()}
 
     def save(self, request, force_insert=False, force_update=False, commit=True):
-        # Create new UIProject with user from request
-        new_ui_project = models.UIProject(name=self.cleaned_data['name'])
-        if commit:
-            new_ui_project.save()
-            # Add user as foreign key to UIProject
-            new_ui_project.users.add(request.session['user_name'])
-
-        return new_ui_project
-
-class DeleteUIProject(forms.ModelForm):
-    # Custom init function to initialize the correct projects 
-    def __init__(self,request,*args,**kwargs):
-        # populates function from the parent class with request.POST 
-        super (DeleteUIProject, self).__init__(*args,**kwargs)
-        # Grab current user object from request.session info
-        current_user = models.User.objects. \
-                                        get(user_name=request.session["user_name"])
-        # populate name field with projects owned by user 
-        project_names = models.UIProject.objects.filter(users=current_user)
-        self.fields['name'] = forms.ModelChoiceField(queryset=project_names)
-
-    class Meta:
-        model = models.UIProject
-        fields = ['name', ]
-
-    def save(self, force_insert=False, force_update=False, commit=True):
         # Create new_user with 
-        new_ui_project = models.UIProject.objects.get(name=self.cleaned_data['name'])
+        new_project = models.UIProject(name=self.cleaned_data['name'])
+        if commit:
+            new_project.save()
+            new_project.users.add(request.session['user_name'])
+            new_project.save()
 
-        print new_ui_project.name
-        print new_ui_project.id
-
-        if commit is True:
-            new_ui_project.delete()
-            return
-
-        return new_ui_project
+        return new_project
 
 # Cluster_Project actions
-class CreateClusterProject(forms.ModelForm):
-    def __init__(self,request,*args,**kwargs):
-        super (CreateClusterProject, self).__init__(*args,**kwargs)
-        # Grab current user object from request.session info
-        current_user = models.User.objects.get(user_name=request.session["user_name"])
-        # Populate ui_project field with projects owned by user 
-        ui_project_names = models.UIProject.objects.filter(users=current_user)
-        self.fields['ui_project'] = forms.ModelChoiceField(queryset=ui_project_names)
-        # Populate cluster field with clusters from db
-        clusters = models.Cluster.objects.all()
-        self.fields['cluster'] = forms.ModelChoiceField(queryset=clusters)
+class ClusterProject(forms.ModelForm):
 
     class Meta:
         model = models.ClusterProject
-        fields = ['name', 'cluster', 'ui_project']
-
-    def save(self, request, force_insert=False, force_update=False, commit=True):
-        # Create new_user with 
-        new_cluster_project = models.ClusterProject(name=self.cleaned_data['name'],
-                                                    cluster=self.cleaned_data['cluster'],
-                                                    ui_project=self.cleaned_data['ui_project']
-                                                   )
-
-        if commit is True:
-            new_cluster_project.save()
-            return
-
-        return new_cluster_project
-
-class DeleteClusterProject(forms.ModelForm):
-    def __init__(self,request,*args,**kwargs):
-        # populates function from the parent class with request.POST 
-        super (DeleteClusterProject, self).__init__(*args,**kwargs)
-        # Grab current user object from request.session info
-        current_user = models.User.objects. \
-                                        get(user_name=request.session["user_name"])
-        # populate name field with Cluster projects owned by user 
-        cluster_project_list = models.ClusterProject.objects.filter(ui_project__users=current_user)
-        print cluster_project_list
-        print type(cluster_project_list)
-        self.fields['name'] = forms.ModelChoiceField(queryset=cluster_project_list)
-
-    class Meta:
-        model = models.ClusterProject
-        fields = ['name', ]
-
-    def save(self, force_insert=False, force_update=False, commit=True):
-        # Create new_user with 
-        new_cluster_project = models.ClusterProject.objects.get(name=self.cleaned_data['name'])
-
-        print new_cluster_project.name
-        print new_cluster_project.id
-
-        if commit is True:
-            new_cluster_project.delete()
-            return
-
-        return new_cluster_project
+        fields = ['name',]#'cluster', 'ui_project']
 
 # vm actions
+<<<<<<< HEAD
 class CreateVM(forms.Form):
     name = forms.CharField()
 
@@ -143,8 +79,33 @@ class CreateVM(forms.Form):
     
 
 class DeleteVM(forms.Form):
+=======
+
+class Create_VM(forms.Form):
+    name = forms.CharField()
+    cluster_projects = []
+    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
+        cluster_projects.append((p['name'], p['name']))
+    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
+
+    #nova = api.get_nova(request, project)	#get nova object
+
+    #image choices
+    #image_choices = []
+    #for option in nova.images.list():
+    #    image_coices.append(str(option.name))    
+    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
+
+    #flavor choices
+    #flavor_choices = []
+    #for option in nova.flavors.list():
+    #    flavor_choices.append(str(option.name))
+    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
+
+class Delete_VM(forms.Form):
+>>>>>>> lucasRefactor
     name = forms.CharField()
 
-class ControlVM(forms.Form):
+class Control_VM(forms.Form):
     name = forms.CharField()
     action = forms.CharField()

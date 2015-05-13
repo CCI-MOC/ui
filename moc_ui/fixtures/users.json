@@ -1,0 +1,11 @@
+[
+  {
+    "model":"moc_ui.user",
+    "fields": {
+      "user_name": "xuh",
+      "password_hash": "$6$rounds=100000$wroWL0h4EVKrnMEa$UzEFNumbOj2mmDxlRfXM8DQ3FRuWxakNFL43NJxCRYQSfRDzj4wPuWiHAvyY6hPZu5YgL8qnAIfrgbRcD0U2C0"
+    }
+  }
+
+  
+]

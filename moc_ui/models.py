@@ -13,11 +13,13 @@ UUID_LEN = len(str(uuid.uuid1()))
 DEFAULT_FIELD_LEN = 255
 
 # User information 
+# Storing Password as PlainText for now! MASSIVELY STUPID IDEA
 class User(models.Model):
     """A user of the marketplace UI"""
     user_name = models.CharField(primary_key=True, max_length=DEFAULT_FIELD_LEN)
+    #password_hash = models.CharField(max_length=PASSHASH_LEN)
     password_hash = models.CharField(max_length=PASSHASH_LEN)
-
+    
     def verify_password(self, password):
         return sha512_crypt.verify(password, self.password_hash)
 
@@ -71,10 +73,20 @@ class UIProject(models.Model):
     ## Service Defaults 
 
     ## Registered Service Options
-    service_list = models.ManyToManyField(Service)
+    service_list = models.ManyToManyField(Service, through = 'UIProject_service_list')
 
     def __unicode__(self):
         return self.name
+
+# Defining the relation.
+class UIProject_service_list(models.Model):
+    TYPE_CHOICES = (('NOR','normal'), ('DEA', 'default'))
+    project = models.ForeignKey(UIProject)
+    service = models.ForeignKey(Service)
+    type = models.CharField(max_length=DEFAULT_FIELD_LEN, choices=TYPE_CHOICES,  default='normal')
+
+    def __unicode__(self):
+        return 'Project Name: ' + self.project.name + ' Servise Name: ' + self.service.name + ' Type: ' + self.type
 
 class ClusterProject(models.Model):
     """An openstack project that a user has access to.
@@ -86,9 +98,11 @@ class ClusterProject(models.Model):
     token = models.TextField(default=None, blank=True, null=True)
 
     ## Link to a cluster    
-    cluster = models.ForeignKey(Cluster)
+    #cluster = models.ForeignKey(Cluster)
     ## UI Project that the ClusterProject is attached to
-    ui_project = models.ForeignKey(UIProject)
+    #ui_project = models.ForeignKey(UIProject)
+    ## Associate services with the ClusterProject
+    service = models.ManyToManyField(Service, through = 'ClusterProject_service')
 
     def __unicode__(self):
         return self.name
@@ -132,4 +146,12 @@ class ClusterProject(models.Model):
                                  self.cluster_account.cluster_password,
                                  self.name,
                                  self.cluster_account.cluster.auth_url)
+
+class ClusterProject_service(models.Model):
+    default = models.BooleanField(default = False)
+    project = models.ForeignKey(ClusterProject)
+    service = models.ForeignKey(Service)
+
+    def __unicode__(self):
+        return 'Project Name: ' +  self.project.name + ' Servise Name: ' + self.service.name + (" default selection. " if self.default else "")
 

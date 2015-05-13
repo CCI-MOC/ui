@@ -61,6 +61,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 SESSION_FILE_PATH = os.getcwd() +"/session"
 
 ROOT_URLCONF = 'moc_ui.urls'

@@ -1,4 +1,4 @@
-    # Django helpers for rendering html and redirecting
+# Django helpers for rendering html and redirecting
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # Dictionaries to pass to template context
@@ -13,7 +13,16 @@ import query_helpers as helpers
 # passed to template context in order to
 # render modal / button / table templates
 import html_helpers as html
+<<<<<<< HEAD
 from models import Service, ClusterProject
+=======
+from models import Service
+from models import UIProject
+from models import ClusterProject
+#API for keystone, nova and other services 
+import ui_api as api
+
+>>>>>>> lucasRefactor
 
 ####################
 ## TEMPLATE VIEWS ##
@@ -24,11 +33,12 @@ def front_page(request):
     
     Enter credentials to be processed by the login view 
     """ 
-    
+
     return render(request, 'front_page.html', 
                  {'login_data': dicts.login_data, 'login_form': forms.Login(), 
                   'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegister()}) 
 
+<<<<<<< HEAD
 
 def about(request):
     return render(request,"aboutPage.html")
@@ -54,25 +64,40 @@ def clouds(request):
             projects = []
     else:
         return HttpResponseRedirect('/')
+=======
+>>>>>>> lucasRefactor
 
+def projects(request):
 
+    tenant = api.joinTenant(request, 'ui')
+    project_name =  models.ClusterProject.objects.all()
     project_list = []
-    for project in projects:
-        vm_list = []
-#        for vm in models.VM.objects.filter(ui_project=project):
-#            vm_list.append(vm)
-        project_list.append({'name':project.name, 'vm_list': vm_list})
-
-    for project in dicts.test_project_list:
-        project_list.append(project)
-
-
-    return render(request, 'clouds.html', 
+    for project in project_name:
+        project_list += [{'name': project}]
+    return render(request, 'projects.html', 
                   {'project_list': project_list, 
-                   'cloud_modals': html.cloud_modals(request), 
-                  }
-                 )
+                   'project_modals': html.project_modals(request)
+                   })
+  
+## Project Control Page
+def control(request, project):
 
+    createVMform = forms.Create_VM()   
+    vms = api.listVMs(api.get_nova(request, project))
+
+    return render(request, 'control.html', 
+                  {'project': [project], 'vms': vms,
+                   'createVMform': createVMform })
+## Network Page
+def network(request, project):
+    createVMform = forms.Create_VM()   
+    vms = api.listVMs(api.get_nova(request, project))
+
+    return render(request, 'network.html',
+                    {'project': [project] , 'vms': vms,
+                    'createVMform': createVMform })
+
+<<<<<<< HEAD
 def market(request, project, filter = 'all', service = '', action = ''):
     def _toggle_active (project, service):
         #Get the models of the queried objects:
@@ -83,6 +108,104 @@ def market(request, project, filter = 'all', service = '', action = ''):
         if len(project) == 0 or len(service) == 0:
             return False
 
+=======
+# VM CONTROLS
+def VM_active_state_toggle (request, project, VMid):
+    print  (project, VMid)
+    print  VMid[len(VMid)-1]
+    print  VMid[:len(VMid)-1]
+    if VMid[len(VMid)-1] == '/':
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)
+    api.VM_active_state_toggle(nova, VMid)
+    return HttpResponseRedirect('/control/' + project + '/')
+
+# VM Delete
+def VM_delete(request, project, VMid):
+	print (project, VMid)					#debugging
+	if VMid[len(VMid)-1] == '/':			#strip ending /
+		VMid = VMid[:len(VMid)-1]
+	nova = api.get_nova(request, project)	#get nova object
+	api.delete(nova, VMid)					#delete specified Nova object
+	return HttpResponseRedirect('/control/' + project + '/')	#back to control
+
+# VM start
+def VM_start(request, project, VMid):
+	print (project, VMid)					#debugging
+	if VMid[len(VMid)-1] == '/':			#strip ending /
+		VMid = VMid[:len(VMid)-1]
+	nova = api.get_nova(request, project)	#get nova object
+	api.startVM(nova, VMid)					#start specified Nova object
+	return HttpResponseRedirect('/control/' + project + '/')	#back to control
+
+# VM stop
+def VM_stop(request, project, VMid):
+	print (project, VMid)					#debugging
+	if VMid[len(VMid)-1] == '/':			#strip ending /
+		VMid = VMid[:len(VMid)-1]
+	nova = api.get_nova(request, project)	#get nova object
+	api.stopVM(nova, VMid)					#stop specified Nova object
+	return HttpResponseRedirect('/control/' + project + '/')	#back to control
+
+# VM add default
+def VM_add_default(request, project):
+	print (project)
+	nova = api.get_nova(request, project)	#get nova object
+	api.createDefault(nova)
+	return HttpResponseRedirect('/control/' + project + '/')	#back to control
+
+# VM add custom
+def VM_add(request, project, VMname, imageName, flavorName):
+	print (project, VMname, imageName, flavorName)					#debugging
+
+#	if request.method == 'POST':
+#		form = forms.Create_VM(request.POST)
+#		if form.is_valid():
+#			print "form is valid."
+#			nameVM = form.cleaned_data['VM_name']
+#			nameFlavor 
+
+	nova = api.get_nova(request, project)	#get nova object
+	api.createVM(nova, VMname, imageName, flavorName)			#add specified Nova object
+	return HttpResponseRedirect('/control/' + project + '/')	#back to control
+
+#def login(request):
+#    """View to Login a user
+#   
+#    Checks post credentials, redirects
+#    to projects or back to front page with error 
+#    """
+#    if request.method == 'POST':
+#        form = forms.Login(request.POST)
+#        if form.is_valid():
+#            print "form is valid"
+#            user_name = form.cleaned_data['user_name']
+#            password = form.cleaned_data['password']
+#
+#            user = helpers.retrieve_object("User", "user_name", user_name)
+#            if user is not None:
+#                print "verifying password"
+#                if user.verify_password(password=password):
+#                    request.session['user_name'] = user_name
+#                    request.session['username'] = user_name
+#                    request.session['password'] = password
+#                    return HttpResponseRedirect('/projects')
+
+
+
+
+## Market Page
+def market(request, project, filter = 'all', service = '', action = ''):
+    def _toggle_active (project, service):
+        #Get the models of the queried objects:
+        project = UIProject.objects.filter(name = project)
+        service = Service.objects.filter(name = service)
+
+        # Fails if a project or service does not exist, return an error. 
+        if len(project) == 0 or len(service) == 0:
+            return False
+
+>>>>>>> lucasRefactor
         # Checks if the relation already exist
         search = models.UIProject_service_list.objects.filter(project = project, service = service)
         if len(search) > 0:
@@ -224,7 +347,7 @@ def login(request):
     """View to Login a user
     
     Checks post credentials, redirects
-    to clouds or back to front page with error 
+    to projects or back to front page with error 
     """
     if request.method == 'POST':
         form = forms.Login(request.POST)
@@ -238,12 +361,9 @@ def login(request):
                 print "verifying password"
                 if user.verify_password(password=password):
                     request.session['user_name'] = user_name
-                    return HttpResponseRedirect('/clouds')
-
-    # temporary workaround to auto-login
-    print "using workaround"
-    request.session['user_name'] = "jbell" 
-    return HttpResponseRedirect('/clouds')
+                    request.session['username'] = user_name
+                    request.session['password'] = password
+                    return HttpResponseRedirect('/projects')
 
 def logout(request):
     """View to Logout of session 
@@ -274,7 +394,9 @@ def register(request):
                                                    password=password)
                 new_user.save()
                 request.session['user_name'] = user_name
-                return HttpResponseRedirect('/clouds')
+                request.session['username'] = user_name
+                request.session['password'] = password
+                return HttpResponseRedirect('/projects')
             else:
                 print "user %s exists" % user
         else:
@@ -291,51 +413,64 @@ def create_object(request, object_class):
         # get the current user for auth and fk creation
         current_user = request.session['user_name']
         # Grab form class for object creation and initialize with request info
-        form_name = "Create%s" % object_class
         # Passing request.POST for django auto-pop, request to pull session info out
-        post_form = getattr(forms, form_name)(request, request.POST)
+        post_form = getattr(forms, object_class)(request.POST)
         # Debug code to print form html to console
-        #for field in post_form:
-           #print "%s: %s" % (field.label_tag(), field.value())
+        for field in post_form:
+           print "%s: %s" % (field.label_tag(), field.value())
         if post_form.is_valid():
             # Debug code to print form info in better format
-            #for key, value in post_form.cleaned_data.iteritems():
-                #print "%s: %s" % (key, value)
+            for key, value in post_form.cleaned_data.iteritems():
+                print "%s: %s" % (key, value)
             try:
-                # Call the save function on the form 
+                # Creates a new database object
+                # Saves the new object by default
                 new_object = post_form.save(request)
+                # Create the foreing key and many-to-many relations
+                #new_object.users.add(current_user)
+                #new_object.save()
+                # iterate through fks and print them out
+                object_model = getattr(models, object_class)
+                print "object model: %s" % object_model
+                print "fields: "
+                field_names = []
+                for field in object_model._meta.get_fields():
+                    print field
+                    field_names.push(field_names)
+#                for field, field_name in object_model._meta.fields:
+#                    print field_name 
+#                    if field.many_to_many:
+#                        print field.rel.to
             except Exception as e:
                 print "Hit exception:"
                 print e 
         else:
             print post_form.errors
-    return HttpResponseRedirect('/clouds')
+    return HttpResponseRedirect('/projects')
 
 def delete_object(request, object_class):
     """Process POST form to delete generic database object"""
     if request.method == "POST":
-        form_name = "Delete%s" % object_class
-        # Grab form class and initialize with request and POST info
-        post_form = getattr(forms, form_name)(request, request.POST)
+        # Grab form class for object deletion and initialize with request and POST info
+        post_form = getattr(forms, object_class)(request.POST, request)
         # Debug code to print form html to console
-#        for field in post_form:
-#            print "%s: %s" % (field.label_tag(), field.value())
+        for field in post_form:
+            print "%s: %s" % (field.label_tag(), field.value())
         if post_form.is_valid():
             # Debug code to print form info in better format
-#            for key, value in post_form.cleaned_data.iteritems():
-#                print "%s: %s" % (key, value)
-#            print "end of form data"
+            for key, value in post_form.cleaned_data.iteritems():
+                print "%s: %s" % (key, value)
             try:
-                # Call the save function on the form 
-                form_object = post_form.save()
-                #print "name: %s" % form_object
-                #print "id: %d" % form_object.id
+                # Create a database object from the post form, but doesn't commit
+                form_object_from_form = post_form.save(commit=False)
+                # Delete object, commits to database
+                form_object_from_form.delete()
             except Exception as e:
                 print "Hit exception:"
                 print e 
         else:
             print post_form.errors
-    return HttpResponseRedirect('/clouds')
+    return HttpResponseRedirect('/projects')
 
 def control_vm(request, action, vm_name):
     if request.method == "PUT":

@@ -79,4 +79,3 @@ An alternative OpenStack Dashboard to Horizon for the MOC.
 
 * How can I test the OpenStack python API effeciently??
   * Look at UI/marketUI/auth.py. Use the defined keystone, glance and nova clients via python command line (first run 'source ~/devstack/openrc')
-
