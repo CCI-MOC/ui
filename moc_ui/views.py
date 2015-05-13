@@ -13,9 +13,10 @@ import query_helpers as helpers
 # passed to template context in order to
 # render modal / button / table templates
 import html_helpers as html
-from models import Service
+
+from models import Service, ClusterProject
 from models import UIProject
-from models import ClusterProject
+
 #API for keystone, nova and other services 
 import ui_api as api
 
@@ -33,6 +34,15 @@ def front_page(request):
     return render(request, 'front_page.html', 
                  {'login_data': dicts.login_data, 'login_form': forms.Login(), 
                   'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegister()}) 
+
+def about(request):
+    return render(request,"aboutPage.html")
+
+def terms(request):
+    return render(request, "termsPage.html")
+
+def helps(request):
+    return render(request, 'helpPage.html')
 
 
 def projects(request):
@@ -64,6 +74,8 @@ def network(request, project):
     return render(request, 'network.html',
                     {'project': [project] , 'vms': vms,
                     'createVMform': createVMform })
+
+
 
 # VM CONTROLS
 def VM_active_state_toggle (request, project, VMid):

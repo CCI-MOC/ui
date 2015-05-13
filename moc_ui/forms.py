@@ -71,6 +71,16 @@ class ClusterProject(forms.ModelForm):
 
 # vm actions
 
+# class CreateVM(forms.Form):
+#     name = forms.CharField()
+
+#     def create(self):
+# 	pass
+    
+
+# class DeleteVM(forms.Form):
+
+
 class Create_VM(forms.Form):
     name = forms.CharField()
     cluster_projects = []
@@ -93,6 +103,7 @@ class Create_VM(forms.Form):
     #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
 
 class Delete_VM(forms.Form):
+
     name = forms.CharField()
 
 class Control_VM(forms.Form):
