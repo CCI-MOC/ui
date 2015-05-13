@@ -130,8 +130,8 @@ input, select, textarea{
 .nb
 {
     width:200px;
-	margin-right: 0;
-	margin-left: 0;
+    margin-right: 0;
+    margin-left: 0;
     position: fixed;
     z-index: 900;
 }
