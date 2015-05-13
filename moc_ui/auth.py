@@ -64,9 +64,7 @@ def get_glance(request, tenant_name):
 	glance = glclient.Client(glance_endpoint, token = keystone.auth_token)
 	return {'keystone': keystone, 'nova': nova, 'glance': glance}
 	
-def get_neutron(request):
-	username = request.session['username']
-	password = request.session['password']
+
 
 # def loginUser(username, password, request):
 #         """

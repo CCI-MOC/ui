@@ -6,7 +6,13 @@ from views import *
 urlpatterns = patterns('',
     # front page
     url(r'^$', front_page),
-    # cloud splash
+    # about page
+    url(r'^about', about),
+    # terms page
+    url(r'^terms',terms),
+    # help page
+    url(r'^help', helps),
+
     url(r'^projects', projects),
     # market page
     url(r'^(?!.+toggle_active\/?$|.+toggle_default\/?$)market\/(?P<project>.+)?\/$', market),
