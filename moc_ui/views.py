@@ -58,8 +58,12 @@ def control(request, project):
                    'createVMform': createVMform })
 ## Network Page
 def network(request, project):
+    createVMform = forms.Create_VM()   
+    vms = api.listVMs(api.get_nova(request, project))
 
-    return render(request, 'network.html')
+    return render(request, 'network.html',
+                    {'project': [project] , 'vms': vms,
+                    'createVMform': createVMform })
 
 # VM CONTROLS
 def VM_active_state_toggle (request, project, VMid):

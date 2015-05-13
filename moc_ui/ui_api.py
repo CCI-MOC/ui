@@ -30,7 +30,7 @@ def listVMs(nova):
 	vms = []
 	server_list = nova.servers.list()
 	network = nova.networks.list()
-	print network
+	
 	for server in server_list:
 		vm = {
 		'name':server.name,
@@ -38,7 +38,7 @@ def listVMs(nova):
  		'status':server.status,
  		'image':nova.images.get(server.image[u'id']).name,
 		'flavor':nova.flavors.get(server.flavor[u'id']).name,
- 		'network':'-',
+ 		'network':network,
 		'vnc':'-'
 		}
 		'''
