@@ -14,7 +14,9 @@ import query_helpers as helpers
 # render modal / button / table templates
 import html_helpers as html
 
+
 from models import Service, ClusterProject
+
 from models import UIProject
 
 #API for keystone, nova and other services 
@@ -35,6 +37,7 @@ def front_page(request):
                  {'login_data': dicts.login_data, 'login_form': forms.Login(), 
                   'reg_modal': dicts.reg_modal, 'reg_form': forms.UserRegister()}) 
 
+
 def about(request):
     return render(request,"aboutPage.html")
 
@@ -43,6 +46,7 @@ def terms(request):
 
 def helps(request):
     return render(request, 'helpPage.html')
+
 
 
 def projects(request):
@@ -74,7 +78,6 @@ def network(request, project):
     return render(request, 'network.html',
                     {'project': [project] , 'vms': vms,
                     'createVMform': createVMform })
-
 
 
 # VM CONTROLS

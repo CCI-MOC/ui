@@ -37,7 +37,6 @@ urlpatterns = patterns('',
 
     #VM stop
     url(r'VM_stop\/(?P<project>.+)?\/(?P<VMid>.+)\/?$', VM_stop)
-
 )
 ##Form Processing
 urlpatterns += patterns('',
