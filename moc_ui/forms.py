@@ -116,7 +116,7 @@ class ClusterProject(forms.ModelForm):
 
     class Meta:
         model = models.ClusterProject
-        fields = ['name',]#'cluster', 'ui_project']
+        fields = ['name']
 
 # # Cluster_Project actions
 # class CreateClusterProject(forms.ModelForm):
@@ -179,33 +179,31 @@ class ClusterProject(forms.ModelForm):
 #         return new_cluster_project
 
 # vm actions
-class Create_VM(forms.Form):
-    name = forms.CharField()
-    cluster_projects = []
-    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
-        cluster_projects.append((p['name'], p['name']))
-    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
+class CreateVM(forms.ModalForm):
+      def __init__(self,request,*args,**kwargs):
+        super (CreateVM, self).__init__(*args,**kwargs)
 
-    #nova = api.get_nova(request, project)	#get nova object
+    class Meta:
+        model = models.UIProject
+        fields = ['name', ]
+        # widgets = {'users': forms.HiddenInput()}
 
-    #image choices
-    #image_choices = []
-    #for option in nova.images.list():
-    #    image_coices.append(str(option.name))    
-    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
+    def save(self, request, force_insert=False, force_update=False, commit=True):
+        # Create new UIProject with user from request
+        new_ui_vm = models.UIProject(name=self.cleaned_data['name'])
+        if commit:
+            new_ui_project.save()
+            # Add user as foreign key to UIProject
+            new_ui_project.users.add(request.session['user_name'])
 
-    #flavor choices
-    #flavor_choices = []
-    #for option in nova.flavors.list():
-    #    flavor_choices.append(str(option.name))
-    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
+        return new_ui_project
 
-class Delete_VM(forms.Form):
-    name = forms.CharField()
+class DeleteVM(forms.Form):
+    name = forms.CharField() 
 
-class Control_VM(forms.Form):
-    name = forms.CharField()
-    action = forms.CharField()
+# class Control_VM(forms.Form):
+#     name = forms.CharField()
+#     action = forms.CharField()
 
 
 

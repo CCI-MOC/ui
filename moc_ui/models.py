@@ -155,3 +155,17 @@ class ClusterProject_service(models.Model):
     def __unicode__(self):
         return 'Project Name: ' +  self.project.name + ' Servise Name: ' + self.service.name + (" default selection. " if self.default else "")
 
+class Create_VM(models.Model):
+    """Create a custom VM"""
+    ## Project information
+    name = models.CharField(max_length=DEFAULT_FIELD_LEN)
+    ## Foreign Keys
+    users = models.ManyToManyField(User)
+
+    ## Service Defaults 
+
+    ## Registered Service Options
+    service_list = models.ManyToManyField(Service, through = 'UIProject_service_list')
+
+    def __unicode__(self):
+        return self.name

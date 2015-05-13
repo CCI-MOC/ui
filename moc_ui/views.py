@@ -69,7 +69,9 @@ def control(request, project):
 
     return render(request, 'control.html', 
                   {'project': [project], 'vms': vms,
-                   'createVMform': createVMform })
+                   'createVMform': createVMform,
+                   'vm_modals': html.vm_modals(request)
+                   })
 ## Network Page
 def network(request, project):
     createVMform = forms.Create_VM()   
