@@ -10,11 +10,16 @@ sample_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'ti
 login_buttons = [{'name': 'Login', 'type': 'submit', 'action': '/login/', 'class': 'btn-primary'},
 {'name': 'Register', 'type': 'modal', 'data_target': '#createUser', 'class': 'btn-success'}] 
 
-
 login_data = {'name': 'MassOpenCloud Login', 'action': '/login', 'method': 'post', 'button_list': login_buttons} 
 
-reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'} 
+reg_modal = {'id': 'createUser', 'action': '/register', 'method': 'post', 'title': 'Register User'}
 
+#CONTROL PAGE
+vm_buttons = {'name': 'Create', 'type': 'modal', 'data_target': '#createVM', 'class': 'btn-success'}
+
+vm_data = {'name': 'Create a VM', 'action': '/createVM', 'method': 'post', 'button_list': vm_buttons} 
+
+vm_modal = {'id': 'create VM', 'action': '/createVM', 'method': 'post', 'title': 'Create a New VM'} 
 
 # CLOUDS PAGE
 test_vm_list_1 = [{'name': 'hadoop master', 'state': '=)', 'provider': 'HU-prod', 'image': 'centOS 7'},

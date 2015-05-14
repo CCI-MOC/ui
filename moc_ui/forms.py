@@ -180,11 +180,10 @@ class ClusterProject(forms.ModelForm):
 
 # vm actions
 class Create_VM(forms.Form):
-    name = forms.CharField()
-    cluster_projects = []
-    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
-        cluster_projects.append((p['name'], p['name']))
-    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
+    name   = forms.CharField()
+    image  = forms.CharField()
+    flavor = forms.CharField()
+    nics   = forms.CharField()
 
     #nova = api.get_nova(request, project)	#get nova object
 

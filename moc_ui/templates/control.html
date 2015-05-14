@@ -50,9 +50,10 @@
 
                             <!-- Custom VM -->
 			                
-                           <!--  <a href="/VM_add/{{project}}/{{VMname}}/{{imageName}}/{{flavorName}}" class="btn btn-default btn-success" aria-label:"leftalign">
-				                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-			                </a> -->
+                            <button type='button' data-toggle="modal" data-target="#createVM" 
+                                class="btn btn-success" aria-label="Left">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Create VM
+                            </button>
 
                             <!-- Default VM -->
 			                <a href="/VM_add_default/{{project}}" class="btn btn-default btn-success" aria-label:"leftalign">
@@ -125,11 +126,9 @@
         </div>
     </div>
 
-    {% for form_data in cloud_modals %}
-        {% include "modals/cloudModal.html" %}
+    {% for form_data in vm_modals %}
+        {% include "modals/projectModal.html" %}
     {% endfor %}
-
-    {% include "modals/createVM.html" %}
 
 </div>
 {% endfor %}

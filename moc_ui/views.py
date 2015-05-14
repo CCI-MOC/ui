@@ -69,7 +69,9 @@ def control(request, project):
 
     return render(request, 'control.html', 
                   {'project': [project], 'vms': vms,
-                   'createVMform': createVMform })
+                   'createVMform': createVMform,
+                   'vm_modals': html.vm_modals(request)
+                    })
 ## Network Page
 def network(request, project):
     createVMform = forms.Create_VM()   
@@ -80,65 +82,7 @@ def network(request, project):
                     'createVMform': createVMform })
 
 
-# VM CONTROLS
-def VM_active_state_toggle (request, project, VMid):
-    print  (project, VMid)
-    print  VMid[len(VMid)-1]
-    print  VMid[:len(VMid)-1]
-    if VMid[len(VMid)-1] == '/':
-        VMid = VMid[:len(VMid)-1]
-    nova = api.get_nova(request, project)
-    api.VM_active_state_toggle(nova, VMid)
-    return HttpResponseRedirect('/control/' + project + '/')
 
-# VM Delete
-def VM_delete(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.delete(nova, VMid)					#delete specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM start
-def VM_start(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.startVM(nova, VMid)					#start specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM stop
-def VM_stop(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.stopVM(nova, VMid)					#stop specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM add default
-def VM_add_default(request, project):
-	print (project)
-	nova = api.get_nova(request, project)	#get nova object
-	api.createDefault(nova)
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM add custom
-def VM_add(request, project, VMname, imageName, flavorName):
-	print (project, VMname, imageName, flavorName)					#debugging
-
-#	if request.method == 'POST':
-#		form = forms.Create_VM(request.POST)
-#		if form.is_valid():
-#			print "form is valid."
-#			nameVM = form.cleaned_data['VM_name']
-#			nameFlavor 
-
-	nova = api.get_nova(request, project)	#get nova object
-	api.createVM(nova, VMname, imageName, flavorName)			#add specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
 
 #def login(request):
 #    """View to Login a user
@@ -447,3 +391,63 @@ def control_vm(request, action, vm_name):
     # check that the user has privalidge on vm
     # actually do the action
         pass
+
+# VM CONTROLS
+def VM_active_state_toggle (request, project, VMid):
+    print  (project, VMid)
+    print  VMid[len(VMid)-1]
+    print  VMid[:len(VMid)-1]
+    if VMid[len(VMid)-1] == '/':
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)
+    api.VM_active_state_toggle(nova, VMid)
+    return HttpResponseRedirect('/control/' + project + '/')
+
+# VM Delete
+def VM_delete(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.delete(nova, VMid)                  #delete specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM start
+def VM_start(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.startVM(nova, VMid)                 #start specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM stop
+def VM_stop(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.stopVM(nova, VMid)                  #stop specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM add default
+def VM_add_default(request, project):
+    print (project)
+    nova = api.get_nova(request, project)   #get nova object
+    api.createDefault(nova)
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM add custom
+def create_VM(request, project):
+    if request.method == 'POST':
+      form = forms.Create_VM(request.POST)
+      if form.is_valid():
+          print "form is valid."
+          name   = form.cleaned_data['name']
+          flavor = form.cleaned_data['flavor']
+          image  = form.cleaned_data['image']
+          nics   = form.cleaned_data['nics']
+ 
+    # nova = api.get_nova(request, project)   #get nova object
+    # api.createVM(nova, VMname, imageName, flavorName)           #add specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
