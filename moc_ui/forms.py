@@ -185,19 +185,23 @@ class Create_VM(forms.Form):
     #     super (Create_VM, self).__init__(*args,**kwargs)
 
     # self.fields['name'] = forms.CharField()
+    service_list = []
     try:
-        service = models.ClusterProject_service.objects.all().select_related('service')
+        services = models.ClusterProject_service.objects.all()
+        for service in services:
+            print service
+            
+        print service_list
     except Exception as e:
         print 'err'
         print e 
-
     name = forms.CharField()    
 
 
     # self.fields['image']  = forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
     # image =  forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
-    image =  forms.ModelChoiceField(queryset = service, initial = 0)
-
+    image =  forms.ModelChoiceField(queryset = services, initial = 0)
+    
         # flavor_list  = models.Service.objects.values('flavor')
         
         # medium = flavor_list[13]['flavor']
@@ -215,14 +219,12 @@ class Create_VM(forms.Form):
     def save(self, request, force_insert=False, force_update=False, commit=True):
         
         name   = self.cleaned_data['name']
-        image  = self.cleaned_data['image']
+        image  = str(self.cleaned_data['image'])
         flavor = self.cleaned_data['flavor']
         nova   = api.get_nova(request, 'ui') 
 
         api.createVM(nova, name, image, flavor)
 
-
-        return 'here'
 
 class Delete_VM(forms.Form):
     name = forms.CharField()

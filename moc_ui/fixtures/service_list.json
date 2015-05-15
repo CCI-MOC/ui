@@ -167,9 +167,24 @@
       "availability":"True",
       "image_name" : "CentOS-7-x86_64-GenericCloud-1503.qcow2"
       
+
     }
   },
-  {
+    {
+    "model": "moc_ui.service",
+    "pk": 16,
+    "fields": {
+      "name": "Fedora",
+      "service_type": "Service",
+      "description" : "Fedora VM image",
+      "logo_url":"/static/Fedora.jpg",
+      "availability":"True",
+      "image_name" : "Fedora-Cloud-Base-20141203-21.x86_64.qcow2"
+      
+
+    }
+  },
+    {
     "model": "moc_ui.uiproject",
     "pk": 1,
     "fields": {

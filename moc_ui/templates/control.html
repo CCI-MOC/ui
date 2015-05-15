@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "control_base.html" %}
 
 {% block title %}Control Panel{% endblock %}
 
@@ -16,7 +16,16 @@
                             <h2 class="col-md-7 pull-left">  {{project}}'s <small>control panel</small></h2>
                        		
 
-                            <div class="col-md-5 btn-group pull-right" role="group">                        
+                            <div class="col-md-5 btn-group pull-right" role="group">  
+                                <button type='button' data-toggle="modal" data-target="#createVM" 
+                                    class="btn btn-success" aria-label="Left">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New VM
+                                </button>
+
+                        
+                                <a href="/VM_add_default/{{project}}" class="btn btn-default btn-success" aria-label:"leftalign">
+                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Default VM
+                                </a>                      
                             </div>
                         </div>
                     </div>
@@ -24,7 +33,7 @@
                <!--  Marketplace -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-7 pull-left">
+                        <!-- <div class="col-md-7 pull-left">
                             <h3>{{project}}'s Marketplace</h3>
                             
                         </div>
@@ -32,25 +41,24 @@
                              <a href="/market/{{project}}" class="btn btn-primary" aria-label="Left Align">
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                             </a>                      
-                        </div>     
+                        </div>      -->
                     </div>
                     <!-- VM Control -->
                     <div class="panel-body">
                         <div class="row">
-                            <h2>{{project}}'s VMs</h2>
+                          <!--   <h3 class="col-md-7 pull-left">  {{project}}'s VM</h3> -->
 
 
-                            <!-- Custom VM -->
-			                
-                            <button type='button' data-toggle="modal" data-target="#createVM" 
+                            			                
+                           <!--  <button type='button' data-toggle="modal" data-target="#createVM" 
                                 class="btn btn-success" aria-label="Left">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Create VM
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New VM
                             </button>
 
-                            <!-- Default VM -->
+                        
 			                <a href="/VM_add_default/{{project}}" class="btn btn-default btn-success" aria-label:"leftalign">
-				                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-			                </a>
+				                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Default VM
+			                </a> -->
 
 
                         </div>     
@@ -63,7 +71,7 @@
                                         <td>Status</td>
                                         <td>Image</td>
                                         <td>Flavour</td>
-                                        <td>Network</td>
+                                        <!-- <td>Network</td> -->
                         
                                         <td>Actions</td>
                                     </tr>
@@ -76,7 +84,7 @@
                                     <td>{{vm.status}}</td>
                                     <td>{{vm.image}}</td>
                                     <td>{{vm.flavor}}</td>
-                                    <td>{{vm.network}}</td>
+                                    <!-- <td>{{vm.network}}</td> -->
                             
                                     <td>
                                         <div class="btn-group" role="group">

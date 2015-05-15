@@ -38,7 +38,7 @@ def listVMs(nova):
  		'status':server.status,
  		'image':nova.images.get(server.image[u'id']).name,
 		'flavor':nova.flavors.get(server.flavor[u'id']).name,
- 		'network':network
+ 		# 'network':network
 		}
 		'''
 		if server.status != 'BUILD':
@@ -63,8 +63,8 @@ def _listVMs():
  		'status':server.status,
  		'image':nova.images.get(server.image[u'id']).name,
 		'flavor':nova.flavors.get(server.flavor[u'id']).name,
- 		'network':'-',
-		'vnc':'-'
+ 	# 	'network':'-',
+		# 'vnc':'-'
 		}
 		if server.status != 'BUILD':
 			vm['vnc'] = server.get_vnc_console('novnc')[u'console'][u'url']
