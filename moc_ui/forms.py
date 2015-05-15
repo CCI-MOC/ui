@@ -180,24 +180,45 @@ class ClusterProject(forms.ModelForm):
 
 # vm actions
 class Create_VM(forms.Form):
-    name   = forms.CharField()
-    image  = forms.CharField()
-    flavor = forms.CharField()
-    nics   = forms.CharField()
 
-    #nova = api.get_nova(request, project)	#get nova object
+    # def __init__(self,request,*args,**kwargs):
+    #     super (Create_VM, self).__init__(*args,**kwargs)
 
-    #image choices
-    #image_choices = []
-    #for option in nova.images.list():
-    #    image_coices.append(str(option.name))    
-    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
+    # self.fields['name'] = forms.CharField()
+    name = forms.CharField()    
 
-    #flavor choices
-    #flavor_choices = []
-    #for option in nova.flavors.list():
-    #    flavor_choices.append(str(option.name))
-    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
+    image_list  = models.Service.objects.values('image_name')
+        
+    ubuntu = image_list[13]['image_name']
+    centos = image_list[14]['image_name']
+
+    # self.fields['image']  = forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+    image =  forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+
+        # flavor_list  = models.Service.objects.values('flavor')
+        
+        # medium = flavor_list[13]['flavor']
+        # tiny = flavor_list[14]['flavor']
+
+    m ='m1.medium'
+    t = 'm1.tiny'
+    l = 'm1.large'
+
+    # self.fields['flavor'] = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(t,t),(l,l)]))
+    flavor = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(t,t),(l,l)]))
+    
+  
+    def save(self, request, force_insert=False, force_update=False, commit=True):
+        
+        name   = self.cleaned_data['name']
+        image  = self.cleaned_data['image']
+        flavor = self.cleaned_data['flavor']
+        nova   = api.get_nova(request, 'ui') 
+
+        api.createVM(nova, name, image, flavor)
+
+
+        return 'here'
 
 class Delete_VM(forms.Form):
     name = forms.CharField()

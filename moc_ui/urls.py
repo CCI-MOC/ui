@@ -48,7 +48,7 @@ urlpatterns += patterns('',
     url(r'^create/(?P<object_class>.+)', create_object),
     url(r'^delete/(?P<object_class>.+)', delete_object),
     # VM creatoin
-    url(r'^createVM\/(?P<project>.+)?\/$', create_VM),
+    url(r'^createVM\/(?P<project>.+)', create_VM),
     # projects control
 #    url(r'^createProject', createProject),
 #    url(r'^deleteProject', deleteProject),

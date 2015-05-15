@@ -115,7 +115,7 @@
     "pk": 11,
     "fields": {
       "name": "Hadoop",
-      "service_type": "Service",
+      "service_type": "Compute",
       "description" : "Apache Hadoop",
       "logo_url":"/static/hadoop.jpg",
       "availability":"True"
@@ -143,6 +143,32 @@
       "availability":"True"
     }
 	},
+    {
+    "model": "moc_ui.service",
+    "pk": 14,
+    "fields": {
+      "name": "Ubuntu",
+      "service_type": "Service",
+      "description" : "Ubuntu vm image",
+      "logo_url":"/static/Ubuntu.jpg",
+      "availability":"True",
+      "image_name" : "Ubuntu 14.04.2 LTS (Trusty Tahr) x86_64",
+      "flavor" : "m1.medium"
+    }
+  },
+    {
+    "model": "moc_ui.service",
+    "pk": 15,
+    "fields": {
+      "name": "CentOS",
+      "service_type": "Service",
+      "description" : "CentOS vm image",
+      "logo_url":"/static/CentOS.png",
+      "availability":"True",
+      "image_name" : "CentOS-7-x86_64-GenericCloud-1503.qcow2",
+      "flavor": "m1.tiny"
+    }
+  },
   {
     "model": "moc_ui.uiproject",
     "pk": 1,

@@ -44,9 +44,18 @@ class Service(models.Model):
     description = models.CharField(max_length=DEFAULT_FIELD_LEN)
     logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
     availability = models.BooleanField(default=False)
+    image_name = models.CharField(max_length = DEFAULT_FIELD_LEN)
+    flavor =  models.CharField(max_length = DEFAULT_FIELD_LEN)
     
     def __unicode__(self):
         return self.name
+
+# Flavor for VM
+# class Flavor (models.Model):
+#     flavor =  models.CharField(max_length=DEFAULT_FIELD_LEN)
+#     def __unicode__ (self):
+#         return self.name
+
 
 # Cluster information
 class Cluster(models.Model):

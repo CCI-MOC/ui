@@ -17,7 +17,7 @@ def project_modals(request):
             
             ]
 def vm_modals(request):
-   return   [{'id':'createVM', 'action' : '/createVM',
+   return   [{'id':'createVM', 'action' : '/createVM/ui',
               'title':'Create VM', 'form':forms.Create_VM()},
              {'id':'deleteVM', 'action':'/deleteVM', 
               'title':'Delete VM', 'form':forms.Delete_VM()}

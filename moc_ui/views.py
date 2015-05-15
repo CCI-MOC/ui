@@ -63,18 +63,16 @@ def projects(request):
   
 ## Project Control Page
 def control(request, project):
-
-    createVMform = forms.Create_VM()   
+  
     vms = api.listVMs(api.get_nova(request, project))
 
     return render(request, 'control.html', 
                   {'project': [project], 'vms': vms,
-                   'createVMform': createVMform,
                    'vm_modals': html.vm_modals(request)
                     })
 ## Network Page
 def network(request, project):
-    createVMform = forms.Create_VM()   
+    createVMform = forms.Create_VM(request)   
     vms = api.listVMs(api.get_nova(request, project))
 
     return render(request, 'network.html',
@@ -439,15 +437,23 @@ def VM_add_default(request, project):
 
 # VM add custom
 def create_VM(request, project):
+    print 'lucas-test-enter-view-create_VM'
     if request.method == 'POST':
-      form = forms.Create_VM(request.POST)
-      if form.is_valid():
-          print "form is valid."
-          name   = form.cleaned_data['name']
-          flavor = form.cleaned_data['flavor']
-          image  = form.cleaned_data['image']
-          nics   = form.cleaned_data['nics']
- 
-    # nova = api.get_nova(request, project)   #get nova object
-    # api.createVM(nova, VMname, imageName, flavorName)           #add specified Nova object
-    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+        form = forms.Create_VM(request.POST)
+        
+        if form.is_valid():
+            print 'lucas-test-view-create_VM_beforeSave'
+            try:
+                form.save(request)
+            except Exception as e:
+                print "Hit exception:"
+                print e 
+
+            print 'lucas-test-view-create_VM_afterSave'
+        else:
+            for field in form:
+                print "%s: %s" % (field.label_tag(), field.value()) 
+
+            print form.errors
+
+    return HttpResponseRedirect('/control/' + project + '/')    

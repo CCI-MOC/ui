@@ -101,14 +101,11 @@ def listFlavors(nova):
 		flavors.append(flavor)
 	return flavors
 
-def createVM(nova, VMname, imageName, flavorName):
-	"""
-	Create VM on current tenant with specified information
-	"""
-        image = nova.images.find(name=imageName)
-	fl = nova.flavors.find(name=flavorName)
+def createVM(nova, name, image, flavor):
+	imageVM = nova.images.find(name=image)
+	fl = nova.flavors.find(name=flavor)
 	nics = [{"net-id": nova.networks.list()[0].id, "v4-fixed-ip": ''}]
-        nova.servers.create(VMname, image=image, flavor=fl, meta=None, files=None, nics=nics)
+	nova.servers.create(name, image=imageVM, flavor=fl, meta=None, files=None, nics=nics)
 
 def createDefault(nova):
 	fl = nova.flavors.find(name='m1.small')
