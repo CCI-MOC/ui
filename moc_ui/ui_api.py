@@ -38,8 +38,7 @@ def listVMs(nova):
  		'status':server.status,
  		'image':nova.images.get(server.image[u'id']).name,
 		'flavor':nova.flavors.get(server.flavor[u'id']).name,
- 		'network':network,
-		'vnc':'-'
+ 		'network':network
 		}
 		'''
 		if server.status != 'BUILD':

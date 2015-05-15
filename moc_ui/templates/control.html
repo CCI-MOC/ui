@@ -33,14 +33,6 @@
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                             </a>                      
                         </div>     
-                        <div class="col-md-7 pull-left">                         
-                            <h3>{{project}}'s Network</h3>
-                        </div>
-                        <div class="col-md-7 pull-right">                         
-                            <a href="/network/{{project}}" class="btn btn-primary" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
-                            </a>  
-                        </div>
                     </div>
                     <!-- VM Control -->
                     <div class="panel-body">
@@ -72,7 +64,7 @@
                                         <td>Image</td>
                                         <td>Flavour</td>
                                         <td>Network</td>
-                                        <td>VNC</td>
+                        
                                         <td>Actions</td>
                                     </tr>
                                 </thead>
@@ -85,7 +77,7 @@
                                     <td>{{vm.image}}</td>
                                     <td>{{vm.flavor}}</td>
                                     <td>{{vm.network}}</td>
-                                    <td>{{vm.vnc}}</td>
+                            
                                     <td>
                                         <div class="btn-group" role="group">
                                         {% if vm.status = 'ACTIVE' %}

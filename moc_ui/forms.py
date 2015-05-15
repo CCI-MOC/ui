@@ -185,27 +185,31 @@ class Create_VM(forms.Form):
     #     super (Create_VM, self).__init__(*args,**kwargs)
 
     # self.fields['name'] = forms.CharField()
+    try:
+        service = models.ClusterProject_service.objects.all().select_related('service')
+    except Exception as e:
+        print 'err'
+        print e 
+
     name = forms.CharField()    
 
-    image_list  = models.Service.objects.values('image_name')
-        
-    ubuntu = image_list[13]['image_name']
-    centos = image_list[14]['image_name']
 
     # self.fields['image']  = forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
-    image =  forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+    # image =  forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+    image =  forms.ModelChoiceField(queryset = service, initial = 0)
 
         # flavor_list  = models.Service.objects.values('flavor')
         
         # medium = flavor_list[13]['flavor']
         # tiny = flavor_list[14]['flavor']
 
-    m ='m1.medium'
+    m = 'm1.medium'
     t = 'm1.tiny'
     l = 'm1.large'
-
+    s = 'm1.small'
+    x = 'm1.xlarge'
     # self.fields['flavor'] = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(t,t),(l,l)]))
-    flavor = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(t,t),(l,l)]))
+    flavor = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(x,x),(l,l),(s,s),(t,t)]))
     
   
     def save(self, request, force_insert=False, force_update=False, commit=True):

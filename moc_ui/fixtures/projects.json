@@ -11,7 +11,7 @@
     "model": "moc_ui.ClusterProject",
     "pk": 2,
     "fields": {
-      "name": "bit_coin_farm",
+      "name": "another_project",
       "token": ""
     }
   }
