@@ -72,12 +72,17 @@ def control(request, project):
                     })
 ## Network Page
 def network(request, project):
-    createVMform = forms.Create_VM(request)   
-    vms = api.listVMs(api.get_nova(request, project))
+    
 
     return render(request, 'network.html',
-                    {'project': [project] , 'vms': vms,
-                    'createVMform': createVMform })
+                    {'project': [project]})
+
+## Network Page
+def storage(request, project):
+    
+
+    return render(request, 'storage.html',
+                    {'project': [project]})
 
 
 

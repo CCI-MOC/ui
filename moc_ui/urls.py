@@ -22,8 +22,10 @@ urlpatterns = patterns('',
     url(r'^market\/(?P<project>.+)\/(?P<service>.+)\/(?P<action>toggle_active|toggle_default)\/?$', market),
     # project control page
     url(r'^control\/(?P<project>.+)?\/$', control),
-    #
+    # network page
     url(r'^network\/(?P<project>.+)?\/$', network),
+    # storage page
+    url(r'^storage\/(?P<project>.+)?\/$', storage),
 	#VM pause/unpause
     url(r'^VM_active_state_toggle\/(?P<project>.+)?\/(?P<VMid>.+)\/?$', VM_active_state_toggle),
     #VM default add
