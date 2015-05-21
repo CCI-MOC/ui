@@ -51,7 +51,7 @@ def helps(request):
 
 def projects(request):
 
-    tenant = api.joinTenant(request, 'ui')
+    tenant = api.joinTenant(request, 'admin')
     project_name =  models.ClusterProject.objects.all()
     project_list = []
     for project in project_name:

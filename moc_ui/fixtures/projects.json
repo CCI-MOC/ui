@@ -3,7 +3,7 @@
     "model": "moc_ui.ClusterProject",
     "pk": 1,
     "fields": {
-      "name": "ui",
+      "name": "admin",
       "token": ""
     }
   },
