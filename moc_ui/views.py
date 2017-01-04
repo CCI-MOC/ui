@@ -51,7 +51,7 @@ def helps(request):
 
 def projects(request):
 
-    tenant = api.joinTenant(request, 'ui')
+    tenant = api.joinTenant(request, 'admin')
     project_name =  models.ClusterProject.objects.all()
     project_list = []
     for project in project_name:
@@ -63,82 +63,29 @@ def projects(request):
   
 ## Project Control Page
 def control(request, project):
-
-    createVMform = forms.Create_VM()   
+  
     vms = api.listVMs(api.get_nova(request, project))
 
     return render(request, 'control.html', 
                   {'project': [project], 'vms': vms,
-                   'createVMform': createVMform })
+                   'vm_modals': html.vm_modals(request)
+                    })
 ## Network Page
 def network(request, project):
-    createVMform = forms.Create_VM()   
-    vms = api.listVMs(api.get_nova(request, project))
+    
 
     return render(request, 'network.html',
-                    {'project': [project] , 'vms': vms,
-                    'createVMform': createVMform })
+                    {'project': [project]})
+
+## Network Page
+def storage(request, project):
+    
+
+    return render(request, 'storage.html',
+                    {'project': [project]})
 
 
-# VM CONTROLS
-def VM_active_state_toggle (request, project, VMid):
-    print  (project, VMid)
-    print  VMid[len(VMid)-1]
-    print  VMid[:len(VMid)-1]
-    if VMid[len(VMid)-1] == '/':
-        VMid = VMid[:len(VMid)-1]
-    nova = api.get_nova(request, project)
-    api.VM_active_state_toggle(nova, VMid)
-    return HttpResponseRedirect('/control/' + project + '/')
 
-# VM Delete
-def VM_delete(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.delete(nova, VMid)					#delete specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM start
-def VM_start(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.startVM(nova, VMid)					#start specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM stop
-def VM_stop(request, project, VMid):
-	print (project, VMid)					#debugging
-	if VMid[len(VMid)-1] == '/':			#strip ending /
-		VMid = VMid[:len(VMid)-1]
-	nova = api.get_nova(request, project)	#get nova object
-	api.stopVM(nova, VMid)					#stop specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM add default
-def VM_add_default(request, project):
-	print (project)
-	nova = api.get_nova(request, project)	#get nova object
-	api.createDefault(nova)
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
-
-# VM add custom
-def VM_add(request, project, VMname, imageName, flavorName):
-	print (project, VMname, imageName, flavorName)					#debugging
-
-#	if request.method == 'POST':
-#		form = forms.Create_VM(request.POST)
-#		if form.is_valid():
-#			print "form is valid."
-#			nameVM = form.cleaned_data['VM_name']
-#			nameFlavor 
-
-	nova = api.get_nova(request, project)	#get nova object
-	api.createVM(nova, VMname, imageName, flavorName)			#add specified Nova object
-	return HttpResponseRedirect('/control/' + project + '/')	#back to control
 
 #def login(request):
 #    """View to Login a user
@@ -447,3 +394,71 @@ def control_vm(request, action, vm_name):
     # check that the user has privalidge on vm
     # actually do the action
         pass
+
+# VM CONTROLS
+def VM_active_state_toggle (request, project, VMid):
+    print  (project, VMid)
+    print  VMid[len(VMid)-1]
+    print  VMid[:len(VMid)-1]
+    if VMid[len(VMid)-1] == '/':
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)
+    api.VM_active_state_toggle(nova, VMid)
+    return HttpResponseRedirect('/control/' + project + '/')
+
+# VM Delete
+def VM_delete(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.delete(nova, VMid)                  #delete specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM start
+def VM_start(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.startVM(nova, VMid)                 #start specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM stop
+def VM_stop(request, project, VMid):
+    print (project, VMid)                   #debugging
+    if VMid[len(VMid)-1] == '/':            #strip ending /
+        VMid = VMid[:len(VMid)-1]
+    nova = api.get_nova(request, project)   #get nova object
+    api.stopVM(nova, VMid)                  #stop specified Nova object
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM add default
+def VM_add_default(request, project):
+    print (project)
+    nova = api.get_nova(request, project)   #get nova object
+    api.createDefault(nova)
+    return HttpResponseRedirect('/control/' + project + '/')    #back to control
+
+# VM add custom
+def create_VM(request, project):
+    print 'lucas-test-enter-view-create_VM'
+    if request.method == 'POST':
+        form = forms.Create_VM(request.POST)
+        
+        if form.is_valid():
+            print 'lucas-test-view-create_VM_beforeSave'
+            try:
+                form.save(request)
+            except Exception as e:
+                print "Hit exception:"
+                print e 
+
+            print 'lucas-test-view-create_VM_afterSave'
+        else:
+            for field in form:
+                print "%s: %s" % (field.label_tag(), field.value()) 
+
+            print form.errors
+
+    return HttpResponseRedirect('/control/' + project + '/')    

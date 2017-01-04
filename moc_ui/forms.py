@@ -180,25 +180,51 @@ class ClusterProject(forms.ModelForm):
 
 # vm actions
 class Create_VM(forms.Form):
-    name = forms.CharField()
-    cluster_projects = []
-    for p in models.ClusterProject.objects.all().values('name').distinct(): #for all 
-        cluster_projects.append((p['name'], p['name']))
-    cluster_project = forms.ChoiceField(widget=forms.Select, choices=cluster_projects)
 
-    #nova = api.get_nova(request, project)	#get nova object
+    # def __init__(self,request,*args,**kwargs):
+    #     super (Create_VM, self).__init__(*args,**kwargs)
 
-    #image choices
-    #image_choices = []
-    #for option in nova.images.list():
-    #    image_coices.append(str(option.name))    
-    #imageName = forms.ChoiceField(widget=forms.Select, choices=image_choices)
+    # self.fields['name'] = forms.CharField()
+    service_list = []
+    try:
+        services = models.ClusterProject_service.objects.all()
+        for service in services:
+            print service
+            
+        print service_list
+    except Exception as e:
+        print 'err'
+        print e 
+    name = forms.CharField()    
 
-    #flavor choices
-    #flavor_choices = []
-    #for option in nova.flavors.list():
-    #    flavor_choices.append(str(option.name))
-    #flavorName = forms.ChoiceField(widget=forms.Select, choices=flavor_choices)
+
+    # self.fields['image']  = forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+    # image =  forms.ChoiceField(widget =forms.Select, choices = ([(ubuntu,ubuntu),(centos,centos)]))
+    image =  forms.ModelChoiceField(queryset = services, initial = 0)
+    
+        # flavor_list  = models.Service.objects.values('flavor')
+        
+        # medium = flavor_list[13]['flavor']
+        # tiny = flavor_list[14]['flavor']
+
+    m = 'm1.medium'
+    t = 'm1.tiny'
+    l = 'm1.large'
+    s = 'm1.small'
+    x = 'm1.xlarge'
+    # self.fields['flavor'] = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(t,t),(l,l)]))
+    flavor = forms.ChoiceField(widget = forms.Select, choices = ([(m,m),(x,x),(l,l),(s,s),(t,t)]))
+    
+  
+    def save(self, request, force_insert=False, force_update=False, commit=True):
+        
+        name   = self.cleaned_data['name']
+        image  = str(self.cleaned_data['image'])
+        flavor = self.cleaned_data['flavor']
+        nova   = api.get_nova(request, 'ui') 
+
+        api.createVM(nova, name, image, flavor)
+
 
 class Delete_VM(forms.Form):
     name = forms.CharField()

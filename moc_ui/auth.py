@@ -60,9 +60,11 @@ def get_nova(request, tenant_name):
 def get_glance(request, tenant_name):
 	username = request.session['username']
 	password = request.session['password']
+	keystone = get_keystone(request,tenant_name)
+	nova = get_nova(request,tenant_name)
 	glance_endpoint = keystone.service_catalog.url_for(service_type='image')
 	glance = glclient.Client(glance_endpoint, token = keystone.auth_token)
-	return {'keystone': keystone, 'nova': nova, 'glance': glance}
+	return  glance
 	
 
 

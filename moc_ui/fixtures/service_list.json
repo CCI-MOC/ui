@@ -115,7 +115,7 @@
     "pk": 11,
     "fields": {
       "name": "Hadoop",
-      "service_type": "Service",
+      "service_type": "Compute",
       "description" : "Apache Hadoop",
       "logo_url":"/static/hadoop.jpg",
       "availability":"True"
@@ -143,18 +143,59 @@
       "availability":"True"
     }
 	},
-  {
+    {
+    "model": "moc_ui.service",
+    "pk": 14,
+    "fields": {
+      "name": "Ubuntu",
+      "service_type": "Service",
+      "description" : "Ubuntu vm image",
+      "logo_url":"/static/Ubuntu.jpg",
+      "availability":"True",
+      "image_name" : "Ubuntu 14.04.2 LTS (Trusty Tahr) x86_64"
+
+    }
+  },
+    {
+    "model": "moc_ui.service",
+    "pk": 15,
+    "fields": {
+      "name": "CentOS",
+      "service_type": "Service",
+      "description" : "CentOS vm image",
+      "logo_url":"/static/CentOS.png",
+      "availability":"True",
+      "image_name" : "CentOS-7-x86_64-GenericCloud-1503.qcow2"
+      
+
+    }
+  },
+    {
+    "model": "moc_ui.service",
+    "pk": 16,
+    "fields": {
+      "name": "Fedora",
+      "service_type": "Service",
+      "description" : "Fedora VM image",
+      "logo_url":"/static/Fedora.jpg",
+      "availability":"True",
+      "image_name" : "Fedora-Cloud-Base-20141203-21.x86_64.qcow2"
+      
+
+    }
+  },
+    {
     "model": "moc_ui.uiproject",
     "pk": 1,
     "fields": {
-      "name": "big_data"
+      "name": "ui"
     }
   },
   {
     "model": "moc_ui.uiproject",
     "pk": 2,
     "fields": {
-      "name": "webservers"
+      "name": "another_one"
     }
   },
   {

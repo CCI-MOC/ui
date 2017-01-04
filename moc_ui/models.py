@@ -44,9 +44,17 @@ class Service(models.Model):
     description = models.CharField(max_length=DEFAULT_FIELD_LEN)
     logo_url = models.CharField(max_length=DEFAULT_FIELD_LEN)
     availability = models.BooleanField(default=False)
-    
+    image_name = models.CharField(max_length = DEFAULT_FIELD_LEN)
+
     def __unicode__(self):
         return self.name
+
+# Flavor for VM
+# class Flavor (models.Model):
+#     flavor =  models.CharField(max_length=DEFAULT_FIELD_LEN)
+#     def __unicode__ (self):
+#         return self.name
+
 
 # Cluster information
 class Cluster(models.Model):
@@ -78,7 +86,7 @@ class UIProject(models.Model):
     def __unicode__(self):
         return self.name
 
-# Defining the relation.
+# Joint_table for Service and Project
 class UIProject_service_list(models.Model):
     TYPE_CHOICES = (('NOR','normal'), ('DEA', 'default'))
     project = models.ForeignKey(UIProject)
@@ -153,5 +161,5 @@ class ClusterProject_service(models.Model):
     service = models.ForeignKey(Service)
 
     def __unicode__(self):
-        return 'Project Name: ' +  self.project.name + ' Servise Name: ' + self.service.name + (" default selection. " if self.default else "")
+        return self.service.image_name
 

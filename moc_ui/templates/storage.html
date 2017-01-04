@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{request.session.user_name}}'s Network{% endblock %}
+{% block title %}{{request.session.user_name}}'s Storage{% endblock %}
 
 {% block content %}
 {% for project in project %}
@@ -13,7 +13,7 @@
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div class="row">
-                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>network</small></h2>
+                            <h2 class="col-md-7 pull-left">  {{request.session.user_name}}'s <small>storage</small></h2>
                         </div>
                     </div>
                 </div>
