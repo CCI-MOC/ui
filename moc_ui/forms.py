@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 import models
-import novaclient.v1_1.client as nvclient
-import glanceclient.v2.client as glclient
-import keystoneclient.v2_0.client as ksclient
+# import novaclient.v1_1.client as nvclient
+# import glanceclient.v2.client as glclient
+# import keystoneclient.v2_0.client as ksclient
 import ui_api as api
 
 class Login(forms.Form):

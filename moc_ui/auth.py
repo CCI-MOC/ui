@@ -1,24 +1,33 @@
 from os import environ as env
 
 # Client package
-import novaclient.v1_1.client as nvclient
-import glanceclient.v2.client as glclient
-import keystoneclient.v2_0.client as ksclient
+#import novaclient.v1_1.client as nvclient
+
+#from novaclient import client as nvclient
+
+#import glanceclient.v2.client as glclient
+#import keystoneclient.v2_0.client as ksclient
 
 # from keystoneclient.auth.identity import v2
-from keystoneclient import session
-from novaclient import client
+
+from keystoneauth1.identity import v3
+
+from keystoneauth1 import session
+
+from keystoneclient.v3 import client as ksclient
+from novaclient import client as nvclient
+from glanceclient import client as glclient
 
 # Socks
-import socks
-import socket
+#import socks
+#import socket
 
 # Set up SOCKS proxy usage:
-s = socks.socksocket()
+#s = socks.socksocket()
 
 # Set up the Port number as the one used for connecting Harvard Cluster
-socks.set_default_proxy(socks.SOCKS5, 'localhost', 5507)
-socket.socket = socks.socksocket
+#socks.set_default_proxy(socks.SOCKS5, 'localhost', 5507)
+#socket.socket = socks.socksocket
 
 # Log User to his/her associated Tenant 
 def loginTenant(request, tenant_name):
@@ -28,43 +37,76 @@ def loginTenant(request, tenant_name):
 
 	username = request.session['username']
 	password = request.session['password']
-
+	auth_url = 'https://engage1.massopencloud.org:5000/v3/'
+	
 	print 'lucas-test-auth-loginTenant'
-	keystone = ksclient.Client(auth_url = 'http://140.247.152.207:5000/v2.0', username = username,
-		password = password, tenant_name = tenant_name)
+	
+	unscoped_auth = v3.Password(auth_url = auth_url, username = username, password = password, user_domain_name="Default", unscoped=True)
+	unscoped_sess=session.Session(auth=unscoped_auth)
+	unscoped_token=unscoped_sess.get_token()
+	auth=v3.Token(auth_url = auth_url,token=unscoped_token)
+	sess=session.Session(auth=auth)
+	#scoped_token=sess.get_token()
+	keystone = ksclient.Client(session=sess)
+	# keystone = ksclient.Client(auth_url = 'https://engage1.massopencloud.org:5000/v2.0/', username = username,
+	# 	password = password, tenant_name = tenant_name)
 	print 'lucas-test-auth-loginTenant-succesfully'
-	nova = nvclient.Client(auth_url = 'http://140.247.152.207:5000/v2.0',
-		username = username,
-		api_key = password,
-		project_id = tenant_name)
-	glance_endpoint = keystone.service_catalog.url_for(service_type='image')
-	glance = glclient.Client(glance_endpoint, token = keystone.auth_token)
+	# nova = nvclient.Client('2', auth_url = 'https://engage1.massopencloud.org:5000/v2.0/',
+	# 	username = username,
+	# 	api_key = password,
+	# 	project_id = tenant_name)
+	nova = nvclient.Client('2', session=sess)
+	glance = glclient.Client('2', session=sess)
 	return {'keystone': keystone, 'nova': nova, 'glance': glance}
 
 def get_keystone(request, tenant_name):
 	username = request.session['username']
 	password = request.session['password']
-	keystone = ksclient.Client(auth_url = 'http://140.247.152.207:5000/v2.0', username = username,
-		password = password, tenant_name = tenant_name)
+	auth_url = 'https://engage1.massopencloud.org:5000/v3/'
+	# keystone = ksclient.Client(auth_url = 'https://engage1.massopencloud.org:5000/v2.0/', username = username,
+	# 	password = password, tenant_name = tenant_name)
+	unscoped_auth = v3.Password(auth_url = auth_url, username = username, password = password, user_domain_name="Default", unscoped=True)
+	unscoped_sess=session.Session(auth=unscoped_auth)
+	unscoped_token=unscoped_sess.get_token()
+	auth=v3.Token(auth_url = auth_url,token=unscoped_token)
+	sess=session.Session(auth=auth)
+	#scoped_token=sess.get_token()
+	keystone = ksclient.Client(session=sess)
 	return keystone
 
 def get_nova(request, tenant_name):
 	username = request.session['username']
 	password = request.session['password']
-	nova = nvclient.Client(auth_url = 'http://140.247.152.207:5000/v2.0',
-		username = username,
-		api_key = password,
-		project_id = tenant_name)
+	auth_url = 'https://engage1.massopencloud.org:5000/v3/'
+
+	unscoped_auth = v3.Password(auth_url = auth_url, username = username,
+		password = password, user_domain_name="Default", unscoped=True)
+	unscoped_sess=session.Session(auth=unscoped_auth)
+	unscoped_token=unscoped_sess.get_token()
+	auth=v3.Token(auth_url = auth_url,token=unscoped_token)
+	sess=session.Session(auth=auth)
+	nova = nvclient.Client('2', session=sess)
+	# nova = nvclient.Client('2', auth_url = 'https://engage1.massopencloud.org:5000/v2.0/',
+	# 	username = username,
+	# 	api_key = password,
+	# 	project_id = tenant_name)
 	return nova
 
 def get_glance(request, tenant_name):
 	username = request.session['username']
 	password = request.session['password']
-	keystone = get_keystone(request,tenant_name)
-	nova = get_nova(request,tenant_name)
-	glance_endpoint = keystone.service_catalog.url_for(service_type='image')
-	glance = glclient.Client(glance_endpoint, token = keystone.auth_token)
-	return  glance
+	auth_url = 'https://engage1.massopencloud.org:5000/v3/'
+
+	# keystone = get_keystone(request,tenant_name)
+	# nova = get_nova(request,tenant_name)
+	unscoped_auth = v3.Password(auth_url = auth_url, username = username,
+		password = password, user_domain_name="Default", unscoped=True)
+	unscoped_sess=session.Session(auth=unscoped_auth)
+	unscoped_token=unscoped_sess.get_token()
+	auth=v3.Token(auth_url = auth_url,token=unscoped_token)
+	sess=session.Session(auth=auth)
+	glance = glclient.Client('2', session=sess)
+	return glance
 	
 
 
@@ -75,7 +117,7 @@ def get_glance(request, tenant_name):
 # 	print 'lucas-test-auth-loginUser'
 	
 #         keystone = ksclient.Client(
-# 	        auth_url = 'http://140.247.152.207:5000/v2.0',
+# 	        auth_url = 'https://engage1.massopencloud.org:5000/v2.0/',
 # 		username = username,
 #        		password = password)
 #     	print 'lucas-test-auth-loginUser-succesfully'
@@ -83,7 +125,7 @@ def get_glance(request, tenant_name):
 
 
 # def _loginTenant (request, username, password, tenant_name):
-# 	auth_url = 'http://140.247.152.207:5000/v2.0'
+# 	auth_url = 'https://engage1.massopencloud.org:5000/v2.0/'
 # 	auth = v2.Password(auth_url = auth_url, username = username, password = password, tenant_name = tenant_name)
 # 	sess = session.Session(auth=auth)
 # 	nova = client.Client('1.1', session=sess)
