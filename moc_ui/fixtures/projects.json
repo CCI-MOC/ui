@@ -3,7 +3,7 @@
     "model": "moc_ui.ClusterProject",
     "pk": 1,
     "fields": {
-      "name": "admin",
+      "name": "atmosphere",
       "token": ""
     }
   },
@@ -11,7 +11,7 @@
     "model": "moc_ui.ClusterProject",
     "pk": 2,
     "fields": {
-      "name": "another_project",
+      "name": "another_dummy_project",
       "token": ""
     }
   }
